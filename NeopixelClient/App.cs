@@ -10,6 +10,7 @@ namespace DynamicView
         // Has to appear as a formal parameter (but does not need to be referenced) in order for the
         //   builder.Services.AddSingleton<BluetoothScanner>();
         // to instantiate.
+#if ANDROID
         public App(NeopixelBleScanner scanner)
         {
             MainPage = new MainPage(scanner);
