@@ -3,10 +3,11 @@
 The Neopixel Display System is basically a small ecosystem emerging from the convergence of an experiment to drive a Neopixel Matrix display using an ESP32 processor, and an interest / need to remotely control an external audio ouptut from [OBS Studio](https://obsproject.com/).
 
 ## Components
+At this time, the key components of the system are the NeopixelServer, an OBS Studio plugin, and a . et MAUI Android / WIndows application.
 
 ## NeoPixelServer
 
-At this time, the key components of the system are the NeopixelServer; an aplication running on an ESP32 that operates a Neopixel Matrix display and some physical I/O (mechanical relays and virtual LEDs). 
+The NeopixelServer is an aplication running on an ESP32 that operates a Neopixel Matrix display and some physical I/O (mechanical relays and virtual LEDs). 
 
 The Neopixel Server is developed using the Ardiono for ESP32 development tools
 
