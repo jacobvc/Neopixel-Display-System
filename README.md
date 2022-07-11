@@ -31,7 +31,8 @@ not support 5G networks.
 <img src="/assets/webpage.png">
 
 It is also a Bluetooth Central Device that uses the same messaging EXCEPT control
-is implemented using JSON objects rather than a GET construct.
+is implemented using JSON objects rather than a GET construct. The Arduino version of the
+Neopixel Client utilizes the BLE interface 
 
 The features consist primarily of Displaying text in choice of color (or rainbow)
 with specified alignment (left, center, right, scroll), displaying a selected builtin
@@ -52,15 +53,45 @@ The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android 
 interface on WIndows (The BLE library does not support Windows)
 <img src="/assets/NET-MAUI.png">
 
-# Key Concepts and approaches
+# Key Concepts and Objectives
 Most of my projects are more about doing something interesting and learning new skills than 
-producing a particular result.
-
-## Develop Arduino API focused Wifi + BLE 'boilerplate'
+producing a particular result. I will describe a few of them here to help understand why on earth
+I made certain implementation decisions.
 
 ## Dynamic User Interface Generation
+Design a metadata construct that can provide sufficient information for a client to construct 
+a realistic user interface.
+
+Implement metadata generation in the server applilcation.
+
+Implement dynamic user interface generation in javascript for a web page and in C# for .NET MAUI
+
+## Develop Arduino API focused ESP32 Wifi + BLE 'boilerplate'
+Develop an ESP32 application that implements Wifi (with web server and embedded web page)
+or Bluetooth BLE or both and that is designed to remove either or both if not needed.
+
+## Develop a static embedded javascript-based web page
+Implement a mechanism to launch and test the embedded web page when it is not actually 
+embedded.
+
+Implement javascript version of dynamic user interface generation. 
+
+Embed the tested web page into the Neopixel Server.
 
 ## .NET MAUI Experimentation
+Learn about the .NET MAUI environment.
 
-## Develop a OBS Studio script (in python)
+Implement pure C# version of dynamic user interface generation. 
+
+Develop application versions for both Android and Windows targets, at least one of which is BLE capable.
+
+**WARNING** Microsoft Visual Studio Preview Version 17 or newer is required for .NET MAUI.
+
+## Develop a OBS Studio script (python)
+Learn the details of OBS Studio scripting, especially the uesr interface operation.
+
+Develop a script based user interface that offer full accessibility to all of the Neopixel Server features.
+
+Develop the connectivity to control the Neopixel server from the OBS Studio script.
+
 
