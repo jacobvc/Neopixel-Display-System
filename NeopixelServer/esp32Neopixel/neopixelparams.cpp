@@ -61,8 +61,8 @@ void InitPreferences()
         prefs.putString("device_name", "NEOPixel Display");
 
         // WiFi related Preferences
-        prefs.putString("ssid", "vinces_house");
-        prefs.putString("password", "LifeIsGood");
+        prefs.putString("ssid", "");
+        prefs.putString("password", "");
 
         prefs.putBool("nvsInit", true); // Create the "already initialized" key and store a value.
     }
