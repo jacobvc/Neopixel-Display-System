@@ -4,8 +4,6 @@ The Neopixel display panel<br><img src="/assets/NeopixelPanel.png" width="420" h
 
 The Neopixel Server Web Page<br><img src="/assets/webpage.png" width="280" height="60">
 
-The OBS Studio Script<br><img src="/assets/obsstudio_script.png" width="178 height="100">
-
 The Neopixel Client Application<br><img src="/assets/NET-MAUI.png" width="316" height="120">
 
 
@@ -46,7 +44,7 @@ off, or blink, and turning a mechanical relay or analog switch on or off.
 
 The OBS Studio script is a python script that allows control of any / all of the provided features as a result of activation and / or deactivation of any scene. The user interface 
 
-<img src="/assets/obsstudio_script.png">
+<img src="/assets/obsstudio.png">
 
 ## Neopixel Client
 
