@@ -19,7 +19,7 @@ bitmap image, again with specified alignment, seting one of four virtual LEDs to
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
 # Design 
-[Design](design.md)
+[Design](DESIGN.md)
 # Hardware
 
 1/8 inch plastic
