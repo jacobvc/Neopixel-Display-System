@@ -41,12 +41,26 @@ off, or blink, and turning a mechanical relay or analog switch on or off.
 
 ## OBS Studio Script
 
-The OBS Studio script is a python script that allows control of any / all of the provided features as a result of activation and / or deactivation of any scene. The user interface 
+The OBS Studio script is a python script that allows control of any / all of the provided 
+features as a result of activation and / or deactivation of any scene. The user interface 
 
 <img src="/assets/obsstudio.png">
 
 ## Neopixel Client
 
-The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP interface on WIndows (The BLE library does not support Windows)
+The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP 
+interface on WIndows (The BLE library does not support Windows)
 <img src="/assets/NET-MAUI.png">
+
+# Key Concepts and approaches
+Most of my projects are more about doing something interesting and learning new skills than 
+producing a particular result.
+
+## Develop Arduino API focused Wifi + BLE 'boilerplate'
+
+## Dynamic User Interface Generation
+
+## .NET MAUI Experimentation
+
+## Develop a OBS Studio script (in python)
 
