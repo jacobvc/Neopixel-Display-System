@@ -1,7 +1,13 @@
 # Neopixel-Display-System
 
-<img src="/assets/NeopixelPanel.png" width="420" height="60">
-<img src="/assets/webpage.png" width="280" height="60">
+The Neopixel display panel<br><img src="/assets/NeopixelPanel.png" width="420" height="60">
+
+The Neopixel Server Web Page<br><img src="/assets/webpage.png" width="280" height="60">
+
+The OBS Studio Script<br><img src="/assets/obsstudio_script.png" width="178 height="100">
+
+The Neopixel Client Application<br><img src="/assets/NET-MAUI.png" width="316" height="120">
+
 
 The Neopixel Display System is basically a small ecosystem emerging from the convergence of an experiment to drive a Neopixel Matrix display using an ESP32 processor, and an interest / need to remotely control an external audio ouptut from [OBS Studio](https://obsproject.com/).
 
