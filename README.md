@@ -24,7 +24,7 @@ It is also a Bluetooth Central Device that uses the same messaging EXCEPT contro
 is implemented using JSON objects rather than a GET construct.
 
 The features consist primarily of Displaying text in choice of color (or rainbow)
-with specified alignment (left, cneter, right, scroll), displaying a selected builtin
+with specified alignment (left, center, right, scroll), displaying a selected builtin
 bitmap image, again with specified alignment, seting one of four virtual LEDs to on, 
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
