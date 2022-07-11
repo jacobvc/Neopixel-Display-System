@@ -3,7 +3,7 @@
 The Neopixel Display System is basically a small ecosystem emerging from the convergence of an experiment to drive a Neopixel Matrix display using an ESP32 processor, and an interest / need to remotely control an external audio ouptut from [OBS Studio](https://obsproject.com/).
 
 ## Components
-At this time, the key components of the system are the NeopixelServer, an OBS Studio plugin, and a . et MAUI Android / WIndows application.
+At this time, the key components of the system are the NeopixelServer, an OBS Studio plugin, and a .NET MAUI Android / WIndows application.
 
 ## NeoPixel Server
 
@@ -23,4 +23,4 @@ The OBS Studio script is a python script that allows control of any / all of the
 
 ## Neopixel Client
 
-The Neopixel Client is a .net MAUI applicaiton using a BLE interface on Android and a HTTP interface on WIndows (The Bluetooth livrary does not support Windows)
+The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP interface on WIndows (The Bluetooth livrary does not support Windows)
