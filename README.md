@@ -23,4 +23,4 @@ The OBS Studio script is a python script that allows control of any / all of the
 
 ## Neopixel Client
 
-The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP interface on WIndows (The Bluetooth livrary does not support Windows)
+The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP interface on WIndows (The BLE library does not support Windows)
