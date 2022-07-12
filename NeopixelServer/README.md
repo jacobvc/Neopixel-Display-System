@@ -18,9 +18,13 @@ with specified alignment (left, center, right, scroll), displaying a selected bu
 bitmap image, again with specified alignment, seting one of four virtual LEDs to on, 
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
-# Design 
-[Design](DESIGN.md)
+# Quick Start
+
+[Install ESP32 support in the Arduino IDE](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 # Hardware
 
 1/8 inch plastic
 PVC FRP Cap Moulding
+
+# Design 
+[Design](DESIGN.md)
