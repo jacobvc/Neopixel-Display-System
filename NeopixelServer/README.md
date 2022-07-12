@@ -27,11 +27,22 @@ simply plugged into the 'out' side of the prior. See more about hardware below.
 
 The first step is to install the development environment and build the server.
 
-* [Install the Arduino IDE](https://www.arduino.cc/en/software)
+* [Install the Arduino IDE](https://www.arduino.cc/en/software) (Note that either veersion 1.0 or 2.0 can be used)
 * [Install ESP32 support in the Arduino IDE](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
-* Connect and test
+* Connect and test the ESP32 device (should have done this in the previous step)
 * Install the required libraries
-* 
+* Build and run the project
+
+The required libraries include:
+* ArduinoJson-6.x
+* Adafruit_GFX
+* Adafruit_NeoMatrix
+* ESPAsyncWebServer
+
+The implementation uses WiFi Smartconfig. [Install the ESP32 Smart Config App](https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo) and configure it. When it successfully connects to WiFi, it scrolls the IP address on the display.
+
+Open that IP address in a browser to control the device.
+
 # Hardware
 
 1/8 inch plastic
