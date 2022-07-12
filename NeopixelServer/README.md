@@ -19,8 +19,19 @@ bitmap image, again with specified alignment, seting one of four virtual LEDs to
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
 # Quick Start
+The system is designed to be completely incremental. That is, all you really need is the
+server itself and a web browser. The minimum server is an ESP32 Dev Module and one or more
+WS2812 8x32 led matrix displays (Compile option, 2 is default). The display(s) need to be 
+connected to GROUND, 5V (VIN), and D32. When more than one is used each additional one is 
+simply plugged into the 'out' side of the prior. See more about hardware below.
 
-[Install ESP32 support in the Arduino IDE](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
+The first step is to install the development environment and build the server.
+
+* [Install the Arduino IDE](https://www.arduino.cc/en/software)
+* [Install ESP32 support in the Arduino IDE](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
+* Connect and test
+* Install the required libraries
+* 
 # Hardware
 
 1/8 inch plastic
