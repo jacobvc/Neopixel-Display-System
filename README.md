@@ -37,7 +37,7 @@ Neopixel Client utilizes the BLE interface
 
 The features consist primarily of Displaying text in choice of color (or rainbow)
 with specified alignment (left, center, right, scroll), displaying a selected builtin
-bitmap image, again with specified alignment, seting one of four virtual LEDs to on, 
+bitmap image, again with specified alignment, setting one of four virtual LEDs to on, 
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
 [more ...](NeopixelServer/README.md)
@@ -57,9 +57,10 @@ features as a result of activation and / or deactivation of any scene. The user 
 
 The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP 
 interface on WIndows (The BLE library does not support Windows)
-<img src="/assets/NET-MAUI.png">
 
 [more ...](NeopixelClient/README.md)
+
+<img src="/assets/NET-MAUI.png">
 
 # Key Concepts and Objectives
 Most of my projects are more about doing something interesting and learning new skills than 
