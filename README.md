@@ -39,13 +39,14 @@ The features consist primarily of Displaying text in choice of color (or rainbow
 with specified alignment (left, center, right, scroll), displaying a selected builtin
 bitmap image, again with specified alignment, seting one of four virtual LEDs to on, 
 off, or blink, and turning a mechanical relay or analog switch on or off.
+[ more ...](NeopixelServer/README.md)
 
 
 ## OBS Studio Script
 
 The OBS Studio script is a python script that allows control of any / all of the provided 
 features as a result of activation and / or deactivation of any scene. The user interface 
-![more ...](NeopixelServer/README.md)
+[ more ...](obsstudio_script/README.md)
 
 
 <img src="/assets/obsstudio.png">
