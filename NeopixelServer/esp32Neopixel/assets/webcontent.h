@@ -5,8 +5,8 @@ const char * index_html = R"rawtext(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="neopixel.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" src="neopixel.js"></script>
+  <link href="dynamicview.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="dynamicview.js"></script>
 </head>
 
 <body>
@@ -25,7 +25,7 @@ const char * index_html = R"rawtext(
 
 </html>)rawtext";
 
-const char * neopixel_js = R"rawtext(
+const char * dynamicview_js = R"rawtext(
 "use strict";
 
 var connected = false;
@@ -205,7 +205,7 @@ function updateStatus(id, value) {
 
 )rawtext";
 
-const char * neopixel_css = R"rawtext(
+const char * dynamicview_css = R"rawtext(
 html {
     touch-action: manipulation;
 }

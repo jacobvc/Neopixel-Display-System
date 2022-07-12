@@ -1,3 +1,3 @@
-python deploywebpage.py  -o ../esp32Neopixel/assets/webcontent.h index.html neopixel.js neopixel.css 
+python deploywebpage.py  -o ../esp32Neopixel/assets/webcontent.h index.html dynamicview.js dynamicview.css 
 
 pause

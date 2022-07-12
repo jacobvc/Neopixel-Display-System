@@ -1,26 +1,6 @@
 "use strict";
 //__BEGIN_EXCLUDE__
 /*
-    <label for ID> <div ID> OR <input ID>
-    Where ID is a JSON input property name (key)
-    OR key[index] in the case of an array
-
-    select elements are created empty with class='enum-name'
-    where the the options are populated when the enum, for example 'ledmode' 
-    is received in a configuration message
-
-    Each input element has 
-      onchange="updateStatus(this.id, this.value)
-    or similar, resulting in a GET request with a JSON property-name=value parameter
-    being sent immediately
-
-    JSON array properties are used to construct a section. It is constructed
-    inside a DIV with id="<key>-section"
-       function createView(elemType, label, key, source, srcProp, selectClass) 
-    An element of elemType is constructed for each value of the srcProp array
-    with id="key[index]", following a label with text 'label'
-
-
 
 WARNING WARNING WARNING 
 js_minify messes up with lines broken before a '+'

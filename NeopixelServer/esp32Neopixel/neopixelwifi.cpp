@@ -70,18 +70,18 @@ void handleRoot(AsyncWebServerRequest *request)
     request->send(response);
 }
 
-void handleNeopixelJs(AsyncWebServerRequest *request)
+void handleDynamicViewJs(AsyncWebServerRequest *request)
 {
     Serial.println("Handle neopixel.js");
-    AsyncWebServerResponse *response = request->beginResponse(200, "text/javascript", neopixel_js);
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/javascript", dynamicview_js);
     response->addHeader("Access-Control-Allow-Origin", "*");
     request->send(response);
 }
 
-void handleNeopixelCss(AsyncWebServerRequest *request)
+void handleDynamicViewCss(AsyncWebServerRequest *request)
 {
     Serial.println("Handle neopixel.css");
-    AsyncWebServerResponse *response = request->beginResponse(200, "text/css", neopixel_css);
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/css", dynamicview_css);
     response->addHeader("Access-Control-Allow-Origin", "*");
     request->send(response);
 }
@@ -254,8 +254,8 @@ void NeoWifiSetup(void)
     HOOK_ASYNC_REQUEST("/", handleRoot);
     HOOK_ASYNC_REQUEST("/status", handleStatus);
     HOOK_ASYNC_REQUEST("/metadata", handleMetaData);
-    HOOK_ASYNC_REQUEST("/neopixel.js", handleNeopixelJs);
-    HOOK_ASYNC_REQUEST("/neopixel.css", handleNeopixelCss);
+    HOOK_ASYNC_REQUEST("/dynamicview.js", handleDynamicViewJs);
+    HOOK_ASYNC_REQUEST("/dynamicview.css", handleDynamicViewCss);
 
     server.onNotFound([](AsyncWebServerRequest *request)
                       { handleNotFound(request); });
