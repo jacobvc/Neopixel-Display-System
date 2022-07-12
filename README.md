@@ -55,8 +55,8 @@ interface on WIndows (The BLE library does not support Windows)
 
 # Key Concepts and Objectives
 Most of my projects are more about doing something interesting and learning new skills than 
-producing a particular result. I will describe a few of them here to help understand why on earth
-I made certain implementation decisions.
+producing a particular result. I will describe a few of them here offer background on 
+certain implementation decisions.
 
 ## Dynamic User Interface Generation
 Design a metadata construct that can provide sufficient information for a client to construct 
