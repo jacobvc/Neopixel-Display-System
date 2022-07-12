@@ -45,6 +45,8 @@ off, or blink, and turning a mechanical relay or analog switch on or off.
 
 The OBS Studio script is a python script that allows control of any / all of the provided 
 features as a result of activation and / or deactivation of any scene. The user interface 
+![Server Panel](NeopixelServeer/README.md)
+
 
 <img src="/assets/obsstudio.png">
 
