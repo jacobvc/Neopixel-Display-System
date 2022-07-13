@@ -21,7 +21,7 @@ off, or blink, and turning a mechanical relay or analog switch on or off.
 # Quick Start
 The system is designed to be completely incremental. That is, all you really need is the
 server itself and a web browser. The minimum server is an ESP32 Dev Module and one or more
-WS2812 8x32 led matrix displays (Compile option, 2 is default). The display(s) need to be 
+WS2812 8x32 led matrix displays (Compile option, 2 wide is default). The display(s) need to be 
 connected to GROUND, 5V (VIN), and D32. When more than one is used each additional one is 
 simply plugged into the 'out' side of the prior. See more about hardware below.
 
@@ -44,9 +44,12 @@ The implementation uses WiFi Smartconfig. [Install the ESP32 Smart Config App](h
 Open that IP address in a browser to control the device.
 
 # Hardware
+The Neopixel Matrix is a panel with 8 x 32 pixels (LEDs)
+<br><img src="/assets/neopixel32.png"> mounted on a flexible plastic panel, with a 3 pin JST SM female input connector and a 3 pin JST SM male output connectors. Multiple panels are daisy chained by plugging the input connector of one to the ooutput connector of another. Note that circuit board version of the SM connector are not avaialable, so the normal approach is to use a pigtail cable.
 
-1/8 inch plastic
-PVC FRP Cap Moulding
+One practical approach for panel construction is to use a 1/8 inch acrylic backing, and to fasten the disply to the backing using a "PVC FRP Cap Moulding", available from building supply stores. They make a very tight connection and stay in place very nicely. To use the display only, Connect the input to GROUND, VIN, and D32.
+
+[The full hardware immplementation can be implemented using this circuit board](https://github.com/jacobvc/ESP32-Hardware-Boards/tree/main/Esp32Relays)
 
 # Design 
 [Design](DESIGN.md)
