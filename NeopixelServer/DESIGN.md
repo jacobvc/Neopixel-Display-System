@@ -1,5 +1,7 @@
 # Neopixel Server Design
 
+TODO - Compose the design documentation ...
+
 # Dynamic User Interface Generation
 
 ## ViewMetaData
