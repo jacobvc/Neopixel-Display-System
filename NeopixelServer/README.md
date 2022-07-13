@@ -52,4 +52,4 @@ One practical approach for panel construction is to use a 1/8 inch acrylic backi
 [The full hardware immplementation can be implemented using this circuit board](https://github.com/jacobvc/ESP32-Hardware-Boards/tree/main/Esp32Relays)
 
 # Design 
-[Design](DESIGN.md)
+If you want to modify the software, look [here for more information about the design](DESIGN.md)
