@@ -40,7 +40,7 @@ with specified alignment (left, center, right, scroll), displaying a selected bu
 bitmap image, again with specified alignment, setting one of four virtual LEDs to on, 
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
-[more ...](NeopixelServer/README.md)
+[more ...](NeopixelServer)
 
 
 ## OBS Studio Script
@@ -49,7 +49,7 @@ The OBS Studio script is a python script that allows control of any / all of the
 features as a result of activation and / or deactivation of any scene. The user interface
 also supports enabling / disabling the participation of OBS Studio scenes.
 
-[more ...](obsstudio_script/README.md)
+[more ...](obsstudio_script)
 
 
 <img src="/assets/obsstudio.png">
@@ -59,7 +59,7 @@ also supports enabling / disabling the participation of OBS Studio scenes.
 The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP 
 interface on WIndows (The BLE library does not support Windows)
 
-[more ...](NeopixelClient/README.md)
+[more ...](NeopixelClient)
 
 <img src="/assets/NET-MAUI.png">
 
