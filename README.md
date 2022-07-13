@@ -1,6 +1,6 @@
 # Neopixel-Display-System
 
-The Neopixel Display System is basically a small ecosystem emerging from the convergence of an experiment to drive a Neopixel Matrix display using an ESP32 processor, and an interest / need to remotely control an external audio ouptut from [OBS Studio](https://obsproject.com/).
+The Neopixel Display System is a server device and several clients emerging from the convergence of an experiment to drive a Neopixel Matrix display using an ESP32 processor, and an interest / need to remotely control an external audio ouptut from [OBS Studio](https://obsproject.com/).
 
 ## Components
 
@@ -47,7 +47,7 @@ off, or blink, and turning a mechanical relay or analog switch on or off.
 
 The OBS Studio script is a python script that allows control of any / all of the provided
 features as a result of activation and / or deactivation of any scene. The user interface
-also supports enabling / disabling the participation of any scene.
+also supports enabling / disabling the participation of OBS Studio scenes.
 
 [more ...](obsstudio_script/README.md)
 
