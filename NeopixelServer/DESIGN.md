@@ -14,12 +14,12 @@ By convention, "functionalities" are implemented in a single file, supported by 
 ## Functionalities and source files
 The server functionalities
 
-* Configuration: config.h
-* esp32Neopixel.ino, neopixel.h
-* neopixelparams
-* neopixeldisplay, assets/
+* Configuration: config.h - The physical configuration. This file specifies the Neopixel Pannel size and the number of panels in use, in both horizontal and vertical dimensions, as well as GPIO port usage and the user inteface names for the virtual LEDs and the physical outputs.
+* esp32Neopixel.ino, neopixel.h - The 'main' application. Implements setup() and loop(), ad dispatches the corresponding functions for each of the functionalities.
+* neopixeldisplay, assets/ -
+* neopixelparams - 
 * neopixelble
-* neopixelwifi, WebPageDevelopment/ ans assets/webcontent.h
+* neopixelwifi, WebPageDevelopment/ and assets/webcontent.h
 
 # Dynamic User Interface Generation
 
