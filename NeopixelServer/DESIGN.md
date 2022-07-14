@@ -1,6 +1,25 @@
 # Neopixel Server Design
 
-TODO - Compose the design documentation ...
+## Architecture
+The design is ESP32 Arduino based. This has several implications:
+* It is developed using the Arduino IDE
+* There are a (very) few expressif libraries that are unavailable
+* The are a few available Arduino libraries that would not be available from the expressif SDK
+* Rather than a single (main()) entry point, there are two; setup() and loop()
+* The entry points are in a file with a .ino extension (esp32Neopixel.ino) in a directory of the same name
+* Additional source files in the same directory (,ino or .cpp) are included in the project
+
+By convention, "functionalities" are implemented in a single file, supported by a single header file, and they export the functions: <functionality>Setup() and <functionality>Tick() which are invoked by the entry point setup() and loop() respectively. To the extent feasible, interdependency is avoided, permitting a functionality to be removed by removing those two function calls.
+ 
+## Functionalities and source files
+The server functionalities
+
+* Configuration: config.h
+* esp32Neopixel.ino, neopixel.h
+* neopixelparams
+* neopixeldisplay, assets/
+* neopixelble
+* neopixelwifi, WebPageDevelopment/ ans assets/webcontent.h
 
 # Dynamic User Interface Generation
 
