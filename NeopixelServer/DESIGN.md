@@ -52,7 +52,10 @@ Provide the ability to display internally stored bitmaps. The selected bitmap is
     void SetBmpAlignment(Alignment alignment);
 
 ##### Assets
+ The assets subdirectory contains header files with the data for builtin bitmaps. The data in these header files is assumed to be in RGB (5-6-5 format.
 #### Virtual LEDs
+Provide the ability to display virtual (2 x 2 pixel) LED indicators in the first two columns of the display. Each one may have a mode of "ON", OFF", or "BLINK". The LEDs may each have one or two colors configured. The two colors swap position every second when the display is "on".
+ 
     void LedConfig(int index, int color1, int color2);
     LedDef *GetLeds();
     void SetLed(int index, LedMode mode);
