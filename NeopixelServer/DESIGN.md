@@ -7,7 +7,7 @@ The design is ESP32 Arduino based. This has several implications:
 * The are a few available Arduino libraries that would not be available from the expressif SDK
 * Rather than a single (main()) entry point, there are two; setup() and loop()
 * The entry points are in a file with a .ino extension (esp32Neopixel.ino) in a directory of the same name
-* Additional source files in the same directory (,ino or .cpp) are included in the project
+* Additional source files in the same directory (.ino or .cpp) are included in the project
 
 By convention, "functionalities" are implemented in a single file, supported by a single header file, and they export the functions: <functionality>Setup() and <functionality>Tick() which are invoked by the entry point setup() and loop() respectively. To the extent feasible, interdependency is avoided, permitting a functionality to be removed by removing those two function calls.
  
@@ -22,36 +22,66 @@ The server functionalities
 * neopixelwifi, WebPageDevelopment/ and assets/webcontent.h - The WiFi / Webserver interface. See Below
 
 ### Display Functionality
- #### Text
- #### Graphics
- ##### Assets
- #### Virtual LEDs
-### Parameter Access
- #### Parameter Getters
- #### Parameter Setters
- ##### Outputs
- #### Parameter Parser
- #### Metadata (JSON)
- #### Status (JSON)
-### Bluetooth BLE
- #### Read Metadata
- #### Read Status
- #### Set Parameter(s)
-### WiFi / Webserver
- #### WiFi
- #### Webserver
- #### Get Metadata
- #### Get Status
- #### Set Parameter(s)
- #### Dynammic Webpage
- #### Web Page Development
+neopixeldisplay implements the NeopixelDisplay object, which encapsulates all of the display functionality.
+#### Text
+Provide the ability to display arbitrary length text with specified aligment and color. Color is communicated as the index of a set of options, where zero is reserved for "OFF" and one is reserved for "Rainbow". Alignment may be specified as left, center, right, or scroll. If the text does not fit on the display and alignment is not "scroll', the text "rocks" to display all of the text.
  
+ Note that when a bitmap is displayed, it overrides the text color to "OFF"
  
-# Dynamic User Interface Generation
+ Get accessors are implemented for Text, Color, and Alignment to make them available for status reporting.
+ 
+    String& GetText();
+    int ShowText(String text);
+    int ShowText(String text, int colorIndex);
+    int ShowText(String text, int colorIndex, Alignment alignment);
+    Alignment GetTextAlignment();
+    void SetTextAlignment(Alignment alignment);
+    void SetTextColor(int value);
+    int GetTextColor();
+#### Graphics
+Provide the ability to display internally stored bitmaps. The selected bitmap is communicated as the index of a set of options, where zero is reserved for "OFF" Alignment may be specified as left, center, right, scroll, or bounce.
+ 
+ Get accessors are provided for Bitmap and Alignment to make them available for status reporting.
 
-## ViewMetaData
+ Note that when text displayed, it overrides bitmap "OFF"
+ 
+    int GetBitmap();
+    int ShowBitmap(uint16_t which, Alignment alignment);
+    int ShowBitmap(uint16_t which);
+    Alignment GetBmpAlignment();
+    void SetBmpAlignment(Alignment alignment);
+
+##### Assets
+#### Virtual LEDs
+    void LedConfig(int index, int color1, int color2);
+    LedDef *GetLeds();
+    void SetLed(int index, LedMode mode);
+### Parameter Access
+#### Parameter Getters
+#### Parameter Setters
+##### Outputs
+#### Parameter Parser
+#### Metadata (JSON)
+#### Status (JSON)
+### Bluetooth BLE
+#### Read Metadata
+#### Read Status
+#### Set Parameter(s)
+### WiFi / Webserver
+#### WiFi
+#### Webserver
+#### Get Metadata
+#### Get Status
+#### Set Parameter(s)
+#### Web Page Development
+##### Dynamic View
+ 
+ 
+# Metadata Based User Interface Generation
+
+## ViewMetaData Object
 **string name:**
-Name of the metadata item (same as name of associated data)
+Name of the metadata item (same as name of associated Status data)
 
 **string[] names:**
 If non-null, item value is an array, and 'names' are names for each array member
