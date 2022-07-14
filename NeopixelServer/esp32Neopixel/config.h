@@ -21,5 +21,5 @@
 
 // Port numbers and UI names for the physical outputs
 // Limited only by number of GPIOs
-#define OUTPUTS_PORTS {13, "Audio"},   {12, "Relay 1"}, {14, "Relay  2"}, \
+#define OUTPUTS_PORTS {13, "Audio"},   {12, "Relay 1"}, {14, "Relay 2"}, \
                       {27, "Relay 3"}, {33, "Audio 2"}
