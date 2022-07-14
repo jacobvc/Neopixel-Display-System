@@ -44,8 +44,10 @@ The implementation uses WiFi Smartconfig. [Install the ESP32 Smart Config App](h
 Open that IP address in a browser to control the device.
 
 # Hardware
-The Neopixel Matrix is a panel with 8 x 32 pixels (LEDs)
-<br><img src="/assets/neopixel32.png"> mounted on a flexible plastic panel, with a 3 pin JST SM female input connector and a 3 pin JST SM male output connectors. Multiple panels are daisy chained by plugging the input connector of one to the ooutput connector of another. Note that circuit board version of the SM connector are not avaialable, so the normal approach is to use a pigtail cable.
+The Neopixel Matrix is a panel with 8 x 32 pixels (LEDs) mounted on a flexible plastic substrate, 
+with a 3 pin JST SM female input connector and a 3 pin JST SM male output connectors. Multiple panels are daisy chained by plugging the input connector of one to the output connector of another. Note that circuit board version of the SM connector are not avaialable, so the normal approach is to use a pigtail cable.
+
+<img src="/assets/neopixel32.png">
 
 One practical approach for panel construction is to use a 1/8 inch acrylic backing, and to fasten the disply to the backing using a "PVC FRP Cap Moulding", available from building supply stores. They make a very tight connection and stay in place very nicely. To use the display only, Connect the input to GROUND, VIN, and D32.
 
