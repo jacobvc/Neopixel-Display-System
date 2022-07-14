@@ -14,13 +14,39 @@ By convention, "functionalities" are implemented in a single file, supported by 
 ## Functionalities and source files
 The server functionalities
 
-* Configuration: config.h - The physical configuration. This file specifies the Neopixel Pannel size and the number of panels in use, in both horizontal and vertical dimensions, as well as GPIO port usage and the user inteface names for the virtual LEDs and the physical outputs.
+* Configuration: config.h - The physical configuration. This file specifies the Neopixel Panel size and the number of panels in use, in both horizontal and vertical dimensions, as well as GPIO port usage and the user inteface names for the virtual LEDs and the physical outputs.
 * esp32Neopixel.ino, neopixel.h - The 'main' application. Implements setup() and loop(), ad dispatches the corresponding functions for each of the functionalities.
-* neopixeldisplay, assets/ -
-* neopixelparams - 
-* neopixelble
-* neopixelwifi, WebPageDevelopment/ and assets/webcontent.h
+* neopixeldisplay, assets/ - Implementation of display functionality. See below
+* neopixelparams - Implementation of All parameter access and communications. See Below
+* neopixelble - The bluetooth BLE interface. See below
+* neopixelwifi, WebPageDevelopment/ and assets/webcontent.h - The WiFi / Webserver interface. See Below
 
+### Display Functionality
+ #### Text
+ #### Graphics
+ ##### Assets
+ #### Virtual LEDs
+### Parameter Access
+ #### Parameter Getters
+ #### Parameter Setters
+ ##### Outputs
+ #### Parameter Parser
+ #### Metadata (JSON)
+ #### Status (JSON)
+### Bluetooth BLE
+ #### Read Metadata
+ #### Read Status
+ #### Set Parameter(s)
+### WiFi / Webserver
+ #### WiFi
+ #### Webserver
+ #### Get Metadata
+ #### Get Status
+ #### Set Parameter(s)
+ #### Dynammic Webpage
+ #### Web Page Development
+ 
+ 
 # Dynamic User Interface Generation
 
 ## ViewMetaData
