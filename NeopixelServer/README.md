@@ -39,7 +39,7 @@ The required libraries include:
 * Adafruit_NeoMatrix
 * ESPAsyncWebServer
 
-The implementation uses WiFi Smartconfig. [Install the ESP32 Smart Config App](https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo) and configure it. When it successfully connects to WiFi, it scrolls the IP address on the display.
+The implementation uses WiFi Smartconfig. [Install the ESP32 Smart Config App](https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo) and use it configure the access point connecton. When it successfully connects to WiFi, the IP address scrolls on the display.
 
 Open that IP address in a browser to control the device.
 
@@ -52,4 +52,4 @@ One practical approach for panel construction is to use a 1/8 inch acrylic backi
 [The full hardware immplementation can be implemented using this circuit board](https://github.com/jacobvc/ESP32-Hardware-Boards/tree/main/Esp32Relays)
 
 # Design 
-If you want to modify the software, look [here for more information about the design](DESIGN.md)
+If you are ready to modify the software for your own needs, look [here for more information about the design](DESIGN.md)
