@@ -9,19 +9,15 @@
 #define BRIGHTNESS 32
 
 
-// Number of steps supported by 'Sequence'
-#define STEP_COUNT 4
-
-// Number of sequence and output elements
-#define SEQUENCE_COUNT 4
-
 // GPIO Port mapping
 #define BUILTIN_LED 2
 #define BUILTIN_BUTTON 0
 #define MATRIX_GPIO 32
 
+// UI names for the virtual LEDs
+// No more thsn 4 without updating neopixeldisplay implementation
 #define LEDS_NAMES "LED 1", "LED 2", "LED 3", "LED 4"
 
-// GND 13 12 14 27 26 25 33 32 35 34 39 36
+// Port numbers and names for the physical outputs
 #define OUTPUTS_PORTS {13, "Audio"},   {12, "Relay 1"}, {14, "Relay  2"}, \
                       {27, "Relay 3"}, {33, "Audio 2"}

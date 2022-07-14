@@ -102,40 +102,6 @@ void SavePreferences()
  *
  */
 
-//
-// Sequence
-//
-byte *SequenceValue()
-{
-    return sequence.GetConfig();
-}
-
-int SequenceCount()
-{
-    return SEQUENCE_COUNT;
-}
-
-void SequenceChanged(byte config[])
-{
-    sequence.SetConfig(config);
-}
-
-void JsonSequenceDataArray(JsonArray obj)
-{
-    byte *sequence = SequenceValue();
-    for (int i = 0; i < SEQUENCE_COUNT; ++i)
-    {
-        obj[i] = sequence[i];
-    }
-}
-
-byte parseSequence(const String &value, int arg)
-{
-    byte *sequence = SequenceValue();
-    sequence[arg] = value.toInt();
-    SequenceChanged(sequence);
-    return 1;
-}
 
 //
 // Outputs
@@ -377,11 +343,6 @@ void NeoParamSetup()
 
     params.AddParser("devicename", parseString, DEVNAME_ID);
 
-    //for (int i = 0; i < SEQUENCE_COUNT; ++i)
-    //{
-    //    params.AddParser(String("sequence[") + i + "]", parseSequence, i);
-    //}
-
     for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
     {
         params.AddParser(String("leds[") + i + "]", parseLed, i);
@@ -427,7 +388,6 @@ void JsonEncodeNeopixelData()
     doc["txtclr"] = IntValue(COLOR_INDEX_ID);
     doc["text"] = TextValue();
     doc["bmp"] = IntValue(BITMAP_ID);
-    //JsonSequenceDataArray(doc.createNestedArray("sequence"));
     JsonOutputDataArray(doc.createNestedArray("outputs"));
     JsonLedDataArray(doc.createNestedArray("leds"));
 
