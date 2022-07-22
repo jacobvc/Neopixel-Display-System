@@ -69,40 +69,12 @@ void NeoParamTick();
 void GetPreferences();
 void SavePreferences();
 
-//
-// Sequence
-//
-extern byte *SequenceValue();
-extern int SequenceCount();
-extern void SequenceChanged(byte configs[]);
-extern void JsonSequenceDataArray(JsonArray root);
-
-//
-// Output
-//
-extern byte *OutputsValue();
 extern int OutputCount();
-extern void OutputValueChanged(int index, int value);
-extern void JsonOutputDataArray(JsonArray root);
-
-//
-// Virtual LEDs
-//
-LedDef *LedsValue();
 int LedsCount();
-void LedChanged(int index, LedMode value);
-void JsonLedDataArray(JsonArray root);
-
-//
-// Text
-//
-extern String& TextValue();
-extern void TextChanged(String msg);
 
 void JsonEncodeNeopixelData();
 void JsonEncodeNeopixelMetaData();
 
-byte NeoParamParse(const String& name, const String& value);
 void JsonOutputsMeta(JsonObject obj);
 void JsonLedsMeta(JsonObject obj);
 

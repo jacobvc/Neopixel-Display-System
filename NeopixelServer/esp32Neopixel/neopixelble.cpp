@@ -69,17 +69,14 @@ class StatusCallbacks : public BLECharacteristicCallbacks
         for (JsonPair kv : root)
         {
             String key = kv.key().c_str();
-            String value = kv.value().as<char *>();
+            String value = kv.value().as<const char *>();
             if (!params.parse(key, value))
             {
                 // error += "! " + request->argName(i) + " (" + request->arg(i) + ") FAILED ! ";
             }
             Serial.println(kv.key().c_str());
-            Serial.println(kv.value().as<char *>());
+            Serial.println(kv.value().as<const char *>());
         }
-        // for (int i = 0; i < OutputCount(); ++i) {
-        //     OutputValueChanged(i, data[i]);
-        // }
     }
 };
 

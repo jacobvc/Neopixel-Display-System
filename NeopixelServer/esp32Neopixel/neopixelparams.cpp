@@ -106,6 +106,11 @@ void SavePreferences()
 //
 // Outputs
 //
+int OutputCount()
+{
+    return OUTPUT_COUNT;
+}
+
 void JsonMetaOutputs(JsonObject obj)
 {
   obj["name"] = "outputs";
@@ -119,31 +124,25 @@ void JsonMetaOutputs(JsonObject obj)
     }
 }
 
-byte *OutputsValue()
+int OutputValue(int index)
 {
-    for (int i = 0; i < OUTPUT_COUNT; ++i)
+    if (index < OUTPUT_COUNT)
     {
-        outputValues[i] = digitalRead(outputsPorts[i].value);
+        return digitalRead(outputsPorts[index].value);
     }
-    return outputValues;
+    return -1;
 }
 
-int OutputCount()
+void OutputValueChanged(int index, int newvalue)
 {
-    return OUTPUT_COUNT;
-}
-
-void OutputValueChanged(int index, int value)
-{
-    digitalWrite(outputsPorts[index].value, value);
+    digitalWrite(outputsPorts[index].value, newvalue);
 }
 
 void JsonOutputDataArray(JsonArray obj)
 {
-    byte *outputs = OutputsValue();
     for (int i = 0; i < OUTPUT_COUNT; ++i)
     {
-        obj[i] = outputs[i];
+        obj[i] = OutputValue(i);
     }
 }
 
@@ -165,7 +164,12 @@ byte parseOutput(const String &value, int arg)
 //
 // Led
 //
-void JsonMetaLedss(JsonObject obj)
+int LedsCount()
+{
+    return VIRTUAL_LED_COUNT;
+}
+
+void JsonMetaLeds(JsonObject obj)
 {
   obj["name"] = "leds";
   obj["type"] = "select";
@@ -179,16 +183,6 @@ void JsonMetaLedss(JsonObject obj)
     }
 }
 
-LedDef *LedsValue()
-{
-    return display.GetLeds();
-}
-
-int LedsCount()
-{
-    return VIRTUAL_LED_COUNT;
-}
-
 void LedChanged(int index, LedMode value)
 {
     display.SetLed(index, value);
@@ -196,7 +190,7 @@ void LedChanged(int index, LedMode value)
 
 void JsonLedDataArray(JsonArray obj)
 {
-    LedDef *leds = LedsValue();
+    LedDef *leds = display.GetLeds();
     for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
     {
         obj[i] = leds[i].mode;
@@ -453,7 +447,7 @@ void JsonEncodeNeopixelMetaData()
     JsonMetaCompositeText(doc.createNestedObject());
     JsonMetaCompositeBitmap(doc.createNestedObject());
     JsonMetaOutputs(doc.createNestedObject());
-    JsonMetaLedss(doc.createNestedObject());
+    JsonMetaLeds(doc.createNestedObject());
 
     JsonMetaOptsColor(doc.createNestedObject());
     JsonMetaOptsBitmap(doc.createNestedObject());
