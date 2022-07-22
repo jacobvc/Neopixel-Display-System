@@ -94,6 +94,7 @@ Outputs are implemented in neopixelparams.cpp.
  
 #### Parameter Parsing: class NeopixelParams
 Parameter parsing is implemented in neopixelparams.cpp. 
+ 
     void AddParser(String name, byte (*parse)(const String &value, int arg), int arg);
     byte parse(const String &name, const String &value);
 
