@@ -34,12 +34,22 @@ The first step is to install the development environment and build the server.
 * Build and run the project
 
 The required libraries include:
-* ArduinoJson-6.x
-* Adafruit_GFX
-* Adafruit_NeoMatrix
-* ESPAsyncWebServer
+* ArduinoJson version 6.x (install using Arduino Library Manager)
+* Adafruit_GFX (install using Arduino Library Manager)
+* Adafruit_NeoMatrix (install using Arduino Library Manager)
+* [ESPAsyncTcp](https://github.com/me-no-dev/AsyncTCP) Install as zip library (see below)
+* [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) Install as zip library (see below)
 
-The implementation uses WiFi Smartconfig. [Install the ESP32 Smart Config App](https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo) and use it configure the access point connecton. When it successfully connects to WiFi, the IP address scrolls on the display.
+To install as a Zip Library, follow the link the the github repository, click on the green "code" button,
+and choose download zip. Then in the Arduino IDE select the menu item: Sketch > Include Library > Add .zip Library,
+and browse to the downloaded file location.
+
+Configure the IDE for the board and project and build / run
+* Board ESP32 Dev Module
+* Partition Scheme: Minimal SPIFFS (or any config with at least 1.6MB APP)
+* Serial Port
+
+The implementation is provisioned using WiFi Smartconfig. [Install the ESP32 Smart Config App](https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo) and use it configure the access point connecton. When it successfully connects to WiFi, the IP address scrolls on the display.
 
 Open that IP address in a browser to control the device.
 

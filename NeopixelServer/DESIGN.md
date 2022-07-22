@@ -11,8 +11,8 @@ The design is ESP32 Arduino based. This has several implications:
 
 By convention, "functionalities" are implemented in a single file, supported by a single header file, and they export the functions: <functionality>Setup() and <functionality>Tick() which are invoked by the entry point setup() and loop() respectively. To the extent feasible, interdependency is avoided, permitting a functionality to be removed by removing those two function calls.
  
-## Functionalities and source files
-The server functionalities
+### Functionalities and source files
+The server functionalities include:
 
 * Configuration: config.h - The physical configuration. This file specifies the Neopixel Panel size and the number of panels in use, in both horizontal and vertical dimensions, as well as GPIO port usage and the user inteface names for the virtual LEDs and the physical outputs.
 * esp32Neopixel.ino, neopixel.h - The 'main' application. Implements setup() and loop(), ad dispatches the corresponding functions for each of the functionalities.
@@ -21,12 +21,16 @@ The server functionalities
 * neopixelble - The bluetooth BLE interface. See below
 * neopixelwifi, WebPageDevelopment/ and assets/webcontent.h - The WiFi / Webserver interface. See Below
 
-### Display Functionality
-neopixeldisplay implements the NeopixelDisplay object, which encapsulates all of the display functionality.
-#### Text
-Provide the ability to display arbitrary length text with specified aligment and color. Color is communicated as the index of a set of options, where zero is reserved for "OFF" and one is reserved for "Rainbow". Alignment may be specified as left, center, right, or scroll. If the text does not fit on the display and alignment is not "scroll', the text "rocks" to display all of the text.
+### Display Functionality: class NeopixelDisplay
+neopixeldisplay.cpp implements the NeopixelDisplay object, which encapsulates the display functionality. The display functionality consists of "Text", "Graphics", and "Virtual LEDs". As the display module, it also implements the Arduino integration functions:
  
- Note that when a bitmap is displayed, it overrides the text color to "OFF"
+    void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panelsH);
+    void NeoDisplay10msTick();
+
+#### Text
+Provides the ability to display arbitrary length text with specified aligment and color. Color is communicated as the index of a set of options, where zero is reserved for "OFF" and one is reserved for "Rainbow". Alignment may be specified as left, center, right, or scroll. If the text does not fit on the display and alignment is not "scroll', the text "rocks" to display all of the text.
+ 
+ Note that when a graphic is displayed, the text color is overriden to "OFF"
  
  Get accessors are implemented for Text, Color, and Alignment to make them available for status reporting.
  
@@ -38,12 +42,13 @@ Provide the ability to display arbitrary length text with specified aligment and
     void SetTextAlignment(Alignment alignment);
     void SetTextColor(int value);
     int GetTextColor();
+ 
 #### Graphics
-Provide the ability to display internally stored bitmaps. The selected bitmap is communicated as the index of a set of options, where zero is reserved for "OFF" Alignment may be specified as left, center, right, scroll, or bounce.
+Provides the ability to display internally stored bitmaps. The selected bitmap is communicated as the index of a set of options, where zero is reserved for "OFF" Alignment may be specified as left, center, right, scroll, or bounce.
  
  Get accessors are provided for Bitmap and Alignment to make them available for status reporting.
 
- Note that when text displayed, it overrides bitmap "OFF"
+ Note that when text displayed, the bitmap is overriden to "OFF"
  
     int GetBitmap();
     int ShowBitmap(uint16_t which, Alignment alignment);
@@ -51,33 +56,73 @@ Provide the ability to display internally stored bitmaps. The selected bitmap is
     Alignment GetBmpAlignment();
     void SetBmpAlignment(Alignment alignment);
 
-##### Assets
- The assets subdirectory contains header files with the data for builtin bitmaps. The data in these header files is assumed to be in RGB (5-6-5 format.
 #### Virtual LEDs
 Provide the ability to display virtual (2 x 2 pixel) LED indicators in the first two columns of the display. Each one may have a mode of "ON", OFF", or "BLINK". The LEDs may each have one or two colors configured. The two colors swap position every second when the display is "on".
  
     void LedConfig(int index, int color1, int color2);
     LedDef *GetLeds();
     void SetLed(int index, LedMode mode);
+
+#### Assets
+The assets subdirectory has header files containing the embedded webpage file contents (webcontent.h/webcontent.min,h) and header files containing the data for builtin bitmaps. The data in the bitmap header files is in RGB (5-6-5) format.
+
 ### Parameter Access
-#### Parameter Getters
-#### Parameter Setters
-##### Outputs
-#### Parameter Parser
-#### Metadata (JSON)
-#### Status (JSON)
+Parameters are named properties that are externally visible and potentially modifiable from an external interface.
+The Parameter interface makes parameter definitions visible via metadata generation, distributes parameter values
+via status generation, and supports chaning parameters via parameter parsing.
+ 
+Parameter access is implemented in neopixelparams.cpp. As the parameters module, it also implements the Arduino integration functions:
+ 
+    void NeoParamSetup();
+    void NeoParamTick();
+ 
+#### Preferences
+Peferences are persistent configuration values that are stored in ESP32 nonvolatile memory. The preferences implementation
+maintains the preferences values in global memory variables for normal access, and saves the preferences to persistent memory upon change. 
+ 
+Preferences are implemented in neopixelparams.cpp. 
+ 
+    void GetPreferences();  - Get preferences from persistent memory into global variables
+    void SavePreferences(); - Save global preference variables into persistent memory
+ 
+#### Outputs
+Outputs are implemented in neopixelparams.cpp. 
+ 
+#### Metadata Generation (JSON)
+
+#### Status Generation (JSON)
+ 
+#### Parameter Parsing: class NeopixelParams
+Parameter parsing is implemented in neopixelparams.cpp. 
+ 
+    void AddParser(String name, byte (*parse)(const String &value, int arg), int arg);
+    byte parse(const String &name, const String &value);
+
 ### Bluetooth BLE
+The BLE server is implemented in neopixelble.cpp. As the BLE module, it also implements the Arduino integration functions:
+ 
+    void NeoBleSetup();
+    void NeoBleTick();
+
 #### Read Metadata
 #### Read Status
 #### Set Parameter(s)
+ 
 ### WiFi / Webserver
+The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it also implements the Arduino integration functions:
+ 
+    void NeoWifiSetup(void);
+    void NeoWifiTick(void);
+
 #### WiFi
 #### Webserver
 #### Get Metadata
 #### Get Status
 #### Set Parameter(s)
-#### Web Page Development
-##### Dynamic View
+ 
+### Web Page Development
+ 
+#### Dynamic View
  
  
 # Metadata Based User Interface Generation
