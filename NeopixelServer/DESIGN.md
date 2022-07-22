@@ -82,8 +82,8 @@ maintains the preferences values in global memory variables for normal access, a
  
 Preferences are implemented in neopixelparams.cpp. 
  
-   void GetPreferences(); - Get the preferences from persistent memory into global variables
-   void SavePreferences(); - Save global prefernce variables into persistent memory
+    void GetPreferences();  - Get preferences from persistent memory into global variables
+    void SavePreferences(); - Save global preference variables into persistent memory
  
 #### Outputs
 Outputs are implemented in neopixelparams.cpp. 
