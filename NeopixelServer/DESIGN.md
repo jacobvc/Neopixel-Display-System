@@ -23,6 +23,7 @@ The server functionalities include:
 
 ### Display Functionality: class NeopixelDisplay
 neopixeldisplay.cpp implements the NeopixelDisplay object, which encapsulates the display functionality. The display functionality consists of "Text", "Graphics", and "Virtual LEDs". As the display module, it also implements the Arduino integration functions:
+ 
     void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panelsH);
     void NeoDisplay10msTick();
 
@@ -67,6 +68,7 @@ The assets subdirectory has header files containing the embedded webpage file co
 
 ### Parameter Access
 Parameter access is implemented in neopixelparams.cpp. As the parameters module, it also implements the Arduino integration functions:
+ 
     void NeoParamSetup();
     void NeoParamTick();
 
@@ -75,6 +77,7 @@ Metadata generation, status generation, and parameter parsing
  
 ### Preferences
 Preferences are implemented in neopixelparams.cpp. 
+ 
    void GetPreferences();
    void SavePreferences();
  
@@ -92,6 +95,7 @@ Parameter parsing is implemented in neopixelparams.cpp.
 
 ### Bluetooth BLE
 The BLE server is implemented in neopixelble.cpp. As the BLE module, it also implements the Arduino integration functions:
+ 
     void NeoBleSetup();
     void NeoBleTick();
 
@@ -101,6 +105,7 @@ The BLE server is implemented in neopixelble.cpp. As the BLE module, it also imp
  
 ### WiFi / Webserver
 The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it also implements the Arduino integration functions:
+ 
     void NeoWifiSetup(void);
     void NeoWifiTick(void);
 
