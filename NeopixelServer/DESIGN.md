@@ -63,25 +63,29 @@ Provide the ability to display virtual (2 x 2 pixel) LED indicators in the first
     LedDef *GetLeds();
     void SetLed(int index, LedMode mode);
 
-##### Assets
+#### Assets
 The assets subdirectory has header files containing the embedded webpage file contents (webcontent.h/webcontent.min,h) and header files containing the data for builtin bitmaps. The data in the bitmap header files is in RGB (5-6-5) format.
 
 ### Parameter Access
+Parameters are named properties that are externally visible and potentially modifiable from an external interface.
+The Parameter interface makes parameter definitions visible via metadata generation, distributes parameter values
+via status generation, and supports chaning parameters via parameter parsing.
+ 
 Parameter access is implemented in neopixelparams.cpp. As the parameters module, it also implements the Arduino integration functions:
  
     void NeoParamSetup();
     void NeoParamTick();
-
  
-Metadata generation, status generation, and parameter parsing
+#### Preferences
+Peferences are persistent configuration values that are stored in ESP32 nonvolatile memory. The preferences implementation
+maintains the preferences values in global memory variables for normal access, and saves the preferences to persistent memory upon change. 
  
-### Preferences
 Preferences are implemented in neopixelparams.cpp. 
  
-   void GetPreferences();
-   void SavePreferences();
+   void GetPreferences(); - Get the preferences from persistent memory into global variables
+   void SavePreferences(); - Save global prefernce variables into persistent memory
  
-### Outputs
+#### Outputs
 Outputs are implemented in neopixelparams.cpp. 
  
 #### Metadata Generation (JSON)
