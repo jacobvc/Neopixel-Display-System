@@ -12,7 +12,7 @@ The design is ESP32 Arduino based. This has several implications:
 By convention, "functionalities" are implemented in a single file, supported by a single header file, and they export the functions: <functionality>Setup() and <functionality>Tick() which are invoked by the entry point setup() and loop() respectively. To the extent feasible, interdependency is avoided, permitting a functionality to be removed by removing those two function calls.
  
 ### Functionalities and source files
-The server functionalities
+The server functionalities include:
 
 * Configuration: config.h - The physical configuration. This file specifies the Neopixel Panel size and the number of panels in use, in both horizontal and vertical dimensions, as well as GPIO port usage and the user inteface names for the virtual LEDs and the physical outputs.
 * esp32Neopixel.ino, neopixel.h - The 'main' application. Implements setup() and loop(), ad dispatches the corresponding functions for each of the functionalities.
@@ -21,9 +21,11 @@ The server functionalities
 * neopixelble - The bluetooth BLE interface. See below
 * neopixelwifi, WebPageDevelopment/ and assets/webcontent.h - The WiFi / Webserver interface. See Below
 
-### Display Functionality
-neopixeldisplay.cpp implements the NeopixelDisplay object, which encapsulates the display functionality. The display functionality consists of "Text", "Graphics", and "Virtual LEDs".
- 
+### Display Functionality: class NeopixelDisplay
+neopixeldisplay.cpp implements the NeopixelDisplay object, which encapsulates the display functionality. The display functionality consists of "Text", "Graphics", and "Virtual LEDs". As the display module, it also implements the Arduino integration functions:
+    void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panelsH);
+    void NeoDisplay10msTick();
+
 #### Text
 Provides the ability to display arbitrary length text with specified aligment and color. Color is communicated as the index of a set of options, where zero is reserved for "OFF" and one is reserved for "Rainbow". Alignment may be specified as left, center, right, or scroll. If the text does not fit on the display and alignment is not "scroll', the text "rocks" to display all of the text.
  
@@ -63,24 +65,45 @@ Provide the ability to display virtual (2 x 2 pixel) LED indicators in the first
 ##### Assets
 The assets subdirectory has header files containing the embedded webpage file contents (webcontent.h/webcontent.min,h) and header files containing the data for builtin bitmaps. The data in the bitmap header files is in RGB (5-6-5) format.
 
-### Preferences
-### Outputs
- 
 ### Parameter Access
-Parameter access is implemented in neopixelparams.cpp. 
-#### Parameter Getters
-#### Parameter Setters
+Parameter access is implemented in neopixelparams.cpp. As the parameters module, it also implements the Arduino integration functions:
+    void NeoParamSetup();
+    void NeoParamTick();
+
  
-#### Parameter Parser
-#### Metadata (JSON)
-#### Status (JSON)
+Metadata generation, status generation, and parameter parsing
  
+### Preferences
+Preferences are implemented in neopixelparams.cpp. 
+   void GetPreferences();
+   void SavePreferences();
+ 
+### Outputs
+Outputs are implemented in neopixelparams.cpp. 
+ 
+#### Metadata Generation (JSON)
+
+#### Status Generation (JSON)
+ 
+#### Parameter Parsing: class NeopixelParams
+Parameter parsing is implemented in neopixelparams.cpp. 
+    void AddParser(String name, byte (*parse)(const String &value, int arg), int arg);
+    byte parse(const String &name, const String &value);
+
 ### Bluetooth BLE
+The BLE server is implemented in neopixelble.cpp. As the BLE module, it also implements the Arduino integration functions:
+    void NeoBleSetup();
+    void NeoBleTick();
+
 #### Read Metadata
 #### Read Status
 #### Set Parameter(s)
  
 ### WiFi / Webserver
+The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it also implements the Arduino integration functions:
+    void NeoWifiSetup(void);
+    void NeoWifiTick(void);
+
 #### WiFi
 #### Webserver
 #### Get Metadata
