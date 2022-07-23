@@ -66,6 +66,18 @@ Provide the ability to display virtual (2 x 2 pixel) LED indicators in the first
 #### Assets
 The assets subdirectory has header files containing the embedded webpage file contents (webcontent.h/webcontent.min,h) and header files containing the data for builtin bitmaps. The data in the bitmap header files is in RGB (5-6-5) format.
 
+### Preference Functionality
+Peferences are persistent configuration values that are stored in ESP32 nonvolatile memory. The preferences implementation
+maintains the preferences values in global memory variables for normal access, and saves the preferences to persistent memory upon change. Preference values can be accessed as parameters.
+ 
+Preferences are implemented in neopixelparams.cpp. 
+ 
+    void GetPreferences();  - Get preferences from persistent memory into global variables
+    void SavePreferences(); - Save global preference variables into persistent memory
+ 
+### Output Functionality
+The general pattern for parameter implementation is to implement the functionality and to connect it to parameters using an accessor. In the case of outputs, the values are values of GPIO signals, and the hardware itself is treated as the implementation. That is, GPIO read / write are the accessors to the actual hardware implementation Outputs are implemented in neopixelparams.cpp. 
+ 
 ### Parameter Access
 Parameters are named properties that are externally visible and potentially modifiable from an external interface.
 The Parameter interface makes parameter definitions visible via metadata generation, distributes parameter values
@@ -75,18 +87,6 @@ Parameter access is implemented in neopixelparams.cpp. As the parameters module,
  
     void NeoParamSetup();
     void NeoParamTick();
- 
-#### Preferences
-Peferences are persistent configuration values that are stored in ESP32 nonvolatile memory. The preferences implementation
-maintains the preferences values in global memory variables for normal access, and saves the preferences to persistent memory upon change. 
- 
-Preferences are implemented in neopixelparams.cpp. 
- 
-    void GetPreferences();  - Get preferences from persistent memory into global variables
-    void SavePreferences(); - Save global preference variables into persistent memory
- 
-#### Outputs
-Outputs are implemented in neopixelparams.cpp. 
  
 #### Metadata Generation (JSON)
 
@@ -125,9 +125,9 @@ The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it als
 #### Dynamic View
  
  
-# Metadata Based User Interface Generation
+## Metadata Based User Interface Generation
 
-## ViewMetaData Object
+### ViewMetaData Object
 **string name:**
 Name of the metadata item (same as name of associated Status data)
 
