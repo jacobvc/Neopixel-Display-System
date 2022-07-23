@@ -17,7 +17,7 @@ The server functionalities include:
 * Configuration: config.h - The physical configuration. This file specifies the Neopixel Panel size and the number of panels in use, in both horizontal and vertical dimensions, as well as GPIO port usage and the user inteface names for the virtual LEDs and the physical outputs.
 * esp32Neopixel.ino, neopixel.h - The 'main' application. Implements setup() and loop(), ad dispatches the corresponding functions for each of the functionalities.
 * neopixeldisplay, assets/ - Implementation of display functionality. See below
-* neopixelparams - Implementation of All parameter access and communications. See Below
+* neopixelparams - Implementation of All parameter access and representation. See Below
 * neopixelble - The bluetooth BLE interface. See below
 * neopixelwifi, WebPageDevelopment/ and assets/webcontent.h - The WiFi / Webserver interface. See Below
 
