@@ -239,6 +239,7 @@ def action_properties_exec(scene_name, isPreview, activate):
                     action = bool(obj['textoff'])
                     if action:
                         changes['txtclr'] = '0'
+                        changeCount += 1
                 if 'ledaction' in obj:
                     ledaction = obj['ledaction']
                     if ledaction[action_index] != OUT_NA:
