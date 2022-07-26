@@ -16,10 +16,7 @@ At this time, the key components of the system are the NeopixelServer, an OBS St
 
 ![Server Panel](/assets/NeopixelPanel.png)
 
-The NeopixelServer is an aplication running on an ESP32 that operates a Neopixel
-Matrix display and some physical I/O (mechanical relays and virtual LEDs). 
-
-The NeopixelServer is an aplication running on an ESP32 that operates a Neopixel 
+The NeopixelServer is an application running on an ESP32 that operates a Neopixel
 Matrix display and some physical I/O (mechanical relays and virtual LEDs). 
 
 The Neopixel Server is developed using the Arduino for ESP32 development tools
