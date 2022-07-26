@@ -132,9 +132,11 @@ sufficient information to construct a functional user interface.
 It currently supports data of types boolean, string, and select list, as well as arrays of those types
 and composites of more than one data element.
  
-Metadata is ransmitted as a JSON string representing an array of VewMetaData objects.
+Metadata is transmitted as a JSON string representing an array of VewMetaData objects.
 
 ### ViewMetaData Object
+A ViewMetaData object describes data, and is composed of the following fields:
+ 
 **string name:**
 Name of the metadata item (same as name of associated Status data)
 
