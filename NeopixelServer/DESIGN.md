@@ -125,7 +125,14 @@ The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it als
 #### Dynamic View
  
  
-## Metadata Based User Interface Generation
+## Metadata definitions
+Metadata describes the data exchanged between the Neopixel server and client. It is intended to contain
+sufficient information to construct a functional user interface.
+ 
+It currently supports data of types boolean, string, and select list, as well as arrays of those types
+and composites of more than one data element.
+ 
+Metadata is ransmitted as a JSON string representing an array of VewMetaData objects.
 
 ### ViewMetaData Object
 **string name:**
@@ -140,7 +147,7 @@ Suggested label for this item
 **string type:**
 Type of item being described. One of:
 * bool - A boolean value
-* select - A value that hase a specified set of textual values represented by their index
+* select - A value that has a specified set of textual values represented by their index
 * text - A String value
 * composite - A set of ViewMetadata objs that combine to represent a compisite entity
 * value - A constant value to be displayed rather than connected to a control
