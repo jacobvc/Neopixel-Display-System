@@ -129,7 +129,7 @@ function reportError() {
         = 'Request Failed ... Reconnecting';
 }
 
-function createPage(id, value) {
+function createPage(key, value) {
     const xhr = new XMLHttpRequest();
     xhr.onerror = reportError;
 
@@ -168,8 +168,8 @@ function createPage(id, value) {
         updateStatus('', '');
     }
     var url = new URL("/metadata", __LOCATION__);
-    if (id && id.length > 0) {
-        url.searchParams.set(id, value);
+    if (key && key.length > 0) {
+        url.searchParams.set(key, value);
     }
 
     xhr.open("GET", url, true);
@@ -183,7 +183,7 @@ function createPage(id, value) {
             = 'RequestFailed<br>' + e + '<br>  Reconnecting';
     }
 }
-function updateStatus(id, value) {
+function updateStatus(key, value) {
     const xhr = new XMLHttpRequest();
     xhr.onerror = reportError;
 
@@ -202,8 +202,8 @@ function updateStatus(id, value) {
         //__END_EXCLUDE__
     }
     var url = new URL("/status", __LOCATION__);
-    if (id && id.length > 0) {
-        url.searchParams.set(id, value);
+    if (key && key.length > 0) {
+        url.searchParams.set(key, value);
     }
 
     xhr.open("GET", url, true);
