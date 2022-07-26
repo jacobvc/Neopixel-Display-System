@@ -24,4 +24,4 @@
 void NeoBleSetup();
 void NeoBleTick();
 
-void NeoBleSendStatus(String statusJson);
+void NeoBleSendStatus();

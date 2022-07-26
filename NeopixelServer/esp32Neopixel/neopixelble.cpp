@@ -113,7 +113,7 @@ class Metadata2Callbacks : public BLECharacteristicCallbacks
     }
 };
 
-void NeoBleSendStatus(String statusJson)
+void NeoBleSendStatus()
 {
     pStatusCharacteristic->setValue(statusJson.c_str());
     pStatusCharacteristic->notify(true);
