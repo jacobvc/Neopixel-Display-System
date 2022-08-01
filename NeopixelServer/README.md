@@ -1,6 +1,6 @@
 # Neopixel Server
 
-The NeopixelServer is an aplication running on an ESP32 that operates a Neopixel 
+The NeopixelServer is an application running on an ESP32 Dev Board that operates a Neopixel 
 Matrix display and some physical I/O (mechanical relays and virtual LEDs). 
 
 The Neopixel Server is developed using the Arduino for ESP32 development tools
