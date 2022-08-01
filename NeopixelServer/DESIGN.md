@@ -119,30 +119,56 @@ The BLE server is implemented in neopixelble.cpp. As the BLE module, it also imp
     void NeoBleSetup();
     void NeoBleTick();
 
+ The BLE server interface implements two characteristics; MetaData read, and Status read / write / Notify
+ 
 #### Metadata Characteristic
- METADATA_1_CHARACTERISTIC_UUID and METADATA_2_CHARACTERISTIC_UUID - Read characteristics
+METADATA_1_CHARACTERISTIC_UUID and METADATA_2_CHARACTERISTIC_UUID
+
+The Metadata characteristic is implemented in two components (literally two characteristic UUIDs) that the reader concatenates into a single record. The application implements this by sending the first 600 bytes of the global JSON encoded metadata string for (1), and the balance of that string for (2).
+ 
+This is done to get around the ESP32 BLE implementation 600 byte characteristic limitation. 
+There are several more elegant options, but this does the job so a more elegant solution was not given a high priority.
+ 
 #### Status Characteristic
- STATUS_CHARACTERISTIC_UUID
+STATUS_CHARACTERISTIC_UUID
+
+ A global JSON encoded status string is maintained by the application. the parser updates the value of the global status string whenever a status parameter is parsed, modifying a status value.
+ 
 ##### Read characteristic
+ A status read is processed by sending the current value of the global status string.
 ##### Write characteristic
+ A status write is processed by calling params.parse() for each key / value pair in the received JSON object.
 ##### Notify characteristic
+ NeoBleSendStatus() triggers a notification with updated data each time device status is modified.
  
 ### WiFi / Webserver
-The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it also implements the Arduino integration functions:
+The WIFI Webserver is implemented in neopixelble.cpp using WiFi / esp_wifi and ESPAsyncWebServer. As the WiFI module, it also implements the Arduino integration functions:
  
     void NeoWifiSetup(void);
     void NeoWifiTick(void);
 
 #### WiFi
- Provisioning
+ wifi is provisioned using SmartConfig (supported by the ESP32 WiFi Smart Config App). The startup state machine attempts to connect using the configured parameters. If the launch attempt is insuccessful, it goes into Smart Config server mode and waits for the app to update those parameters. This operation repeats until a WiFi connection is successfully estalished.
+
 #### Webserver
- "/"
-#### Get Metadata
- "/metadata"
-#### Get Status
- "/status"
-#### Set Parameter(s)
- "/status?..."
+ The webserver serves three paths; root files, metadata, and status as follows:
+##### Root Files
+ Return the web page and other files. These "files" are embedded into the binary using "assets/webcontent.h". For 
+ more information, look under Web Page development for more details.
+ 
+ "/": the HTML web page (index.html)
+
+ "/dynamicview.js": The javascript file referenced by the web page
+ 
+ "/dynamicview.css": The CSS stylesheet referenced by the web page
+
+ ##### Get Metadata
+ "/metadata": return the JSON encoded Metadata
+ 
+##### Get Status
+ "/status": Return the JSON encoded status data
+##### Set Parameter(s)
+ "/status?key=value...": parse each key / value pair in the GET parameters then return the updated JSON encoded status.
  
 ### Web Page Development
  
