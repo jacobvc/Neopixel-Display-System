@@ -119,12 +119,13 @@ The BLE server is implemented in neopixelble.cpp. As the BLE module, it also imp
     void NeoBleSetup();
     void NeoBleTick();
 
-#### Read Metadata
+#### Metadata Characteristic
  METADATA_1_CHARACTERISTIC_UUID and METADATA_2_CHARACTERISTIC_UUID - Read characteristics
-#### Read Status
- STATUS_CHARACTERISTIC_UUID Read characteristic
-#### Write Status
- STATUS_CHARACTERISTIC_UUID Write characteristic
+#### Status Characteristic
+ STATUS_CHARACTERISTIC_UUID
+##### Read characteristic
+##### Write characteristic
+##### Notify characteristic
  
 ### WiFi / Webserver
 The WIFI Webserver is implemented in neopixelble.cpp. As the WiFI module, it also implements the Arduino integration functions:
