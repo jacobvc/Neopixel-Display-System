@@ -37,7 +37,7 @@ with specified alignment (left, center, right, scroll), displaying a selected bu
 bitmap image, again with specified alignment, setting one of four virtual LEDs to on, 
 off, or blink, and turning a mechanical relay or analog switch on or off.
 
-[more ...](NeopixelServer)
+Go here for the [Neopixel server build quick start](NeopixelServer)
 
 
 ## OBS Studio Script
