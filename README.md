@@ -46,7 +46,7 @@ The OBS Studio script is a python script that allows control of any / all of the
 features as a result of activation and / or deactivation of any scene. The user interface
 also supports enabling / disabling the participation of OBS Studio scenes.
 
-[more ...](obsstudio_script)
+Go here for [OBS Studio script details](obsstudio_script)
 
 
 <img src="/assets/obsstudio.png">
@@ -54,9 +54,9 @@ also supports enabling / disabling the participation of OBS Studio scenes.
 ## Neopixel Client
 
 The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP 
-interface on WIndows (The BLE library does not support Windows)
+interface on Windows (The BLE service used does not support Windows)
 
-[more ...](NeopixelClient)
+Go here for [Neopixel Client details](NeopixelClient)
 
 <img src="/assets/NET-MAUI.png">
 
