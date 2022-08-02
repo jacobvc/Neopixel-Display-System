@@ -172,7 +172,7 @@ The WIFI Webserver is implemented in neopixelble.cpp using WiFi / esp_wifi and E
  
 ## Metadata definitions
 Metadata describes the data exchanged between the Neopixel server and client. It is intended to contain
-sufficient information to construct a functional user interface. It is consumed by clients ([HTML](WebPageDevelopment) and [.Net MAUI](/NeoPixelClient) to construct user interfaces.
+sufficient information to construct a functional user interface. It is consumed by clients ([HTML](WebPageDevelopment) and [.Net MAUI](/NeopixelClient) to construct user interfaces.
  
 It currently supports data of types boolean, string, and select list, as well as arrays of those types
 and composites of more than one data element.
