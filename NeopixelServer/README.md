@@ -27,7 +27,7 @@ simply plugged into the 'out' side of the prior. See more about hardware below.
 
 The first step is to install the development environment and build the server.
 
-* [Install the Arduino IDE](https://www.arduino.cc/en/software) (Note that either veersion 1.0 or 2.0 can be used)
+* [Install the Arduino IDE](https://www.arduino.cc/en/software) (Note that either version 1.0 or 2.0 can be used)
 * [Install ESP32 support in the Arduino IDE](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 * Connect and test the ESP32 device (should have done this in the previous step)
 * Install the required libraries
