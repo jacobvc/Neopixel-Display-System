@@ -48,6 +48,8 @@ LED_ENABLE_OPTIONS = ((OUT_NA + OUT_NA, 'No Action'),
   (OUT_ON + OUT_OFF, 'Active=ON Inactive=OFF'),  (OUT_BLINK + OUT_OFF, 'Active=BLINK Inactive=OFF'),
   (OUT_OFF + OUT_ON, 'Active=OFF Inactive=ON'),  (OUT_OFF + OUT_BLINK, 'Active=OFF Inactive=BLINK'))
 
+TEXT_ALIGN_OPTIONS =(('0', 'left'), ('1', 'center'), 
+  ('2', 'right'), ('3', 'scroll'))
 
 #     ____ _       _           _     
 #    / ___| | ___ | |__   __ _| |___ 
@@ -85,13 +87,14 @@ def settings_dict(settings):
 
 def script_defaults(settings):
     """ OBS-API Set initial (and default) property values """
-    source_names = list_scene_names()
-    for source_name in source_names:
-        scene_defaults(settings, source_name)
+    names = list_scene_names()
+    for name in names:
+        scene_defaults(settings, name)
 
-    source_names = list_source_names()
-    for source_name in source_names:
-        scene_defaults(settings, source_name)
+    # FOR NOW, will not process sources
+    #names = list_source_names()
+    #for name in names:
+    #    scene_defaults(settings, name)
 
 
 def script_update(settings):
@@ -99,7 +102,6 @@ def script_update(settings):
     global neopixle_ip
     global action_mapping
 
-    source_names = list_source_names()
     settings_map = settings_dict(settings)
     # print(settings_map)
     action_mapping = {}
@@ -132,19 +134,19 @@ def script_properties():
     obs.obs_properties_add_text(
         props,  "neo^ip", "NeoPixel Display IP", obs.OBS_TEXT_DEFAULT)
 
-    source_names=list_scene_names()
-    for source_name in source_names:
-        action_properties_create(props, source_name, "Scene")
+    names=list_scene_names()
+    for name in names:
+        action_properties_create(props, name, "Scene")
 
-    source_names=list_source_names()
-    for source_name in source_names:
-        action_properties_create(props, source_name, "Source")
+    # FOR NOW, will not process sources
+    #names=list_source_names()
+    #for name in names:
+    #    action_properties_create(props, name, "Source")
 
     return props
 
 def scene_defaults(settings, name):
-    obs.obs_data_set_default_int(
-        settings, name + "^color", int('ffcccc00', 16))
+    obs.obs_data_set_default_string(settings, name + "^textalign", '3') # scroll
 
 #     ___      __  _             ___                        __  _       
 #    / _ |____/ /_(_)__  ___    / _ \_______  ___  ___ ____/ /_(_)__ ___
@@ -159,26 +161,27 @@ def action_properties_create(props, name, category):
         obj = action_mapping[name]
         if 'enabled' in obj and obj['enabled']:
             enabled = True
-    textaction = obs.obs_properties_add_list(props_scene, name + "^textaction", "Text color \n/ enable", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
-    options_add(textaction, COLOR_INDEX_OPTIONS)
 
     obs.obs_properties_add_text(
-        props_scene, name + "^text", "Display Text", obs.OBS_TEXT_DEFAULT)
+        props_scene, name + "^text", "Banner", obs.OBS_TEXT_DEFAULT)
+    textaction = obs.obs_properties_add_list(props_scene, name + "^textaction", "Banner color \n/ enable", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
+    options_add(textaction, COLOR_INDEX_OPTIONS)
+    textalign = obs.obs_properties_add_list(props_scene, name + "^textalign", "Banner Alignment", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
+    options_add(textalign, TEXT_ALIGN_OPTIONS)
     obs.obs_properties_add_bool(
-        props_scene, name + "^textoff", "Text off upon deactiviate")
-    #obs.obs_properties_add_color(props_scene, name + "^color", "Color")
+        props_scene, name + "^textoff", "Banner off upon deactiviate")
 
-    ledaction = obs.obs_properties_add_list(props_scene, name + "^ledaction", "LED Action", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
-    options_add(ledaction, LED_ENABLE_OPTIONS)
     leds = obs.obs_properties_add_list(
         props_scene, name + "^leds", "LEDS", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
     options_add(leds, LED_NAMES)
+    ledaction = obs.obs_properties_add_list(props_scene, name + "^ledaction", "LED Action", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
+    options_add(ledaction, LED_ENABLE_OPTIONS)
 
-    outputenable = obs.obs_properties_add_list(props_scene, name + "^outputenable", "I/O Action", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
-    options_add(outputenable, OUTPUT_ENABLE_OPTIONS)
     outputs = obs.obs_properties_add_list(
         props_scene, name + "^outputs", "Physical IO", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
     options_add(outputs, OUTPUT_NAMES)
+    outputenable = obs.obs_properties_add_list(props_scene, name + "^outputenable", "I/O Action", obs.OBS_COMBO_TYPE_LIST , obs.OBS_COMBO_FORMAT_STRING )
+    options_add(outputenable, OUTPUT_ENABLE_OPTIONS)
 
     group = obs.obs_properties_add_group(props, name + "^enabled", "'" + name + "' "
     + category + ' (script enable)', obs.OBS_GROUP_CHECKABLE, props_scene)
@@ -201,6 +204,8 @@ def action_properties_enable(enabled, props, source):
         obs.obs_properties_get(props, source + '^textoff'), enabled)
     obs.obs_property_set_visible(
         obs.obs_properties_get(props, source + '^textaction'), enabled)
+    obs.obs_property_set_visible(
+        obs.obs_properties_get(props, source + '^textalign'), enabled)
     obs.obs_property_set_visible(
         obs.obs_properties_get(props, source + '^ledaction'), enabled)
     obs.obs_property_set_visible(
@@ -235,6 +240,8 @@ def action_properties_exec(scene_name, isPreview, activate):
                             text = obj['text']
                         changes['text'] = text
                         changes['txtclr'] = textaction
+                        if 'textalign' in obj:
+                            changes['textalign'] = obj['textalign']
                 if not activate and 'textoff' in obj:
                     action = bool(obj['textoff'])
                     if action:
@@ -281,30 +288,30 @@ def action_enabled_callback(props, prop, settings):
 def list_scene_names():
     """ Make a list of all obs scenes """
     sources=obs.obs_frontend_get_scenes()
-    source_names=[]
+    names=[]
 
     if sources is not None:
         for source in sources:
             # source_id = obs.obs_source_get_id(source)
-            source_name=obs.obs_source_get_name(source)
-            source_names.append(source_name)
+            name=obs.obs_source_get_name(source)
+            names.append(name)
 
     obs.source_list_release(sources)
-    return source_names
+    return names
 
 def list_source_names():
     """ Make a list of all obs sources """
     sources=obs.obs_enum_sources()
-    source_names=[]
+    names=[]
 
     if sources is not None:
         for source in sources:
             # source_id = obs.obs_source_get_id(source)
-            source_name=obs.obs_source_get_name(source)
-            source_names.append(source_name)
+            name=obs.obs_source_get_name(source)
+            names.append(name)
 
     obs.source_list_release(sources)
-    return source_names
+    return names
 
 def get_active_sources_by_scene(source):
     item_names=[]
@@ -369,13 +376,14 @@ def handle_preview_change():
     #program_name=obs.obs_source_get_name(program_source)
     #obs.obs_source_release(program_source)
 
+    # preview, Not activate
     action_properties_exec(preview_name, True, False)
+
     preview_source=obs.obs_frontend_get_current_preview_scene()
     preview_name=obs.obs_source_get_name(preview_source)
     if preview_name:
         preview_items=get_active_sources_by_scene(preview_source)
-        # if program_name != preview_name:
-        # todo Hard coded - preview, activate
+        # preview, activate
         action_properties_exec(preview_name, True, True)
 
     obs.obs_source_release(preview_source)
@@ -384,16 +392,15 @@ def handle_program_change():
     global program_name
     global program_items
 
+    # Not preview, Not activate
     action_properties_exec(program_name, False, False)
 
     program_source=obs.obs_frontend_get_current_scene()
     program_name = obs.obs_source_get_name(program_source)
     program_items=get_active_sources_by_scene(program_source)
-    #for item in scene_items:
-    #    if item.
-    #print(program_items)
-    #todo We need to do something about soruces (program_items) ??
-    # todo Hard coded - Not preview, activate
+
+    #FUTURE handle sources??
+    # Not preview, activate
     action_properties_exec(program_name, False, True)
     obs.obs_source_release(program_source)
 
