@@ -7,7 +7,6 @@ js_minify messes up with lines broken before a '+'
 */
 
 var __LOCATION__ = "http://192.168.12.208";
-//var __LOCATION__ = "http://192.168.12.227";
 //__END_EXCLUDE__
 
 var connected = false;
