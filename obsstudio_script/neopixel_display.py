@@ -263,7 +263,7 @@ def action_properties_exec(scene_name, isPreview, activate):
                         changeCount += 1
                         output = '0'
                         if 'outputs' in obj:    
-                            output = obj['output']
+                            output = obj['outputs']
                         changes['outputs[' + output + ']'] = outputstate
 
                 if changeCount > 0:
