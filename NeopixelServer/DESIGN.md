@@ -171,6 +171,7 @@ The WIFI Webserver is implemented in neopixelble.cpp using WiFi / esp_wifi and E
  "/status?key=value...": parse each key / value pair in the GET parameters then return the updated JSON encoded status.
  
 ### Web Page Development
+ [more..](WebPageDevelopment)
  
 #### Javascript Dynamic View
 The javascript dynamic view is implemented in dynamicview.js
