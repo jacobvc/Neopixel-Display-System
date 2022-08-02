@@ -44,7 +44,7 @@ Go here for the [Neopixel server build quick start](NeopixelServer)
 
 The OBS Studio script is a python script that allows control of any / all of the provided
 features as a result of activation and / or deactivation of any scene. The user interface
-also supports enabling / disabling the participation of OBS Studio scenes.
+also supports enabling / disabling the participation of each OBS Studio scene.
 
 Go here for [OBS Studio script details](obsstudio_script)
 
