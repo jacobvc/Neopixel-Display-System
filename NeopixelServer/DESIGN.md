@@ -154,7 +154,7 @@ The WIFI Webserver is implemented in neopixelble.cpp using WiFi / esp_wifi and E
  The webserver serves three paths; root files, metadata, and status as follows:
 ##### Root Files
  Return the web page and other files. These "files" are embedded into the binary using "assets/webcontent.h". For 
- more information, look under Web Page development for more details.
+ more information, look under [Web Page development](WebPageDevelopment) for more details.
  
  "/": the HTML web page (index.html)
 
@@ -170,9 +170,6 @@ The WIFI Webserver is implemented in neopixelble.cpp using WiFi / esp_wifi and E
 ##### Set Parameter(s)
  "/status?key=value...": parse each key / value pair in the GET parameters then return the updated JSON encoded status.
  
-### Web Page Development
- [more..](WebPageDevelopment)
-  
 ## Metadata definitions
 Metadata describes the data exchanged between the Neopixel server and client. It is intended to contain
 sufficient information to construct a functional user interface.
