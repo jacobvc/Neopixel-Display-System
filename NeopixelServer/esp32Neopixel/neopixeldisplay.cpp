@@ -355,9 +355,15 @@ NeopixelDisplay::NeopixelDisplay()
   memset(leds, 0, ledCount);
   for (int i = 0; i < ledCount; ++i){
     leds[i].mode = LedMode::off;
-    leds[i].color[0] = 2; 
-    leds[i].color[1] = 4; 
   }
+  leds[0].colora = RGB565(0, 255, 0); 
+  leds[0].colorb = RGB565(0, 255, 0); 
+  leds[1].colora = RGB565(255, 0, 0); 
+  leds[1].colorb = RGB565(255, 0, 0); 
+  leds[2].colora = RGB565(0, 255, 0); 
+  leds[2].colorb = RGB565(0, 0, 255); 
+  leds[3].colora = RGB565(0, 255, 0); 
+  leds[3].colorb = RGB565(255, 0, 0); 
 }
 
 /***
@@ -498,11 +504,24 @@ void NeopixelDisplay::SetLed(int index, LedMode mode)
   }
   //  Invalidate();
 }
-void NeopixelDisplay::LedConfig(int index, int color1, int color2) 
+void NeopixelDisplay::LedSetColorA(int index, int color)
+{  
+      struct ledDef *aled = &leds[index];
+      aled->colora = RGB_TO_RGB565(color);
+}
+void NeopixelDisplay::LedSetColorB(int index, int color)
 {
       struct ledDef *aled = &leds[index];
-      aled->color[0] = color1;
-      aled->color[1] = color2;
+      aled->colorb = RGB_TO_RGB565(color);
+}
+
+int NeopixelDisplay::LedGetColorA(int index)
+{
+    return RGB565_TO_RGB(leds[index].colora);
+}
+int NeopixelDisplay::LedGetColorB(int index)
+{
+    return RGB565_TO_RGB(leds[index].colorb);
 }
 
 void NeopixelDisplay::_UpdateLeds()
@@ -529,15 +548,17 @@ void NeopixelDisplay::_DrawLed(int index, int toggle) {
     int x = 0;
     for (int i = 0; i < LED_PIXELS; ++i) {
       for (int j = 0; j < LED_PIXELS; ++j) {
-        if (toggle > 0) {
-          matrix->drawPixel(j + x, i + y, GetIndexedColor(leds[index].color[(i + j) & 1]));
-        }
-        else if (toggle < 0) {
-          matrix->drawPixel(j + x, i + y, 0);
+        if (toggle >= 0) {
+          if ((i + j + toggle / 2) & 1) {
+            matrix->drawPixel(j + x, i + y, leds[index].colora);
+          }
+          else {
+          // Alternate blink
+            matrix->drawPixel(j + x, i + y, leds[index].colorb);
+          }
         }
         else {
-          // Alternate blink
-          matrix->drawPixel(j + x, i + y, GetIndexedColor(leds[index].color[(i + j + 1) & 1]));
+          matrix->drawPixel(j + x, i + y, 0);
         }
       }
     }
