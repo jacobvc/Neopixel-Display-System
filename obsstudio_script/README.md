@@ -37,7 +37,7 @@ The property group contains user interface elements for all of the properties
 listed above, and the group is "collapsed" by changing each of those elements 
 to hidden.
 
-scene_properties_create(props, name, category)
+#### scene_properties_create(props, name, category)
 
 Create user interface for 'name' identifying as 'category' and add to 'props'.
 
@@ -47,11 +47,11 @@ Create user interface for 'name' identifying as 'category' and add to 'props'.
 
 'category' is used for the property group label, typically "scene" or "Source"
 
-scene_properties_enable(enabled, props, name)
+#### scene_properties_enable(enabled, props, name)
 
 Show / hide the property user interface values for scene 'name' based on the value of 'enabled'.
 
-scene_properties_exec(scene_name, isPreview, activate)
+#### scene_properties_exec(scene_name, isPreview, activate)
 
 Execute actions for 'scene_name' upon 'activate' state change.
 
