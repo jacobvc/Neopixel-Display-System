@@ -136,25 +136,26 @@ def script_properties():
 
     names=list_scene_names()
     for name in names:
-        action_properties_create(props, name, "Scene")
+        scene_properties_create(props, name, "Scene")
 
     # FOR NOW, will not process sources
     #names=list_source_names()
     #for name in names:
-    #    action_properties_create(props, name, "Source")
+    #    scene_properties_create(props, name, "Source")
 
     return props
 
 def scene_defaults(settings, name):
     obs.obs_data_set_default_string(settings, name + "^textalign", '3') # scroll
 
-#     ___      __  _             ___                        __  _       
-#    / _ |____/ /_(_)__  ___    / _ \_______  ___  ___ ____/ /_(_)__ ___
-#   / __ / __/ __/ / _ \/ _ \  / ___/ __/ _ \/ _ \/ -_) __/ __/ / -_|_-<
-#  /_/ |_\__/\__/_/\___/_//_/ /_/  /_/  \___/ .__/\__/_/  \__/_/\__/___/
-#                                          /_/                          
 
-def action_properties_create(props, name, category):
+#    ___                       ___                            _    _          
+#   / __| __  ___  _ _   ___  | _ \ _ _  ___  _ __  ___  _ _ | |_ (_) ___  ___
+#   \__ \/ _|/ -_)| ' \ / -_) |  _/| '_|/ _ \| '_ \/ -_)| '_||  _|| |/ -_)(_-<
+#   |___/\__|\___||_||_|\___| |_|  |_|  \___/| .__/\___||_|   \__||_|\___|/__/
+#                                            |_|                              
+
+def scene_properties_create(props, name, category):
     enabled = False
     props_scene = obs.obs_properties_create()
     if name in action_mapping:
@@ -188,7 +189,7 @@ def action_properties_create(props, name, category):
 
     # print("Prop: " + name + " enabled=" + str(enabled) )
     if not enabled:
-        action_properties_enable(False, props, name)
+        scene_properties_enable(False, props, name)
 
     obs.obs_property_set_modified_callback(group, action_enabled_callback)
 
@@ -197,25 +198,25 @@ def options_add(prop, options):
         obs.obs_property_list_add_string(prop, option[1], option[0])
 
 
-def action_properties_enable(enabled, props, source):
+def scene_properties_enable(enabled, props, name):
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^text'), enabled)
+        obs.obs_properties_get(props, name + '^text'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^textoff'), enabled)
+        obs.obs_properties_get(props, name + '^textoff'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^textaction'), enabled)
+        obs.obs_properties_get(props, name + '^textaction'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^textalign'), enabled)
+        obs.obs_properties_get(props, name + '^textalign'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^ledaction'), enabled)
+        obs.obs_properties_get(props, name + '^ledaction'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^leds'), enabled)
+        obs.obs_properties_get(props, name + '^leds'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^outputenable'), enabled)
+        obs.obs_properties_get(props, name + '^outputenable'), enabled)
     obs.obs_property_set_visible(
-        obs.obs_properties_get(props, source + '^outputs'), enabled)
+        obs.obs_properties_get(props, name + '^outputs'), enabled)
 
-def action_properties_exec(scene_name, isPreview, activate):
+def scene_properties_exec(scene_name, isPreview, activate):
     # todo - For now, ignore iPreview and activate. 
     # Only need to worry about it if the UI gives the user the abality to 
     # configure them
@@ -272,10 +273,10 @@ def action_properties_exec(scene_name, isPreview, activate):
                     print('No Changes')
 
 def action_enabled_callback(props, prop, settings):
-    name = obs.obs_property_name(prop)
+    property_name = obs.obs_property_name(prop)
     parts = name.split('^')
-    source = parts[0]
-    action_properties_enable(obs.obs_data_get_bool(settings, name), props, source)
+    name = parts[0]
+    scene_properties_enable(obs.obs_data_get_bool(settings, property_name), props, name)
     return True
 
 #     ___  ____ ____     __                 _                 _ 
@@ -377,14 +378,14 @@ def handle_preview_change():
     #obs.obs_source_release(program_source)
 
     # preview, Not activate
-    action_properties_exec(preview_name, True, False)
+    scene_properties_exec(preview_name, True, False)
 
     preview_source=obs.obs_frontend_get_current_preview_scene()
     preview_name=obs.obs_source_get_name(preview_source)
     if preview_name:
         preview_items=get_active_sources_by_scene(preview_source)
         # preview, activate
-        action_properties_exec(preview_name, True, True)
+        scene_properties_exec(preview_name, True, True)
 
     obs.obs_source_release(preview_source)
 
@@ -393,7 +394,7 @@ def handle_program_change():
     global program_items
 
     # Not preview, Not activate
-    action_properties_exec(program_name, False, False)
+    scene_properties_exec(program_name, False, False)
 
     program_source=obs.obs_frontend_get_current_scene()
     program_name = obs.obs_source_get_name(program_source)
@@ -401,7 +402,7 @@ def handle_program_change():
 
     #FUTURE handle sources??
     # Not preview, activate
-    action_properties_exec(program_name, False, True)
+    scene_properties_exec(program_name, False, True)
     obs.obs_source_release(program_source)
 
 #    _   _            ____  _          _   ____             _
