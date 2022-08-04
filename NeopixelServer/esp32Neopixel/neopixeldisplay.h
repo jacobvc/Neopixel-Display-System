@@ -18,6 +18,8 @@
 #define LED_HIGH     255
 
 #define RGB565(r, g, b) (((r / 8) << 11) | ((g / 4) << 5) | (b / 8))
+#define RGB_TO_RGB565(rgb) RGB565((rgb >> 16) & 0xff, rgb >> 8) & 0xff, rgb & 0xff)
+#define RGB565_to_RGB(rgb565) (((rgb565 << 8) & 0xf80000) + ((rgb565 >> 3) & 0xfc00) + ((rgb565 << 3) & 0xf8))
 
 #define LED_WHITE_LOW    RGB565(LED_LOW, LED_LOW, LED_LOW)
 #define LED_WHITE_MEDIUM RGB565(LED_MEDIUM, LED_MEDIUM, LED_MEDIUM)
