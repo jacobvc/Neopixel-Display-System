@@ -191,12 +191,9 @@ NeoPixelPanel::NeoPixelPanel()
   alignment = Alignment::center;
 }
 
-void NeoPixelPanel::Init(int iWidth, int iHeight, Alignment alignment, int xstep, int ystep) 
+void NeoPixelPanel::Reinit(bool anyLedActive) 
 {
-    this->iWidth = iWidth;
-    this->iHeight = iHeight;
-    this->alignment = alignment;
- 
+    // Calculate xPt assuming panel starts at x = 0
     if (iHeight < height) {
       yPt = 0;
       vscroll = false;
@@ -215,7 +212,8 @@ void NeoPixelPanel::Init(int iWidth, int iHeight, Alignment alignment, int xstep
         xPt = (iWidth < width) ? 0 : 4 * PT_PER_PIXEL;
         break;
       case Alignment::right:
-        xPt = (iWidth < width) ? (width - iWidth) * PT_PER_PIXEL : 4 * PT_PER_PIXEL;
+        xPt = (iWidth < width) ? ((width - iWidth - (anyLedActive ? 2 : 0)) * PT_PER_PIXEL)
+           : 2 * PT_PER_PIXEL;
         break;
       case Alignment::scroll:
         xPt = (width - 8) * PT_PER_PIXEL;
@@ -227,19 +225,28 @@ void NeoPixelPanel::Init(int iWidth, int iHeight, Alignment alignment, int xstep
         vscroll = true;
         break;
     }
+   
+    currentStep = 0;
+}
 
-    // scroll speed in 1/16th
+void NeoPixelPanel::Init(int iWidth, int iHeight, Alignment alignment, int xstep, int ystep, bool anyLedActive) 
+{
+    this->iWidth = iWidth;
+    this->iHeight = iHeight;
+    this->alignment = alignment;
+ 
+ // scroll speed in 1/16th
     xPtPerMove = xstep;
     yPtPerMove = ystep;
     // scroll down and right by moving upper left corner off screen 
     // more up and left (which means negative numbers)
     xStepDirection = -1;
     yStepDirection = -1;
+   
+    Reinit(anyLedActive);
+  }
 
-    currentStep = 0;
-}
-
-bool NeoPixelPanel::Update(AnimateMode mode)
+bool NeoPixelPanel::Update(AnimateMode mode, bool anyLedActive)
 {
   //if (currentStep < totalSteps) {
       bool updDir = false;
@@ -251,7 +258,8 @@ bool NeoPixelPanel::Update(AnimateMode mode)
             return false;
         }
         else {
-            matrix->drawRGBBitmap(xPt / PT_PER_PIXEL, yPt / PT_PER_PIXEL, bmpDef->image, iWidth, iHeight);
+            matrix->drawRGBBitmap(xPt / PT_PER_PIXEL + (anyLedActive ? 2 : 0), 
+              yPt / PT_PER_PIXEL, bmpDef->image, iWidth, iHeight);
             space = 2;
         }
       }
@@ -259,7 +267,8 @@ bool NeoPixelPanel::Update(AnimateMode mode)
         if (textColorIndex == 0) {
             return false;
         }
-        matrix->setCursor(xPt / PT_PER_PIXEL, (yPt / PT_PER_PIXEL) + TEXTY);
+        matrix->setCursor(xPt / PT_PER_PIXEL + (anyLedActive ? 2 : 0),
+          (yPt / PT_PER_PIXEL) + TEXTY);
         if (textColorIndex == RAINBOW) {
           for (uint8_t index = 0; index < text.length(); ++index) {
             matrix->setTextColor(GetIndexedColor((index % COLOR_COUNT) + FIRST_INDEXED_COLOR));
@@ -288,7 +297,7 @@ bool NeoPixelPanel::Update(AnimateMode mode)
           xPt += xPtPerMove * xStepDirection;
           if (xPt >= 32) { xStepDirection = -1; updDir = true ; };
           // we don't go negative past right corner, go back positive
-          if (xPt <= ((width - iWidth - 1) * PT_PER_PIXEL))
+          if (xPt <= ((width - iWidth - 1 - (anyLedActive ? 2 : 0)) * PT_PER_PIXEL))
                             { xStepDirection = 1;  updDir = true ; };
       }
       else if (width > iWidth && hscroll) {
@@ -296,7 +305,7 @@ bool NeoPixelPanel::Update(AnimateMode mode)
           xPt += xPtPerMove * xStepDirection;
           // Reverse when edge leaves panel
           // Deal with bouncing off the 'walls'
-          if (xPt >= (width - iWidth) * PT_PER_PIXEL) 
+          if (xPt >= (width - iWidth - (anyLedActive ? 2 : 0)) * PT_PER_PIXEL) 
                         { xStepDirection = -1; updDir = true ; };
           if (xPt <= 0) { xStepDirection =  1; updDir = true ; };
       }
@@ -396,8 +405,9 @@ int NeopixelDisplay::ShowText(String text, int colorIndex, Alignment alignment) 
 
       int16_t x1, y1;
       uint16_t w, h;
-      matrix->getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
-      panel.Init(w, h, alignment, 2, 1);
+      // Get bounds assuming text may start at third pixel
+      matrix->getTextBounds(text, 2, 0, &x1, &y1, &w, &h);
+      panel.Init(w, h, alignment, 2, 1, AnyLedActive());
 
       panel.totalSteps = 300;
       mode = AnimateMode::Text;
@@ -464,7 +474,7 @@ int NeopixelDisplay::ShowBitmap(uint16_t which, Alignment alignment) {
     }
     // keep integer math, deal with values 16 times too big
     // start by showing upper left of big bitmap or centering if the display is big
-    panel.Init(panel.bmpDef->width, panel.bmpDef->height, alignment, 4, 3);
+    panel.Init(panel.bmpDef->width, panel.bmpDef->height, alignment, 4, 3, AnyLedActive());
 
     panel.totalSteps = 300;
     mode = AnimateMode::Bitmap;
@@ -498,9 +508,13 @@ LedDef *NeopixelDisplay::GetLeds()
 }
 void NeopixelDisplay::SetLed(int index, LedMode mode)
 {
+  bool anyActive = AnyLedActive();
   leds[index].mode = mode;
   if (mode == LedMode::off) {
     _DrawLed(index, -1);
+  }
+  if (anyActive != AnyLedActive()) {
+    panel.Reinit(!anyActive);
   }
   //  Invalidate();
 }
@@ -524,7 +538,7 @@ int NeopixelDisplay::LedGetColorB(int index)
     return RGB565_TO_RGB(leds[index].colorb);
 }
 
-void NeopixelDisplay::_UpdateLeds()
+void NeopixelDisplay::_UpdateLeds(bool anyLedActive)
 {
     for (int le = 0; le < ledCount; ++le) {
       struct ledDef *aled = &leds[le];
@@ -539,10 +553,22 @@ void NeopixelDisplay::_UpdateLeds()
       else if (aled->mode == LedMode::on) {
         _DrawLed(le, toggleCount & 2);
       }
-    }
+      else if (anyLedActive) {
+          // Update OFF when any LEDs are active
+          _DrawLed(le, -1);
+      }
+    }      
     Invalidate();
 }
 
+bool NeopixelDisplay::AnyLedActive() {
+    for (int le = 0; le < ledCount; ++le) {
+      if (leds[le].mode != LedMode::off)  {
+        return true;        
+      }        
+    }   
+return false;       
+}
 void NeopixelDisplay::_DrawLed(int index, int toggle) {
     int y = index * LED_PIXELS;
     int x = 0;
@@ -580,20 +606,25 @@ void NeopixelDisplay::Invalidate()
 void NeopixelDisplay::Tick10ms()
 {
   countdown -= 10;
+  ledCountdown -= 10;
+  
+  bool anyLedActive = false;
+  if (countdown <= 0 || ledCountdown <= 0) {
+    anyLedActive = AnyLedActive();
+  }    
   if (countdown <= 0) {
-    if (!panel.Update(mode)) {
+    if (!panel.Update(mode, anyLedActive)) {
       matrix->clear();
       mode = AnimateMode::None;
     }
-    _UpdateLeds();
+    _UpdateLeds(anyLedActive);
     Invalidate();
 
     countdown = ms;
   }
-  ledCountdown -= 10;
   if (ledCountdown <= 0) {
     ++toggleCount;
-    _UpdateLeds();
+    _UpdateLeds(anyLedActive);
     ledCountdown = 500;
   }
   if (dirty) {

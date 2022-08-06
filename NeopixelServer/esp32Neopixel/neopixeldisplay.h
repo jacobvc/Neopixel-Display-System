@@ -107,8 +107,9 @@ class NeoPixelPanel {
     int textColorIndex;
 
     NeoPixelPanel();
-    void Init(int iWidth, int iHeight, Alignment alignment, int xstep, int ystep);
-    bool Update(AnimateMode mode);
+    void Reinit(bool anyLedActive);
+    void Init(int iWidth, int iHeight, Alignment alignment, int xstep, int ystep, bool anyLedActive);
+    bool Update(AnimateMode mode, bool anyLedActive);
 };
 
 /***
@@ -177,7 +178,8 @@ public:
     void Tick10ms();
     
 private:
-    void _UpdateLeds();
+    bool AnyLedActive();
+    void _UpdateLeds(bool anyLedActive);
     void _DrawLed(int index, int toggle);
 };
 
