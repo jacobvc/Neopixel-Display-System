@@ -61,7 +61,7 @@ with a 3 pin JST SM female input connector and a 3 pin JST SM male output connec
 
 One practical approach for panel construction is to use a 1/8 inch acrylic backing, and to fasten the disply to the backing using a "PVC FRP Cap Moulding", available from building supply stores. They make a very tight connection and stay in place very nicely. To use the display only, Connect the input to GROUND, VIN, and D32.
 
-[The full hardware immplementation can be implemented using this circuit board](https://github.com/jacobvc/ESP32-Hardware-Boards/tree/main/Esp32Relays)
+[A full featured hardware device can be implemented using this circuit board](https://github.com/jacobvc/ESP32-Hardware-Boards/tree/main/Esp32Relays)
 
 # Design 
 If you are ready to modify the software for your own needs, look [here for more information about the design](DESIGN.md)
