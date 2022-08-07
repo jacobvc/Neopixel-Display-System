@@ -200,6 +200,7 @@ Type of item being described. One of:
 * select - A value that has a specified set of textual values represented by their index
 * text - A String value
 * composite - A set of ViewMetadata objs that combine to represent a compisite entity
+* collapsible - Show 'fields' within a collapsible section name 'label', such as might be used for settings
 * value - A constant value to be displayed rather than connected to a control
 * opts - Enumeration of a set of 'option' values
 
