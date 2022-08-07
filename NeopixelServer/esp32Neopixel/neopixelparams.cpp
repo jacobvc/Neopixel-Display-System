@@ -213,6 +213,68 @@ byte parseLed(const String &value, int arg)
 }
 
 //
+// LED Color A
+//
+void JsonMetaLedColorA(JsonObject obj)
+{
+  obj["name"] = "ledcolora";
+  obj["type"] = "color";
+  obj["label"] = "LED Color A";
+  JsonArray arr = obj.createNestedArray("names");
+
+    for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
+    {
+        arr[i] = ledsNames[i];
+    }
+}
+
+void JsonLedColorAArray(JsonArray obj)
+{
+    for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
+    {
+        obj[i] = display.LedGetColorA(i);
+    }
+}
+
+byte parseLedColorA(const String &value, int arg)
+{
+    int val = value.toInt();
+    display.LedSetColorA(arg, val);
+    return 1;
+}
+
+//
+// LED Color B
+//
+void JsonMetaLedColorB(JsonObject obj)
+{
+  obj["name"] = "ledcolorb";
+  obj["type"] = "color";
+  obj["label"] = "LED Color B";
+  JsonArray arr = obj.createNestedArray("names");
+
+    for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
+    {
+        arr[i] = ledsNames[i];
+    }
+}
+
+void JsonLedColorBArray(JsonArray obj)
+{
+    for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
+    {
+        obj[i] = display.LedGetColorB(i);
+    }
+}
+
+byte parseLedColorB(const String &value, int arg)
+{
+    int val = value.toInt();
+    display.LedSetColorB(arg, val);
+    return 1;
+}
+
+//
 // Text
 //
 String &TextValue()
@@ -340,6 +402,8 @@ void NeoParamSetup()
     for (int i = 0; i < VIRTUAL_LED_COUNT; ++i)
     {
         params.AddParser(String("leds[") + i + "]", parseLed, i);
+        params.AddParser(String("ledcolora[") + i + "]", parseLedColorA, i);
+        params.AddParser(String("ledcolorb[") + i + "]", parseLedColorB, i);
     }
 
     for (int i = 0; i < OUTPUT_COUNT; ++i)
@@ -384,6 +448,8 @@ void JsonEncodeNeopixelData()
     doc["bmp"] = IntValue(BITMAP_ID);
     JsonOutputDataArray(doc.createNestedArray("outputs"));
     JsonLedDataArray(doc.createNestedArray("leds"));
+    JsonLedColorAArray(doc.createNestedArray("ledcolora"));
+    JsonLedColorBArray(doc.createNestedArray("ledcolorb"));
 
     statusJson = "";
     serializeJson(doc, statusJson);
@@ -433,6 +499,16 @@ void JsonMetaCompositeBitmap(JsonObject obj)
   arrobj["opts"] = "align-opts";
 }
 
+void JsonMetaSettings(JsonObject obj)
+{
+  obj["name"] = "settings";
+  obj["type"] = "collapsible";
+  obj["label"] = "Settings";
+  JsonArray arr = obj.createNestedArray("fields");
+  JsonMetaLedColorA(arr.createNestedObject());
+  JsonMetaLedColorB(arr.createNestedObject());
+}
+
 void JsonEncodeNeopixelMetaData()
 {
     jsonEncodingDoc.clear();
@@ -448,6 +524,8 @@ void JsonEncodeNeopixelMetaData()
     JsonMetaCompositeBitmap(doc.createNestedObject());
     JsonMetaOutputs(doc.createNestedObject());
     JsonMetaLeds(doc.createNestedObject());
+
+    JsonMetaSettings(doc.createNestedObject());
 
     JsonMetaOptsColor(doc.createNestedObject());
     JsonMetaOptsBitmap(doc.createNestedObject());

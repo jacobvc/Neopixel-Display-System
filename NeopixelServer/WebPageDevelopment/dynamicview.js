@@ -47,6 +47,12 @@ function createControl(ctl, key, metaType, label, selectClass) {
         ctl.innerHTML +=
             `<select id="` + key + `" class='` + selectClass + `' onchange="updateStatus(this.id, this.value)"></select>`;
     }
+    else if (metaType == 'color') {
+        ctl.innerHTML +=
+            `<label for="` + key + `">` + label + `</label>`;
+        ctl.innerHTML +=
+            `<input id="` + key + `" type="color" onchange="updateColor(this.id, this.value)"></select>`;
+    }
     else {
         ctl.innerHTML +=
             `<label for="` + key + `">` + label + `</label>`;
@@ -68,6 +74,16 @@ function createView(ctl, key, item) {
         // div
         for (var i = 0; i < item.fields.length; ++i) {
             createView(ctl, item.fields[i].name, item.fields[i]);
+        }
+        // /div
+        ctl.innerHTML += '<br>';
+    }
+    else if (item.type == 'collapsible') {
+        // div
+        ctl.innerHTML += '<details><summary>' + item.label + '</summary><div id="collapsible-' + item.name + '"></details>';
+        var inner = document.getElementById('collapsible-' + item.name);
+        for (var i = 0; i < item.fields.length; ++i) {
+            createView(inner, item.fields[i].name, item.fields[i]);
         }
         // /div
         ctl.innerHTML += '<br>';
@@ -111,12 +127,18 @@ function updateValue(key, value) {
             if (ctl.type == 'checkbox') {
                 ctl.checked = value;
             }
-            else if (ctl.nodeName == 'DIV') {
+             else if (ctl.nodeName == 'DIV') {
                 ctl.innerHTML = value;
             }
             else if (ctl != document.activeElement) {
+                if (ctl.type == 'color') {
+                    var str = value.toString(16);
+                    ctl.value = '#'+ str.padStart(6, 0);
+                }
+                else {
                 // Dont update the active element
                 ctl.value = value;
+                }
             }
         }
     }
@@ -182,6 +204,11 @@ function createPage(key, value) {
             = 'RequestFailed<br>' + e + '<br>  Reconnecting';
     }
 }
+
+function updateColor(key, value) {
+    updateStatus(key, parseInt(value.substring(1), 16));
+}
+
 function updateStatus(key, value) {
     const xhr = new XMLHttpRequest();
     xhr.onerror = reportError;
