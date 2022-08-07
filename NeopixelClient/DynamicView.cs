@@ -118,6 +118,28 @@ namespace DynamicView
                     CreateView(row, item.fields[i].name, item.fields[i]);
                 }
             }
+            else if (item.type == "collapsible")
+            {
+                var row = new HorizontalStackLayout();
+                ctl.Add(row);
+
+                Label newLabel = NewDefaultLabel("Show " + item.label);
+                newLabel.HorizontalOptions = LayoutOptions.Start;
+                row.Add(newLabel);
+                var swt = new Switch
+                {
+                    WidthRequest = 50,
+                };
+                swt.Toggled += CollapseToggle;
+                row.Add(swt);
+                var collapse = new VerticalStackLayout();
+                ctl.Add(collapse);
+                for (var i = 0; i < item.fields.Length; ++i)
+                {
+                    CreateView(collapse, item.fields[i].name, item.fields[i]);
+                }
+
+            }
             else if (item.names != null)
             {
                 var row = new HorizontalStackLayout();
@@ -132,6 +154,17 @@ namespace DynamicView
             {
                 CreateControl(ctl, key, item.type, item.label, item.opts);
             }
+        }
+
+        private void CollapseToggle(object sender, ToggledEventArgs e)
+        {
+            //throw new NotImplementedException();
+            //Switch swt = sender as Switch;
+            //String name;
+            //if (mapping.TryGetValue(sender, out name))
+            //{
+            //    device.Submit(name, swt.IsToggled.ToString());
+            //}
         }
 
         /// <summary>
@@ -164,6 +197,26 @@ namespace DynamicView
                 mapping[swt] = key;
                 swt.Toggled += Swt_Toggled;
                 row.Add(swt);
+            }
+            else if (metaType == "color")
+            {
+                var row = new HorizontalStackLayout()
+                {
+                    //HorizontalOptions = LayoutOptions.Center,
+                };
+                ctl.Add(row);
+                Label newLabel = NewDefaultLabel(label);
+                newLabel.HorizontalOptions = LayoutOptions.Start;
+                row.Add(newLabel);
+
+                var color = new ColorPicker
+                {
+                    //ItemsSource = options[optionsName].values,
+                };
+                controlMapping[key] = color;
+                mapping[color] = key;
+                //color.SelectedIndexChanged += Select_SelectedIndexChanged;
+                row.Add(color);
             }
             else if (metaType == "select")
             {
@@ -255,7 +308,15 @@ namespace DynamicView
                                 }
                                 else
                                 {
-                                    result = false;
+                                    ColorPicker cp = ctl as ColorPicker;
+                                    if (cp != null)
+                                    {
+                                        cp.Color = Color.FromInt((int)value);
+                                    }
+                                    else
+                                    {
+                                        result = false;
+                                    }
                                 }
                             }
                         }
@@ -361,7 +422,8 @@ namespace DynamicView
         /// <item>bool - A boolean value</item> 
         /// <item>select - A value that hase a specified set of textual values represented by their index</item> 
         /// <item>text - A String value</item> 
-        /// <item>composite - A set of ViewMetadata objs that combine to represent a compisite entity</item> 
+        /// <item>composite - A set of ViewMetadata objs that combine to represent a composite entity</item> 
+        /// <item>collapsible - A set of ViewMetadata objs that should be in a collapsible section</item> 
         /// <item>value - A constant value to be displayed rather than connected to a control</item> 
         /// <item>opts - Enumeration of a set of 'option' values</item> 
         /// </list>

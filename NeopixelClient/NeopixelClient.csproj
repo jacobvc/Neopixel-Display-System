@@ -55,4 +55,10 @@
 	<ItemGroup>
 	  <PackageReference Include="triaxis.BluetoothLE" Version="1.0.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="colorpicker\ColorPicker.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>

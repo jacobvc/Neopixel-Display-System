@@ -17,6 +17,8 @@ namespace DynamicView
         public int bmp { get; set; } = 0;
         public int[] outputs { get; set; } = new int[0];
         public int[] leds { get; set; } = new int[0];
+        public int[] ledcolora { get; set; } = new int[0];
+        public int[] ledcolorb { get; set; } = new int[0];
     }
 #pragma warning restore IDE1006 // Naming Styles
 
