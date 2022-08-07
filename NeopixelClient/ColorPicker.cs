@@ -8,6 +8,17 @@ namespace DynamicView
 {
     public partial class ColorPicker : Grid
     {
+        public delegate void ColorChanged(object sender, ColorChangedEventArgs e);
+        public class ColorChangedEventArgs : EventArgs
+        {
+            public Color color;
+            public ColorChangedEventArgs(Color color)
+            {
+                this.color = color;
+            }
+        }
+        public event ColorChanged changed;
+
         BoxView bvColorPicker;
         Image imgColorPicker;
         Picker pickerColorPicker;
@@ -20,9 +31,9 @@ namespace DynamicView
 
         public ColorPicker()
         {
-            RowDefinitions.Add(new RowDefinition { Height = 38 });
-            ColumnDefinitions.Add(new ColumnDefinition { Width = 38 });
-            ColumnDefinitions.Add(new ColumnDefinition { Width = 38 });
+            RowDefinitions.Add(new RowDefinition { Height = 28 });
+            ColumnDefinitions.Add(new ColumnDefinition { Width = 58 });
+            //ColumnDefinitions.Add(new ColumnDefinition { Width = 38 });
             this.Padding = new Thickness(0, 3);
 
             Grid boxgrid = new Grid
@@ -36,29 +47,26 @@ namespace DynamicView
                 //VerticalOptions = LayoutOptions.FillAndExpand,
             };
             boxgrid.Add(bvColorPicker);
-            imgColorPicker = new Image
-            {
-            };
-            this.Add(imgColorPicker, 1, 0);
+            //imgColorPicker = new Image
+            //{
+            //};
+            //this.Add(imgColorPicker, 1, 0);
             //this.SetColumnSpan(imgColorPicker, 2);
             pickerColorPicker = new Picker
             {
                 IsVisible = false,
             };
             pickerColorPicker.SelectedIndexChanged += pickerColorPicker_SelectedIndexChanged;
-            this.SetColumnSpan(pickerColorPicker, 2);
+            //this.SetColumnSpan(pickerColorPicker, 2);
             this.Add(pickerColorPicker, 0, 0);
 
 
 
             // creating the TapGestureRecognizer
             TapGestureRecognizer tapImgColorPicker = new TapGestureRecognizer();
-            imgColorPicker.GestureRecognizers.Add(tapImgColorPicker);
+            bvColorPicker.GestureRecognizers.Add(tapImgColorPicker);
             tapImgColorPicker.Tapped += TapImgColorPicker_Tapped;
 
-            // set the image from embedded resource
-            imgColorPicker.Source = ImageSource.FromFile("colorpicker/ColorPicker.png");
-           
             // populate picker with available colors
             foreach (string colorName in colorDict.Keys)
             {
@@ -93,6 +101,7 @@ namespace DynamicView
             string colorName = pickerColorPicker.Items[pickerColorPicker.SelectedIndex];
             this.Color = colorDict[colorName];
             pickerColorPicker.IsVisible = false;
+            changed?.Invoke(this, new ColorChangedEventArgs(this.Color));
         }
     }
 }

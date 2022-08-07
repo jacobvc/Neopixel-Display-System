@@ -130,9 +130,12 @@ namespace DynamicView
                 {
                     WidthRequest = 50,
                 };
-                swt.Toggled += CollapseToggle;
+                var collapse = new VerticalStackLayout {  IsVisible = false };
+                swt.Toggled += (sender, e) =>
+                {
+                    collapse.IsVisible = e.Value;
+                };
                 row.Add(swt);
-                var collapse = new VerticalStackLayout();
                 ctl.Add(collapse);
                 for (var i = 0; i < item.fields.Length; ++i)
                 {
@@ -215,6 +218,7 @@ namespace DynamicView
                 };
                 controlMapping[key] = color;
                 mapping[color] = key;
+                color.changed += Color_changed;
                 //color.SelectedIndexChanged += Select_SelectedIndexChanged;
                 row.Add(color);
             }
@@ -311,7 +315,7 @@ namespace DynamicView
                                     ColorPicker cp = ctl as ColorPicker;
                                     if (cp != null)
                                     {
-                                        cp.Color = Color.FromInt((int)value);
+                                        cp.Color = Color.FromInt((int)(0xff000000 | (int)value));
                                     }
                                     else
                                     {
@@ -394,6 +398,19 @@ namespace DynamicView
                 }
             }
         }
+        private void Color_changed(object sender, ColorPicker.ColorChangedEventArgs e)
+        {
+            if (!updating)
+            {
+                ColorPicker picker = sender as ColorPicker;
+                String name;
+                if (mapping.TryGetValue(sender, out name))
+                {
+                    device.Submit(name, e.color.ToInt().ToString());
+                }
+            }
+        }
+
         #endregion
     }
 
