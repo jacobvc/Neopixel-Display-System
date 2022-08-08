@@ -11,8 +11,7 @@ const char * index_html = R"rawtext(
 
 <body>
 
-  <!-- <button type="button" onclick="loadDoc()">Change Content</button> -->
-  <div class="dev-control">
+   <div class="dev-control">
     <h2 class="dev-heading">
       <div id="devicename">Connecting to NEOPixel Device</div></h2>
     <div id="devicepanel" class="dev-panel">
@@ -55,6 +54,12 @@ function createControl(ctl, key, metaType, label, selectClass) {
         ctl.innerHTML +=
             `<select id="` + key + `" class='` + selectClass + `' onchange="updateStatus(this.id, this.value)"></select>`;
     }
+    else if (metaType == 'color') {
+        ctl.innerHTML +=
+            `<label for="` + key + `">` + label + `</label>`;
+        ctl.innerHTML +=
+            `<input id="` + key + `" type="color" onchange="updateColor(this.id, this.value)"></select>`;
+    }
     else {
         ctl.innerHTML +=
             `<label for="` + key + `">` + label + `</label>`;
@@ -68,6 +73,16 @@ function createView(ctl, key, item) {
         // div
         for (var i = 0; i < item.fields.length; ++i) {
             createView(ctl, item.fields[i].name, item.fields[i]);
+        }
+        // /div
+        ctl.innerHTML += '<br>';
+    }
+    else if (item.type == 'collapsible') {
+        // div
+        ctl.innerHTML += '<details><summary>' + item.label + '</summary><div id="collapsible-' + item.name + '"></details>';
+        var inner = document.getElementById('collapsible-' + item.name);
+        for (var i = 0; i < item.fields.length; ++i) {
+            createView(inner, item.fields[i].name, item.fields[i]);
         }
         // /div
         ctl.innerHTML += '<br>';
@@ -111,12 +126,18 @@ function updateValue(key, value) {
             if (ctl.type == 'checkbox') {
                 ctl.checked = value;
             }
-            else if (ctl.nodeName == 'DIV') {
+             else if (ctl.nodeName == 'DIV') {
                 ctl.innerHTML = value;
             }
             else if (ctl != document.activeElement) {
+                if (ctl.type == 'color') {
+                    var str = value.toString(16);
+                    ctl.value = '#'+ str.padStart(6, 0);
+                }
+                else {
                 // Dont update the active element
                 ctl.value = value;
+                }
             }
         }
     }
@@ -128,7 +149,7 @@ function reportError() {
         = 'Request Failed ... Reconnecting';
 }
 
-function createPage(id, value) {
+function createPage(key, value) {
     const xhr = new XMLHttpRequest();
     xhr.onerror = reportError;
 
@@ -160,8 +181,8 @@ function createPage(id, value) {
         updateStatus('', '');
     }
     var url = new URL("/metadata", location);
-    if (id && id.length > 0) {
-        url.searchParams.set(id, value);
+    if (key && key.length > 0) {
+        url.searchParams.set(key, value);
     }
 
     xhr.open("GET", url, true);
@@ -175,7 +196,12 @@ function createPage(id, value) {
             = 'RequestFailed<br>' + e + '<br>  Reconnecting';
     }
 }
-function updateStatus(id, value) {
+
+function updateColor(key, value) {
+    updateStatus(key, parseInt(value.substring(1), 16));
+}
+
+function updateStatus(key, value) {
     const xhr = new XMLHttpRequest();
     xhr.onerror = reportError;
 
@@ -187,8 +213,8 @@ function updateStatus(id, value) {
         }
     }
     var url = new URL("/status", location);
-    if (id && id.length > 0) {
-        url.searchParams.set(id, value);
+    if (key && key.length > 0) {
+        url.searchParams.set(key, value);
     }
 
     xhr.open("GET", url, true);
@@ -398,80 +424,5 @@ label {
   .slider.round:before {
     border-radius: 50%;
   }
-
-/*
-.camera-velocity {
-    display: inline-block;
-    top: -98px;
-    position: relative;
-    width: 36px;
-}
-
-input.vertical {
-    transform: translateX(-35px) translateY(35px) rotate(-90deg) ;
-    width: 98px;
-    height: 28px;
-    vertical-align: top;
-    writing-mode: bt-lr;
-    position: relative;
-}
-
-.dev-control div progress {
-    vertical-align: top;
-    top: 8px;
-}
-
-progress.vertical {
-    left: -10px;
-    width: 96px;
-    height: 4px;
-    position: relative;
-    margin: 10px auto;
-    background-color: rgba(48, 24, 33, 0.75);
-    box-shadow: 0 0 3px #c3e7a5 inset, 0 0 2px rgba(228, 103, 103, 0.9);
-    border-radius: 0px;
-    padding: 0px;
-    transform: rotate(-90deg);
-    display: inline-block;
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-progress::-webkit-progress-value {
-    background-color: rgb(37, 228, 53) !important;
-}
-
-progress::-moz-progress-bar {
-    background-color: rgb(37, 228, 53) !important;
-}
-
-progress[value]::-webkit-progress-value {
-    background-color: rgb(37, 228, 53);
-}
-
-progress::-webkit-progress-bar {
-    background-color: black;
-    width: 100%;
-}
-
-progress {
-    background-color: black;
-}
-
-
-select {
-    background: transparent;
-    position: relative;
-    top: 1px;
-    width: 88px;
-    padding: 5px;
-    line-height: 1;
-    border: 2;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    background-color: rgb(45, 45, 45);
-    color: rgb(200, 200, 200);
-}
-*/
 )rawtext";
 
