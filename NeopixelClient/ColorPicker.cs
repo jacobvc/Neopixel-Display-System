@@ -20,13 +20,12 @@ namespace DynamicView
         public event ColorChanged changed;
 
         BoxView bvColorPicker;
-        Image imgColorPicker;
         Picker pickerColorPicker;
 
         public Color Color
         {
             get { return this.bvColorPicker.Color; }
-            set { this.bvColorPicker.Color = value; }
+            set { this.bvColorPicker.Color = value; /* this.pickerColorPicker.BackgroundColor = value; */ }
         }
 
         public ColorPicker()
@@ -57,7 +56,8 @@ namespace DynamicView
                 IsVisible = false,
             };
             pickerColorPicker.SelectedIndexChanged += pickerColorPicker_SelectedIndexChanged;
-            //this.SetColumnSpan(pickerColorPicker, 2);
+            pickerColorPicker.Focused += PickerColorPicker_Focused;
+
             this.Add(pickerColorPicker, 0, 0);
 
 
@@ -72,6 +72,16 @@ namespace DynamicView
             {
                 pickerColorPicker.Items.Add(colorName);
             }
+        }
+
+        private void PickerColorPicker_Focused(object sender, FocusEventArgs e)
+        {
+            if (!e.IsFocused)
+            {
+
+            }
+            
+            //throw new NotImplementedException();
         }
 
         // Dictionary to get Color from color name.

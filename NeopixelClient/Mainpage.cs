@@ -83,8 +83,6 @@ namespace DynamicView
             };
             row.Add(button);
 #endif
-            //initialView.Add(new Image { Source = "dotnet_bot.png", WidthRequest = 300, HorizontalOptions = LayoutOptions.Center });
-
             Content = initialView;
         }
 

@@ -120,8 +120,29 @@ namespace DynamicView
             }
             else if (item.type == "collapsible")
             {
+                var section = new VerticalStackLayout
+                {
+                    Padding = new Thickness(4, 4)
+                };
                 var row = new HorizontalStackLayout();
-                ctl.Add(row);
+                section.Add(row);
+
+                Border border = new Border
+                {
+                    Stroke = DynamicView.BorderColor,
+                    //Background = Colors.Cornsilk,
+                    StrokeThickness = 2,
+                    //Padding = new Thickness(6, 6),
+                    HorizontalOptions = LayoutOptions.Fill,
+                    ZIndex = 0,
+                    //WidthRequest = 350,
+                    StrokeShape = new RoundRectangle
+                    {
+                        CornerRadius = new CornerRadius(5, 5, 5, 5)
+                    },
+                    Content = section
+                };
+                ctl.Add(border);
 
                 Label newLabel = NewDefaultLabel("Show " + item.label);
                 newLabel.HorizontalOptions = LayoutOptions.Start;
@@ -136,7 +157,7 @@ namespace DynamicView
                     collapse.IsVisible = e.Value;
                 };
                 row.Add(swt);
-                ctl.Add(collapse);
+                section.Add(collapse);
                 for (var i = 0; i < item.fields.Length; ++i)
                 {
                     CreateView(collapse, item.fields[i].name, item.fields[i]);
