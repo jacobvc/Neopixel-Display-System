@@ -175,6 +175,7 @@ namespace DynamicView
                 var row = new VerticalStackLayout()
                 {
                     HorizontalOptions = LayoutOptions.Center,
+                    WidthRequest = 100
                 };
                 ctl.Add(row);
                 Label newLabel = NewDefaultLabel(label);
@@ -182,7 +183,6 @@ namespace DynamicView
                 row.Add(newLabel);
                 var swt = new Switch
                 {
-                    WidthRequest = 50,
                     //BackgroundColor = Colors.LightGrey,
                 };
                 controlMapping[key] = swt;
