@@ -125,13 +125,16 @@ The BLE server is implemented in neopixelble.cpp. As the BLE module, it also imp
  The BLE server interface implements two characteristics; MetaData read, and Status read / write / Notify
  
 #### Metadata Characteristic
-METADATA_1_CHARACTERISTIC_UUID and METADATA_2_CHARACTERISTIC_UUID
+METADATA_CHARACTERISTIC_UUID
 
-The Metadata characteristic is implemented in two components (literally two characteristic UUIDs) that the reader concatenates into a single record. The application implements this by sending the first 600 bytes of the global JSON encoded metadata string for (1), and the balance of that string for (2).
+ The metadata characteristic is implemented as a segmented read. Upon write, the single byte value is used to set the characteristic value to the metadata segment identified by that value. The entire metadata string is read by writing a monotonically incrementing byte (starting at 0) followed by a read; concatenating the results; until the read returns zero length response.
  
-This is done to get around the ESP32 BLE implementation 600 byte characteristic limitation. 
-There are several more elegant options, but this does the job so a more elegant solution was not given a high priority.
+##### Write characteristic
+ A metadata write sets the characteristic value to the metadata segment identified by that value. When the value is greater than the number of segments, the characteristic value is set to empty.
  
+##### Read characteristic
+ A metadata read sends the characteristic value that was set based on the most recent write.
+  
 #### Status Characteristic
 STATUS_CHARACTERISTIC_UUID
 
