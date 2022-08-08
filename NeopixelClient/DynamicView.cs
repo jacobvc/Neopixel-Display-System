@@ -36,7 +36,7 @@ namespace DynamicView
         }
 
         /// <summary>
-        /// Create a dynamic view od the device from metadata array
+        /// Create dynamic view of device from metadata array
         /// </summary>
         /// <param name="metadata"></param>
         /// <returns></returns>
@@ -159,17 +159,6 @@ namespace DynamicView
             }
         }
 
-        private void CollapseToggle(object sender, ToggledEventArgs e)
-        {
-            //throw new NotImplementedException();
-            //Switch swt = sender as Switch;
-            //String name;
-            //if (mapping.TryGetValue(sender, out name))
-            //{
-            //    device.Submit(name, swt.IsToggled.ToString());
-            //}
-        }
-
         /// <summary>
         /// Create an element (typically a label and a control) for data of 'metaType' using 'label'
         /// for the label and 'optionsName' for options in the case of metatype='select'. Attach it to 'ctl'
@@ -271,7 +260,7 @@ namespace DynamicView
 
         #region Update control value
         /// <summary>
-        /// Update control in dynamic view mapped to 'key' using 'value'
+        /// Update control in dynamic view mapped to 'key', with 'value'
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -315,6 +304,7 @@ namespace DynamicView
                                     ColorPicker cp = ctl as ColorPicker;
                                     if (cp != null)
                                     {
+                                        // Works, but there is probably a better way
                                         cp.Color = Color.FromInt((int)(0xff000000 | (int)value));
                                     }
                                     else
@@ -413,7 +403,7 @@ namespace DynamicView
 
         #endregion
     }
-
+    #region ViewMetadata class
 #pragma warning disable IDE1006 // Naming Styles
     /// <summary>
     /// Metadata describing user interface alements
@@ -497,4 +487,5 @@ namespace DynamicView
         }
     }
 #pragma warning restore IDE1006 // Naming Styles
+    #endregion
 }

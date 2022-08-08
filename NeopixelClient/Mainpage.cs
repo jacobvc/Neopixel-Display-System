@@ -29,7 +29,7 @@ namespace DynamicView
 
             };
 
-            Devices.Add(new NeopixelHttpDevice("192.168.12.208"));
+            //Devices.Add(new NeopixelHttpDevice("192.168.12.208"));
 
             CollectionView cv = new CollectionView()
             {
@@ -47,20 +47,18 @@ namespace DynamicView
             //listView.ItemTemplate = viewCell;
 
             initialView.Add(cv);
+#if !ANDROID
             var row = new HorizontalStackLayout();
             initialView.Add(row);
             row.Add(new Label
             {
                 Text = "NeoPixel URL ",
                 Padding = 16,
-                //FontSize = 32,
                 HorizontalOptions = LayoutOptions.Center,
-                //TextColor = Colors.White
             });
             var url = new Entry
             {
                 Text = "192.168.12.208",
-                //FontSize = 32,
                 HorizontalOptions = LayoutOptions.Center,
                 TextColor = Colors.Black
             };
@@ -84,7 +82,8 @@ namespace DynamicView
                 CreateDynamicView(mdata, transport);
             };
             row.Add(button);
-            initialView.Add(new Image { Source = "dotnet_bot.png", WidthRequest = 300, HorizontalOptions = LayoutOptions.Center });
+#endif
+            //initialView.Add(new Image { Source = "dotnet_bot.png", WidthRequest = 300, HorizontalOptions = LayoutOptions.Center });
 
             Content = initialView;
         }

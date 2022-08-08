@@ -26,13 +26,11 @@ namespace DynamicView
     {
         const String BLE_SERVER_NAME = "Neopixel BLE";
         public const String SERVICE_UUID = "991e4749-bdb3-4e79-96d8-9a1b20cd51ab";
-        const String METADATA_1_CHARACTERISTIC_UUID = "9da99ba6-6a55-4bfd-aee8-401fdcd69bf5";
-        const String METADATA_2_CHARACTERISTIC_UUID = "76cd10b8-c3ea-4c16-a589-771506833f1c";
+        const String METADATA_CHARACTERISTIC_UUID = "9da99ba6-6a55-4bfd-aee8-401fdcd69bf5";
         const String STATUS_CHARACTERISTIC_UUID = "c0126900-f29f-4baf-8d8d-9e313d881339";
 
         ICharacteristic chStatus;
-        ICharacteristic chMetadata1;
-        ICharacteristic chMetadata2;
+        ICharacteristic chMetadata;
 
         object IDynamicViewDevice.Peripheral { get => base.Peripheral; set { } }
 
@@ -48,12 +46,9 @@ namespace DynamicView
             {
                 IPeripheralConnection periph = await Peripheral.ConnectAsync(1000);
 
-                chMetadata1 = await periph.FindServiceCharacteristicAsync(
+                chMetadata = await periph.FindServiceCharacteristicAsync(
                     new ServiceCharacteristicUuid(new ServiceUuid(new Uuid(SERVICE_UUID)),
-                    new CharacteristicUuid(new Uuid(METADATA_1_CHARACTERISTIC_UUID))));
-                chMetadata2 = await periph.FindServiceCharacteristicAsync(
-                    new ServiceCharacteristicUuid(new ServiceUuid(new Uuid(SERVICE_UUID)),
-                    new CharacteristicUuid(new Uuid(METADATA_2_CHARACTERISTIC_UUID))));
+                    new CharacteristicUuid(new Uuid(METADATA_CHARACTERISTIC_UUID))));
                 chStatus = await periph.FindServiceCharacteristicAsync(
                     new ServiceCharacteristicUuid(new ServiceUuid(new Uuid(SERVICE_UUID)),
                     new CharacteristicUuid(new Uuid(STATUS_CHARACTERISTIC_UUID))));
@@ -93,8 +88,15 @@ namespace DynamicView
 
         public async Task<ViewMetadata[]> GetMetaDataAsync()
         {
-            string meta = System.Text.Encoding.Default.GetString(await chMetadata1.ReadAsync());
-            meta += System.Text.Encoding.Default.GetString(await chMetadata2.ReadAsync());
+            string meta = "";
+            string part = "";
+            byte i = 0;
+            do
+            {
+                await chMetadata.WriteAsync(new byte[] { i++ });
+                part = System.Text.Encoding.Default.GetString(await chMetadata.ReadAsync());
+                meta += part;
+            } while (part.Length > 0);
             return JsonSerializer.Deserialize<ViewMetadata[]>(meta);
         }
         /// <summary>

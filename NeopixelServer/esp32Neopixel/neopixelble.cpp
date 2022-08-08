@@ -20,8 +20,7 @@ BLEServer *pServer = NULL;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
-BLECharacteristic *pMetadata1Characteristic;
-BLECharacteristic *pMetadata2Characteristic;
+BLECharacteristic *pMetadataCharacteristic;
 BLECharacteristic *pStatusCharacteristic;
 
 /***
@@ -80,37 +79,29 @@ class StatusCallbacks : public BLECharacteristicCallbacks
     }
 };
 
-class Metadata1Callbacks : public BLECharacteristicCallbacks
+#define MIN(a,b) (((a)<(b))?(a):(b))
+
+class MetadataCallbacks : public BLECharacteristicCallbacks
 {
     // This is how to send a characteristic bigger than 600 (ESP_GATT_MAX_ATTR_LEN) bytes
-    void onRead(BLECharacteristic *pCharacteristic)
+    void onWrite(BLECharacteristic *pCharacteristic)
     {
-        int length = metadataJson.length();
-        if (length >= ESP_GATT_MAX_ATTR_LEN)
-        {
-            pCharacteristic->setValue(metadataJson.substring(0, ESP_GATT_MAX_ATTR_LEN).c_str());
-        }
-        else
-        {
-            pCharacteristic->setValue(metadataJson.c_str());
-        }
-    }
-};
+        uint8_t *data = pCharacteristic->getData();
 
-class Metadata2Callbacks : public BLECharacteristicCallbacks
-{
-    void onRead(BLECharacteristic *pCharacteristic)
-    {
         int length = metadataJson.length();
-        if (length > ESP_GATT_MAX_ATTR_LEN)
+        int start = data[0] * ESP_GATT_MAX_ATTR_LEN;
+        if (length > start)
         {
-            pCharacteristic->setValue(metadataJson.substring(ESP_GATT_MAX_ATTR_LEN).c_str());
+          int size = MIN(length - start, ESP_GATT_MAX_ATTR_LEN);
+//printf("metadata: sending %d of %d starting at %d\n", size, length, start);
+            pCharacteristic->setValue(metadataJson.substring(start, start + size).c_str());
         }
         else
         {
+//printf("metadata: all sent\n");
             pCharacteristic->setValue("");
         }
-    }
+    }      
 };
 
 void NeoBleSendStatus()
@@ -135,17 +126,12 @@ void NeoBleSetup()
     pServer->setCallbacks(new MyServerCallbacks());
 
     BLEService *pService = pServer->createService(SERVICE_UUID);
-    pMetadata1Characteristic = pService->createCharacteristic(
-        METADATA_1_CHARACTERISTIC_UUID,
+    pMetadataCharacteristic = pService->createCharacteristic(
+        METADATA_CHARACTERISTIC_UUID,
+        BLECharacteristic::PROPERTY_WRITE |
         BLECharacteristic::PROPERTY_READ);
-    pMetadata1Characteristic->addDescriptor(new BLE2902());
-    pMetadata1Characteristic->setCallbacks(new Metadata1Callbacks());
-
-    pMetadata2Characteristic = pService->createCharacteristic(
-        METADATA_2_CHARACTERISTIC_UUID,
-        BLECharacteristic::PROPERTY_READ);
-    pMetadata2Characteristic->addDescriptor(new BLE2902());
-    pMetadata2Characteristic->setCallbacks(new Metadata2Callbacks());
+    pMetadataCharacteristic->addDescriptor(new BLE2902());
+    pMetadataCharacteristic->setCallbacks(new MetadataCallbacks());
 
     pStatusCharacteristic = pService->createCharacteristic(
         STATUS_CHARACTERISTIC_UUID,
