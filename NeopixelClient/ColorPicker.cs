@@ -20,7 +20,6 @@ namespace DynamicView
         public event ColorChanged changed;
 
         BoxView bvColorPicker;
-        Picker pickerColorPicker;
 
         public Color Color
         {
@@ -28,9 +27,80 @@ namespace DynamicView
             set { this.bvColorPicker.Color = value; /* this.pickerColorPicker.BackgroundColor = value; */ }
         }
 
+        public Layout Picker
+        {
+            get; private set;
+        }
+
+        Layout ColorGrid()
+        {
+            int rows = 4;
+            int cols = 4;
+            int cellsize = 35;
+            int pad = 4;
+
+            Layout layout = new AbsoluteLayout
+            {
+                Margin = new Thickness(10),
+                //WidthRequest = 200,
+                //HeightRequest = 200,
+                IsVisible = false,
+            };
+
+            Grid grid = new Grid();
+            grid.Padding = pad;
+            layout.Add(grid);
+            AbsoluteLayout.SetLayoutBounds(grid, new Rect(10, 10, cols * (cellsize + 2 * pad + 2),
+                rows * (cellsize + 5)));
+
+            for (int i = 0; i < rows; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition { Height = cellsize });
+            }
+            for (int i = 0; i < cols; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = cellsize });
+            }
+
+            int x = 0;
+            int y = 0;
+            foreach(KeyValuePair<String, Color> entry in colorDict)
+            {
+                if (x < cols)
+                {
+                    //grid.Add(new BoxView
+                    //{
+                    //    Color = entry.Value,
+                    //});
+                    Button btn = new Button
+                    {
+                        BackgroundColor = entry.Value,
+                        CornerRadius = 0,
+                    };
+                    btn.Clicked += Btn_Clicked;
+                    grid.Add(btn, x, y);
+                    ++y;
+                    if (y >= rows)
+                    {
+                        y = 0;
+                        ++x;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+            return layout;
+        }
+
         public ColorPicker()
         {
+            Picker = ColorGrid();
+
             RowDefinitions.Add(new RowDefinition { Height = 28 });
+            RowDefinitions.Add(new RowDefinition());
             ColumnDefinitions.Add(new ColumnDefinition { Width = 58 });
             //ColumnDefinitions.Add(new ColumnDefinition { Width = 38 });
             this.Padding = new Thickness(0, 3);
@@ -46,42 +116,12 @@ namespace DynamicView
                 //VerticalOptions = LayoutOptions.FillAndExpand,
             };
             boxgrid.Add(bvColorPicker);
-            //imgColorPicker = new Image
-            //{
-            //};
-            //this.Add(imgColorPicker, 1, 0);
-            //this.SetColumnSpan(imgColorPicker, 2);
-            pickerColorPicker = new Picker
-            {
-                IsVisible = false,
-            };
-            pickerColorPicker.SelectedIndexChanged += pickerColorPicker_SelectedIndexChanged;
-            pickerColorPicker.Focused += PickerColorPicker_Focused;
 
-            this.Add(pickerColorPicker, 0, 0);
-
-
-
-            // creating the TapGestureRecognizer
+            this.Add(Picker, 0, 1);
+            // create the TapGestureRecognizer
             TapGestureRecognizer tapImgColorPicker = new TapGestureRecognizer();
             bvColorPicker.GestureRecognizers.Add(tapImgColorPicker);
             tapImgColorPicker.Tapped += TapImgColorPicker_Tapped;
-
-            // populate picker with available colors
-            foreach (string colorName in colorDict.Keys)
-            {
-                pickerColorPicker.Items.Add(colorName);
-            }
-        }
-
-        private void PickerColorPicker_Focused(object sender, FocusEventArgs e)
-        {
-            if (!e.IsFocused)
-            {
-
-            }
-            
-            //throw new NotImplementedException();
         }
 
         // Dictionary to get Color from color name.
@@ -102,16 +142,15 @@ namespace DynamicView
 
         private void TapImgColorPicker_Tapped(object sender, EventArgs e)
         {
-            pickerColorPicker.IsVisible = true;
-            pickerColorPicker.Focus();
+            Picker.IsVisible = !Picker.IsVisible;
         }
 
-        void pickerColorPicker_SelectedIndexChanged(object sender, EventArgs e)
+        private void Btn_Clicked(object sender, EventArgs e)
         {
-            string colorName = pickerColorPicker.Items[pickerColorPicker.SelectedIndex];
-            this.Color = colorDict[colorName];
-            pickerColorPicker.IsVisible = false;
-            changed?.Invoke(this, new ColorChangedEventArgs(this.Color));
+            Button btn = sender as Button;
+            changed?.Invoke(this, new ColorChangedEventArgs(btn.BackgroundColor));
+            this.Color = btn.BackgroundColor;
+            Picker.IsVisible = false;
         }
     }
 }

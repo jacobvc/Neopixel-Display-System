@@ -16,6 +16,7 @@ namespace DynamicView
         public static Color BorderColor = Color.FromArgb("#C49B33");
 
         IDynamicViewDevice device;
+        StackBase view;
 
         Dictionary<string, ViewMetadata> options = new Dictionary<string, ViewMetadata>();
         Dictionary<object, String> mapping = new Dictionary<object, String>();
@@ -42,7 +43,7 @@ namespace DynamicView
         /// <returns></returns>
         public View Create(ViewMetadata[] metadata)
         {
-            var contents = new VerticalStackLayout()
+            view = new VerticalStackLayout()
             {
                 Spacing = 10,
                 HorizontalOptions = LayoutOptions.Center,
@@ -59,7 +60,7 @@ namespace DynamicView
                 {
                     CornerRadius = new CornerRadius(30, 30, 30, 30)
                 },
-                Content = contents
+                Content = view
             };
             // Instantiate all of the options lists before creating controls
             foreach (ViewMetadata item in metadata)
@@ -80,7 +81,7 @@ namespace DynamicView
                 }
                 else if (type == "value")
                 {
-                    contents.Add(new Label
+                    view.Add(new Label
                     {
                         Text = item.value,
                         Padding = ContentsLabelPadding,
@@ -91,7 +92,7 @@ namespace DynamicView
                 }
                 else
                 {
-                    CreateView(contents, item.name, item);
+                    CreateView(view, item.name, item);
                 }
             }
 
@@ -226,6 +227,7 @@ namespace DynamicView
                 {
                     //ItemsSource = options[optionsName].values,
                 };
+                //ctl.Add(color.Picker);
                 controlMapping[key] = color;
                 mapping[color] = key;
                 color.changed += Color_changed;
