@@ -224,7 +224,7 @@ namespace DynamicView
                 color.Clicked += async (sender, args) =>
                 {
                     Button btn = sender as Button;
-                    ColorPicker picker = new ColorPicker(btn.Text, btn.BackgroundColor, key);
+                    ColorPicker picker = new ColorPicker(btn.Text, btn.BackgroundColor, key, btn);
                     picker.changed += Color_changed;
                     page.ShowPopup(picker);
                 };
@@ -324,6 +324,7 @@ namespace DynamicView
                                     {
                                         // Works, but there is probably a better way
                                         cp.BackgroundColor = Color.FromInt((int)(0xff000000 | (int)value));
+                                        cp.TextColor = ColorPicker.SugestedForground(cp.BackgroundColor);
                                     }
                                     else
                                     {

@@ -19,150 +19,23 @@ namespace DynamicView
                 this.color = color;
             }
         }
-        public event ColorChanged changed;
 
-        BoxView bvColorPicker;
-        Label lblName;
-        Grid bgColor;
+        public event ColorChanged changed;
+        Label lblSelected;
+        Label lblOriginal;
 
         public Color SelectedColor
         {
-            get { return this.bvColorPicker.Color; }
-            set { this.bvColorPicker.Color = value; /* this.pickerColorPicker.BackgroundColor = value; */ }
+            get { return this.lblSelected.BackgroundColor; }
+            set
+            {
+                this.lblSelected.BackgroundColor = value;
+                this.lblSelected.Text = "Selected\n" + value.ToArgbHex();
+                this.lblSelected.TextColor = SugestedForground(value);
+            }
         }
 
-        public Layout Picker
-        {
-            get; private set;
-        }
         public String Key { get; private set; }
-
-        Layout ColorGrid()
-        {
-            int rows = 6;
-            int cols = 3;
-            int cellsize = 35;
-            int pad = 0;
-
-            Layout layout = new AbsoluteLayout
-            {
-                Margin = new Thickness(10),
-                //WidthRequest = 200,
-                //HeightRequest = 200,
-                //IsVisible = false,
-            };
-
-            Grid grid = new Grid();
-            grid.Padding = pad;
-            layout.Add(grid);
-            AbsoluteLayout.SetLayoutBounds(grid, new Rect(0, 0, cols * (cellsize + 2 * pad + 2),
-                rows * (cellsize + 5)));
-
-            for (int i = 0; i < rows; i++)
-            {
-                grid.RowDefinitions.Add(new RowDefinition { Height = cellsize });
-            }
-            for (int i = 0; i < cols; i++)
-            {
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = cellsize });
-            }
-
-            int x = 0;
-            int y = 0;
-            foreach(KeyValuePair<String, Color> entry in colorDict)
-            {
-                if (x < cols)
-                {
-                    //grid.Add(new BoxView
-                    //{
-                    //    Color = entry.Value,
-                    //});
-                    Button btn = new Button
-                    {
-                        BackgroundColor = entry.Value,
-                        CornerRadius = 0,
-                    };
-                    btn.Clicked += Btn_Clicked;
-                    grid.Add(btn, x, y);
-                    ++y;
-                    if (y >= rows)
-                    {
-                        y = 0;
-                        ++x;
-                    }
-                }
-                else
-                {
-                    break;
-                }
-
-            }
-            return layout;
-        }
-
-        public ColorPicker(String label, Color color, string key)
-        {
-#if true
-            Picker = ColorGrid();
-
-            Grid grid = new Grid();
-            grid.RowDefinitions.Add(new RowDefinition());
-            grid.RowDefinitions.Add(new RowDefinition());
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
-            grid.Padding = new Thickness(0, 3);
-
-            lblName = new Label
-            {
-                Text = label,
-                Padding = DynamicView.ContentsLabelPadding,
-                HorizontalOptions = LayoutOptions.Center,
-                TextColor = DynamicView.PageTextColor
-            };
-            grid.Add(lblName, 0, 0);
-            bgColor = new Grid
-            {
-            };
-
-            grid.Add(bgColor, 1, 0);
-            bvColorPicker = new BoxView
-            {
-                BackgroundColor = Colors.Gray,
-                //HorizontalOptions = LayoutOptions.FillAndExpand,
-                //VerticalOptions = LayoutOptions.FillAndExpand,
-            };
-            bgColor.Add(bvColorPicker);
-
-            grid.Add(Picker, 0, 1);
-            Grid.SetColumnSpan(Picker, 2);
-
-            Content = grid;
-            //Layout layout = new VerticalStackLayout();
-            //layout.Add(grid);
-
-            //Border border = new Border
-            //{
-            //    Stroke = Brush.Default;
-            //    //Background = Colors.Cornsilk;
-            //    StrokeThickness = 2;
-            //    Padding = new Thickness(2, 2);
-            //    HorizontalOptions = LayoutOptions.Center;
-            //    StrokeShape = new RoundRectangle
-            //    {
-            //        CornerRadius = new CornerRadius(5, 5, 5, 5)
-            //    };
-            //    Content = layout;
-            //};
-            //Add(border);
-            this.SelectedColor = color;
-
-            // create the TapGestureRecognizer
-            TapGestureRecognizer tapImgColorPicker = new TapGestureRecognizer();
-            bvColorPicker.GestureRecognizers.Add(tapImgColorPicker);
-            tapImgColorPicker.Tapped += TapImgColorPicker_Tapped;
-            Key = key;
-#endif
-        }
 
         // Dictionary to get Color from color name.
         Dictionary<string, Color> colorDict = new Dictionary<string, Color>
@@ -180,28 +53,154 @@ namespace DynamicView
             { "White", Color.FromArgb("#FFFFFF") },         { "Yellow", Color.FromArgb("#FFEB3B") },
         };
 
-        public Boolean IsOpened
+        public ColorPicker(String label, Color color, string key, View anchor)
         {
-            get { return Picker.IsVisible; }
-            set
+            int width = 200;
+            int height = 220;
+            Key = key;
+            this.Anchor = anchor;
+            this.Size = new Size(width, height);
+
+            Grid grid = new Grid();
+            grid.RowDefinitions.Add(new RowDefinition { Height = 45 });
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition { Height = 25 });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = width / 2 } );
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = width / 2 } );
+            grid.Padding = new Thickness(0, 3);
+
+            
+            lblOriginal = new Label
             {
-                //lblName.IsVisible = !value;
-                bgColor.IsVisible = !value;
-                Picker.IsVisible = value;
+                Text = label + "\n" + color.ToArgbHex(),
+                Margin = 3,
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                HorizontalTextAlignment = TextAlignment.Center,
+            };
+            grid.Add(lblOriginal, 0, 0);
+            this.lblOriginal.BackgroundColor = color;
+            this.lblOriginal.TextColor = SugestedForground(color);
+
+            lblSelected = new Label
+            {
+                Text = "Selected",
+                Margin = 3,
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                HorizontalTextAlignment = TextAlignment.Center,
+            };
+            grid.Add(lblSelected, 1, 0);
+
+            Layout pickLayout = new VerticalStackLayout
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+            };
+            pickLayout.Add(ColorGrid(width));
+            grid.Add(pickLayout, 0, 1);
+            Grid.SetColumnSpan(pickLayout, 2);
+
+            Button cancel = new Button
+            {
+                Text = "Cancel",
+            };
+            cancel.Clicked += async (sender, args) =>
+            {
+                Close(false);
+            };
+            grid.Add(cancel, 1, 2);
+            Button ok = new Button
+            {
+                Text = "OK",
+
+            };
+            ok.Clicked += async (sender, args) =>
+            {
+                changed?.Invoke(this, new ColorChangedEventArgs(SelectedColor));
+                Close(true);
+            };
+            grid.Add(ok, 0, 2);
+            Content = grid;
+
+            this.SelectedColor = color;
+        }
+
+        Grid ColorGrid(int width)
+        {
+            int rows = 4;
+            int cols = 5;
+            int pad = 2;
+
+            int cellsize = (int)((Double)width / cols) - 2 * pad;
+
+            Grid grid = new Grid();
+            grid.Padding = pad;
+
+            for (int i = 0; i < rows; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition { Height = cellsize });
+            }
+            for (int i = 0; i < cols; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = cellsize });
+            }
+
+            int x = 0;
+            int y = 0;
+            foreach (KeyValuePair<String, Color> entry in colorDict)
+            {
+                if (x < cols)
+                {
+                    Button btn = new Button
+                    {
+                        BackgroundColor = entry.Value,
+                        CornerRadius = 0,
+                    };
+                    btn.Clicked += ColorSelected;
+                    grid.Add(btn, x, y);
+                    ++y;
+                    if (y >= rows)
+                    {
+                        y = 0;
+                        ++x;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+            return grid;
+        }
+
+        // https://www.w3.org/TR/WCAG20/#relativeluminancedef
+        public static Double ColorChannel(Byte channel)
+        {
+            Double dChan = channel / 255.0;
+            if (dChan <= 0.03928)
+            {
+                return dChan / 12.92;
+            }
+            else
+            {
+                return Math.Pow((dChan + 0.055) / 1.055, 2.4);
             }
         }
-
-        private void TapImgColorPicker_Tapped(object sender, EventArgs e)
+        public static Color SugestedForground(Color background)
         {
-            IsOpened = !IsOpened;
+            Byte r, g, b;
+            background.ToRgb(out r, out g, out b);
+            Double lum = 0.2126 * ColorChannel(r) + 0.7152 * ColorChannel(g) + 0.0722 * ColorChannel(b);
+
+            return lum > 0.175 ? Colors.Black : Colors.White;
         }
 
-        private void Btn_Clicked(object sender, EventArgs e)
+        private void ColorSelected(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            changed?.Invoke(this, new ColorChangedEventArgs(btn.BackgroundColor));
             this.SelectedColor = btn.BackgroundColor;
-            IsOpened = false;
         }
     }
 }
