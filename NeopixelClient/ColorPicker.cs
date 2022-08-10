@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Microsoft.Maui.Controls.Shapes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Maui.Views;
 
 namespace DynamicView
 {
-    public partial class ColorPicker : Grid
+    public partial class ColorPicker : Popup
     {
         public delegate void ColorChanged(object sender, ColorChangedEventArgs e);
         public class ColorChangedEventArgs : EventArgs
@@ -20,8 +22,10 @@ namespace DynamicView
         public event ColorChanged changed;
 
         BoxView bvColorPicker;
+        Label lblName;
+        Grid bgColor;
 
-        public Color Color
+        public Color SelectedColor
         {
             get { return this.bvColorPicker.Color; }
             set { this.bvColorPicker.Color = value; /* this.pickerColorPicker.BackgroundColor = value; */ }
@@ -31,26 +35,27 @@ namespace DynamicView
         {
             get; private set;
         }
+        public String Key { get; private set; }
 
         Layout ColorGrid()
         {
-            int rows = 4;
-            int cols = 4;
+            int rows = 6;
+            int cols = 3;
             int cellsize = 35;
-            int pad = 4;
+            int pad = 0;
 
             Layout layout = new AbsoluteLayout
             {
                 Margin = new Thickness(10),
                 //WidthRequest = 200,
                 //HeightRequest = 200,
-                IsVisible = false,
+                //IsVisible = false,
             };
 
             Grid grid = new Grid();
             grid.Padding = pad;
             layout.Add(grid);
-            AbsoluteLayout.SetLayoutBounds(grid, new Rect(10, 10, cols * (cellsize + 2 * pad + 2),
+            AbsoluteLayout.SetLayoutBounds(grid, new Rect(0, 0, cols * (cellsize + 2 * pad + 2),
                 rows * (cellsize + 5)));
 
             for (int i = 0; i < rows; i++)
@@ -95,33 +100,68 @@ namespace DynamicView
             return layout;
         }
 
-        public ColorPicker()
+        public ColorPicker(String label, Color color, string key)
         {
+#if true
             Picker = ColorGrid();
 
-            RowDefinitions.Add(new RowDefinition { Height = 28 });
-            RowDefinitions.Add(new RowDefinition());
-            ColumnDefinitions.Add(new ColumnDefinition { Width = 58 });
-            //ColumnDefinitions.Add(new ColumnDefinition { Width = 38 });
-            this.Padding = new Thickness(0, 3);
+            Grid grid = new Grid();
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.RowDefinitions.Add(new RowDefinition());
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 50 });
+            grid.Padding = new Thickness(0, 3);
 
-            Grid boxgrid = new Grid
+            lblName = new Label
+            {
+                Text = label,
+                Padding = DynamicView.ContentsLabelPadding,
+                HorizontalOptions = LayoutOptions.Center,
+                TextColor = DynamicView.PageTextColor
+            };
+            grid.Add(lblName, 0, 0);
+            bgColor = new Grid
             {
             };
-            this.Add(boxgrid, 0, 0);
+
+            grid.Add(bgColor, 1, 0);
             bvColorPicker = new BoxView
             {
                 BackgroundColor = Colors.Gray,
                 //HorizontalOptions = LayoutOptions.FillAndExpand,
                 //VerticalOptions = LayoutOptions.FillAndExpand,
             };
-            boxgrid.Add(bvColorPicker);
+            bgColor.Add(bvColorPicker);
 
-            this.Add(Picker, 0, 1);
+            grid.Add(Picker, 0, 1);
+            Grid.SetColumnSpan(Picker, 2);
+
+            Content = grid;
+            //Layout layout = new VerticalStackLayout();
+            //layout.Add(grid);
+
+            //Border border = new Border
+            //{
+            //    Stroke = Brush.Default;
+            //    //Background = Colors.Cornsilk;
+            //    StrokeThickness = 2;
+            //    Padding = new Thickness(2, 2);
+            //    HorizontalOptions = LayoutOptions.Center;
+            //    StrokeShape = new RoundRectangle
+            //    {
+            //        CornerRadius = new CornerRadius(5, 5, 5, 5)
+            //    };
+            //    Content = layout;
+            //};
+            //Add(border);
+            this.SelectedColor = color;
+
             // create the TapGestureRecognizer
             TapGestureRecognizer tapImgColorPicker = new TapGestureRecognizer();
             bvColorPicker.GestureRecognizers.Add(tapImgColorPicker);
             tapImgColorPicker.Tapped += TapImgColorPicker_Tapped;
+            Key = key;
+#endif
         }
 
         // Dictionary to get Color from color name.
@@ -140,17 +180,28 @@ namespace DynamicView
             { "White", Color.FromArgb("#FFFFFF") },         { "Yellow", Color.FromArgb("#FFEB3B") },
         };
 
+        public Boolean IsOpened
+        {
+            get { return Picker.IsVisible; }
+            set
+            {
+                //lblName.IsVisible = !value;
+                bgColor.IsVisible = !value;
+                Picker.IsVisible = value;
+            }
+        }
+
         private void TapImgColorPicker_Tapped(object sender, EventArgs e)
         {
-            Picker.IsVisible = !Picker.IsVisible;
+            IsOpened = !IsOpened;
         }
 
         private void Btn_Clicked(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             changed?.Invoke(this, new ColorChangedEventArgs(btn.BackgroundColor));
-            this.Color = btn.BackgroundColor;
-            Picker.IsVisible = false;
+            this.SelectedColor = btn.BackgroundColor;
+            IsOpened = false;
         }
     }
 }

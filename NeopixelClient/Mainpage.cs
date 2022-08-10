@@ -164,7 +164,7 @@ namespace DynamicView
         {
             if (mdata.Length > 0)
             {
-                DynamicView view = new DynamicView(device);
+                DynamicView view = new DynamicView(device, this);
 
                 StackBase layout = new VerticalStackLayout()
                 {

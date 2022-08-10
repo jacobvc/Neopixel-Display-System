@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,11 @@ namespace DynamicView
 {
     public class DynamicView
     {
-        public static Color PageTextColor = Colors.Black;
-        public static Thickness ContentsLabelPadding = new Thickness(7, 4);
-        public static Color BorderColor = Color.FromArgb("#C49B33");
+        public static readonly Color PageTextColor = Colors.Black;
+        public static readonly Thickness ContentsLabelPadding = new Thickness(7, 4);
+        public static readonly Color BorderColor = Color.FromArgb("#C49B33");
 
+        ContentPage page = null;
         IDynamicViewDevice device;
         StackBase view;
 
@@ -31,9 +33,10 @@ namespace DynamicView
         /// Constructor
         /// </summary>
         /// <param name="device"></param>
-        public DynamicView(IDynamicViewDevice device)
+        public DynamicView(IDynamicViewDevice device, ContentPage page)
         {
             this.device = device;
+            this.page = page;
         }
 
         /// <summary>
@@ -47,7 +50,6 @@ namespace DynamicView
             {
                 Spacing = 10,
                 HorizontalOptions = LayoutOptions.Center,
-                
             };
             Border border = new Border
             {
@@ -214,25 +216,18 @@ namespace DynamicView
             }
             else if (metaType == "color")
             {
-                var row = new HorizontalStackLayout()
-                {
-                    //HorizontalOptions = LayoutOptions.Center,
-                };
-                ctl.Add(row);
-                Label newLabel = NewDefaultLabel(label);
-                newLabel.HorizontalOptions = LayoutOptions.Start;
-                row.Add(newLabel);
-
-                var color = new ColorPicker
-                {
-                    //ItemsSource = options[optionsName].values,
-                };
-                //ctl.Add(color.Picker);
+                var color = new Button {
+                   Text = label };
                 controlMapping[key] = color;
                 mapping[color] = key;
-                color.changed += Color_changed;
-                //color.SelectedIndexChanged += Select_SelectedIndexChanged;
-                row.Add(color);
+                ctl.Add(color);
+                color.Clicked += async (sender, args) =>
+                {
+                    Button btn = sender as Button;
+                    ColorPicker picker = new ColorPicker(btn.Text, btn.BackgroundColor, key);
+                    picker.changed += Color_changed;
+                    page.ShowPopup(picker);
+                };
             }
             else if (metaType == "select")
             {
@@ -324,11 +319,11 @@ namespace DynamicView
                                 }
                                 else
                                 {
-                                    ColorPicker cp = ctl as ColorPicker;
+                                    Button cp = ctl as Button;
                                     if (cp != null)
                                     {
                                         // Works, but there is probably a better way
-                                        cp.Color = Color.FromInt((int)(0xff000000 | (int)value));
+                                        cp.BackgroundColor = Color.FromInt((int)(0xff000000 | (int)value));
                                     }
                                     else
                                     {
@@ -411,16 +406,13 @@ namespace DynamicView
                 }
             }
         }
+
         private void Color_changed(object sender, ColorPicker.ColorChangedEventArgs e)
         {
             if (!updating)
             {
                 ColorPicker picker = sender as ColorPicker;
-                String name;
-                if (mapping.TryGetValue(sender, out name))
-                {
-                    device.Submit(name, e.color.ToInt().ToString());
-                }
+                device.Submit(picker.Key, e.color.ToInt().ToString());
             }
         }
 
