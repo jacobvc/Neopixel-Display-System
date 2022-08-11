@@ -35,16 +35,8 @@ namespace DynamicView
             {
                 ItemsSource = Devices,
                 EmptyView = "Scanning for Neopixel Devices",
-                //ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
             };
             cv.ItemTemplate = BleTemplate();
-
-            //DataTemplate viewCell = new DataTemplate(typeof(StatusCell));
-            //ListView listView = new ListView()
-            //{
-
-            //};
-            //listView.ItemTemplate = viewCell;
 
             initialView.Add(cv);
 #if !ANDROID
@@ -86,7 +78,6 @@ namespace DynamicView
             Content = initialView;
         }
 
-        //public class StatusCell : ViewCell { }
         DataTemplate BleTemplate()
         {
             DataTemplate tpl = new DataTemplate(() =>
@@ -112,10 +103,6 @@ namespace DynamicView
                     },
                     Content = grid
                 };
-
-                //Image image = new Image { Aspect = Aspect.AspectFill, HeightRequest = 60, WidthRequest = 60 };
-                //image.SetBinding(Image.SourceProperty, "ImageUrl");
-                //grid.Add(image);
 
                 Label nameLabel = new Label { FontAttributes = FontAttributes.Bold, FontSize = 16 };
                 nameLabel.SetBinding(Label.TextProperty, "DeviceName");

@@ -12,6 +12,7 @@ namespace DynamicView
 {
     public class DynamicView
     {
+        #region Variables
         public static readonly Color PageTextColor = Colors.Black;
         public static readonly Thickness ContentsLabelPadding = new Thickness(7, 4);
         public static readonly Color BorderColor = Color.FromArgb("#C49B33");
@@ -28,7 +29,9 @@ namespace DynamicView
         /// State variable. Used to suppress events due to (during) data updates.
         /// </summary>
         bool updating = false;
+        #endregion
 
+        #region Constructors
         /// <summary>
         /// Constructor
         /// </summary>
@@ -38,7 +41,9 @@ namespace DynamicView
             this.device = device;
             this.page = page;
         }
+        #endregion
 
+        #region Create THE view
         /// <summary>
         /// Create dynamic view of device from metadata array
         /// </summary>
@@ -102,6 +107,7 @@ namespace DynamicView
             device.GetStatusAsync();
             return border;
         }
+        #endregion
 
         #region Create view of ViewMetadata item
         /// <summary>
