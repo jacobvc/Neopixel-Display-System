@@ -160,7 +160,7 @@ namespace DynamicView
                 {
                     WidthRequest = 50,
                 };
-                var collapse = new VerticalStackLayout {  IsVisible = false };
+                var collapse = new VerticalStackLayout { IsVisible = false };
                 swt.Toggled += (sender, e) =>
                 {
                     collapse.IsVisible = e.Value;
@@ -227,8 +227,10 @@ namespace DynamicView
             }
             else if (metaType == "color")
             {
-                var color = new Button {
-                   Text = label };
+                var color = new Button
+                {
+                    Text = label
+                };
                 controlMapping[key] = color;
                 mapping[color] = key;
                 ctl.Add(color);
@@ -285,9 +287,9 @@ namespace DynamicView
                 TextColor = PageTextColor
             };
         }
-#endregion
+        #endregion
 
-#region Update control value
+        #region Update control value
         /// <summary>
         /// Update control in dynamic view mapped to 'key', with 'value'
         /// </summary>
@@ -353,9 +355,9 @@ namespace DynamicView
             }
             return result;
         }
-#endregion
+        #endregion
 
-#region Event Handlers
+        #region Event Handlers
         private void Status_updated(object sender, StatusUpdatedEventArgs e)
         {
             updating = true;
@@ -428,9 +430,9 @@ namespace DynamicView
             }
         }
 
-#endregion
+        #endregion
     }
-#region ViewMetadata class
+    #region ViewMetadata class
 #pragma warning disable IDE1006 // Naming Styles
     /// <summary>
     /// Metadata describing user interface alements
@@ -514,5 +516,5 @@ namespace DynamicView
         }
     }
 #pragma warning restore IDE1006 // Naming Styles
-#endregion
+    #endregion
 }

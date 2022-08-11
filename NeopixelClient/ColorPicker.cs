@@ -57,6 +57,15 @@ namespace DynamicView
         };
         #endregion
 
+        #region Constructor / Helpers
+        /// <summary>
+        /// Create a ColorPicker Popup labeled 'label' with 'color', remembering 
+        /// parameter 'key'. Anchor the picker at 'anchor'
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="color"></param>
+        /// <param name="key"></param>
+        /// <param name="anchor"></param>
         public ColorPicker(String label, Color color, string key, View anchor)
         {
             int width = 200;
@@ -131,6 +140,11 @@ namespace DynamicView
             this.SelectedColor = color;
         }
 
+        /// <summary>
+        /// Create a grid of buttons each with a specified color, intended to fit in 'width'
+        /// </summary>
+        /// <param name="width"></param>
+        /// <returns></returns>
         Grid ColorGrid(int width)
         {
             int rows = 4;
@@ -179,7 +193,9 @@ namespace DynamicView
             }
             return grid;
         }
+        #endregion
 
+        #region Static Text color utility
         // https://www.w3.org/TR/WCAG20/#relativeluminancedef
         /// <summary>
         /// Calculate the luminance component for one channel (r, g, or b)
@@ -212,11 +228,14 @@ namespace DynamicView
 
             return lum > 0.175 ? Colors.Black : Colors.White;
         }
+        #endregion
 
+        #region Event handlers
         private void ColorBtn_Selected(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             this.SelectedColor = btn.BackgroundColor;
         }
+        #endregion
     }
 }
