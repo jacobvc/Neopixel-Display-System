@@ -17,7 +17,13 @@ I'm sure there must be, or eventually will be a better way, but I found the the 
 * Use the 
 new project wizard to create a new .NET MAUI application, then delete all of the .xaml and .xaml.cs files in the root directory
 
-* create a new App.cs file that implements a trivial App
+* Asd a new App.cs c,lass that implements a trivial App and replace
+
+       internal class App
+       {
+       }
+
+with
 
        public class App : Application
        {
@@ -27,11 +33,26 @@ new project wizard to create a new .NET MAUI application, then delete all of the
           }
        }
 
-* Create a new MainPage.cs that implements the main ContentPage
+* Add a new MainPage class that implements the main ContentPage and replace
 
-       public partial class MainPage : ContentPage
+       internal class MainPage
        {
-           public MainPage()
-           {
-           }
        }
+
+with
+
+        public MainPage()
+        {
+            var layout = new VerticalStackLayout
+            {
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
+            };
+            var label = new Label
+            {
+                Text = "My first pure C# MAUI App",
+                FontSize = 48,
+            };
+            layout.Add(label); 
+            Content = layout;
+        }
