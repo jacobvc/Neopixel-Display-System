@@ -10,6 +10,7 @@ namespace DynamicView
 {
     public partial class ColorPicker : Popup
     {
+        #region Event Definitions
         public delegate void ColorChanged(object sender, ColorChangedEventArgs e);
         public class ColorChangedEventArgs : EventArgs
         {
@@ -19,7 +20,9 @@ namespace DynamicView
                 this.color = color;
             }
         }
+        #endregion
 
+        #region Variables and Porperties
         public event ColorChanged changed;
         Label lblSelected;
         Label lblOriginal;
@@ -31,7 +34,7 @@ namespace DynamicView
             {
                 this.lblSelected.BackgroundColor = value;
                 this.lblSelected.Text = "Selected\n" + value.ToArgbHex();
-                this.lblSelected.TextColor = SugestedForground(value);
+                this.lblSelected.TextColor = SugestedTextColor(value);
             }
         }
 
@@ -52,11 +55,12 @@ namespace DynamicView
             { "Red", Color.FromArgb("#D32F2F") },           { "Teal", Color.FromArgb("#009587") },
             { "White", Color.FromArgb("#FFFFFF") },         { "Yellow", Color.FromArgb("#FFEB3B") },
         };
+        #endregion
 
         public ColorPicker(String label, Color color, string key, View anchor)
         {
             int width = 200;
-            int height = 220;
+            int height = 240;
             Key = key;
             this.Anchor = anchor;
             this.Size = new Size(width, height);
@@ -64,7 +68,7 @@ namespace DynamicView
             Grid grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = 45 });
             grid.RowDefinitions.Add(new RowDefinition());
-            grid.RowDefinitions.Add(new RowDefinition { Height = 25 });
+            grid.RowDefinitions.Add(new RowDefinition { Height = 35 });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = width / 2 } );
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = width / 2 } );
             grid.Padding = new Thickness(0, 3);
@@ -80,7 +84,7 @@ namespace DynamicView
             };
             grid.Add(lblOriginal, 0, 0);
             this.lblOriginal.BackgroundColor = color;
-            this.lblOriginal.TextColor = SugestedForground(color);
+            this.lblOriginal.TextColor = SugestedTextColor(color);
 
             lblSelected = new Label
             {
@@ -104,23 +108,24 @@ namespace DynamicView
             Button cancel = new Button
             {
                 Text = "Cancel",
+                Margin = new Thickness(4, 1),
             };
             cancel.Clicked += async (sender, args) =>
             {
                 Close(false);
             };
-            grid.Add(cancel, 1, 2);
+            grid.Add(cancel, 0, 2);
             Button ok = new Button
             {
                 Text = "OK",
-
+                Margin = new Thickness(4, 1),
             };
             ok.Clicked += async (sender, args) =>
             {
                 changed?.Invoke(this, new ColorChangedEventArgs(SelectedColor));
                 Close(true);
             };
-            grid.Add(ok, 0, 2);
+            grid.Add(ok, 1, 2);
             Content = grid;
 
             this.SelectedColor = color;
@@ -157,7 +162,7 @@ namespace DynamicView
                         BackgroundColor = entry.Value,
                         CornerRadius = 0,
                     };
-                    btn.Clicked += ColorSelected;
+                    btn.Clicked += ColorBtn_Selected;
                     grid.Add(btn, x, y);
                     ++y;
                     if (y >= rows)
@@ -176,7 +181,12 @@ namespace DynamicView
         }
 
         // https://www.w3.org/TR/WCAG20/#relativeluminancedef
-        public static Double ColorChannel(Byte channel)
+        /// <summary>
+        /// Calculate the luminance component for one channel (r, g, or b)
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        static Double ChannelLum(Byte channel)
         {
             Double dChan = channel / 255.0;
             if (dChan <= 0.03928)
@@ -188,16 +198,22 @@ namespace DynamicView
                 return Math.Pow((dChan + 0.055) / 1.055, 2.4);
             }
         }
-        public static Color SugestedForground(Color background)
+
+        /// <summary>
+        /// Compute the suggested text color for the specified background
+        /// </summary>
+        /// <param name="background"></param>
+        /// <returns></returns>
+        public static Color SugestedTextColor(Color background)
         {
             Byte r, g, b;
             background.ToRgb(out r, out g, out b);
-            Double lum = 0.2126 * ColorChannel(r) + 0.7152 * ColorChannel(g) + 0.0722 * ColorChannel(b);
+            Double lum = 0.2126 * ChannelLum(r) + 0.7152 * ChannelLum(g) + 0.0722 * ChannelLum(b);
 
             return lum > 0.175 ? Colors.Black : Colors.White;
         }
 
-        private void ColorSelected(object sender, EventArgs e)
+        private void ColorBtn_Selected(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             this.SelectedColor = btn.BackgroundColor;

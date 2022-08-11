@@ -14,7 +14,7 @@ namespace DynamicView
     {
         #region Variables
         public static readonly Color PageTextColor = Colors.Black;
-        public static readonly Thickness ContentsLabelPadding = new Thickness(7, 4);
+        public static readonly Thickness ContentsLabelPadding = new Thickness(3, 3);
         public static readonly Color BorderColor = Color.FromArgb("#C49B33");
 
         ContentPage page = null;
@@ -205,7 +205,12 @@ namespace DynamicView
                 var row = new VerticalStackLayout()
                 {
                     HorizontalOptions = LayoutOptions.Center,
+#if ANDROID
+                    WidthRequest = 60
+#else
+                    // Keep Windows On/Off label from being cropped
                     WidthRequest = 100
+#endif
                 };
                 ctl.Add(row);
                 Label newLabel = NewDefaultLabel(label);
@@ -280,9 +285,9 @@ namespace DynamicView
                 TextColor = PageTextColor
             };
         }
-        #endregion
+#endregion
 
-        #region Update control value
+#region Update control value
         /// <summary>
         /// Update control in dynamic view mapped to 'key', with 'value'
         /// </summary>
@@ -330,7 +335,7 @@ namespace DynamicView
                                     {
                                         // Works, but there is probably a better way
                                         cp.BackgroundColor = Color.FromInt((int)(0xff000000 | (int)value));
-                                        cp.TextColor = ColorPicker.SugestedForground(cp.BackgroundColor);
+                                        cp.TextColor = ColorPicker.SugestedTextColor(cp.BackgroundColor);
                                     }
                                     else
                                     {
@@ -348,9 +353,9 @@ namespace DynamicView
             }
             return result;
         }
-        #endregion
+#endregion
 
-        #region Event Handlers
+#region Event Handlers
         private void Status_updated(object sender, StatusUpdatedEventArgs e)
         {
             updating = true;
@@ -423,9 +428,9 @@ namespace DynamicView
             }
         }
 
-        #endregion
+#endregion
     }
-    #region ViewMetadata class
+#region ViewMetadata class
 #pragma warning disable IDE1006 // Naming Styles
     /// <summary>
     /// Metadata describing user interface alements
@@ -509,5 +514,5 @@ namespace DynamicView
         }
     }
 #pragma warning restore IDE1006 // Naming Styles
-    #endregion
+#endregion
 }

@@ -31,6 +31,7 @@ namespace DynamicView
 
             //Devices.Add(new NeopixelHttpDevice("192.168.12.208"));
 
+#if ANDROID
             CollectionView cv = new CollectionView()
             {
                 ItemsSource = Devices,
@@ -39,7 +40,7 @@ namespace DynamicView
             cv.ItemTemplate = BleTemplate();
 
             initialView.Add(cv);
-#if !ANDROID
+#else
             var row = new HorizontalStackLayout();
             initialView.Add(row);
             row.Add(new Label
