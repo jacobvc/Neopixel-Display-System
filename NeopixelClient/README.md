@@ -9,14 +9,20 @@ I wanted to do a BLE Android App to support the Neopixel server, when I saw a .N
 that it would be a good experiment vs. using Android Studio or Xamarin. It also offered the possibility of single source 
 Android, IOS, and / or MAC OS support.
 
-BUT for the experiemnt, I also wanted to do use pure C#, so this example does not utilize any XAML or BLAZOR sources.
+BUT for the experiment, I also wanted to do use pure C#, so this example does not utilize any XAML or BLAZOR sources.
 
 ## Quick Start
 This application is a client of an **esp32Neopxel** device. If one is not available, go to [Neopixel Server](/NeopixelServer) and create one of them first.
 
 At the time of this writing, .NET MAUI requires Visual Studio 2022 Preview. That is sort of a moving target, so I recommend going directly to the [.NET MAUI documentation](https://docs.microsoft.com/en-us/dotnet/maui) to install the most appropriate development tools.
 
-Once the desired version of Visual Studio has been installed, use it to open **NeopixelClient.sln**
+Once the desired version of Visual Studio has been installed, use it to open **NeopixelClient.sln**.
+
+### Windows Target
+Select "Windows Machine" for the target, then build and run. When the app launches, it will show a suggested IP address. Change the IP address to that of your NeoPixelServer, and press connect ... that's about it
+
+### Android Target
+You will need an android device (platform version 23.0 or newer), connected in developer mode. It will appear in the targets list under "Android Local Devices". Select that device for the target, then build and run. When the app launches, it will begin BLE scanning and present a list of available devices. Press connect on the device of interest, and you should be excactly where you ended with the Windows Target.
 
 ## Starting a New Application
 I'm sure there must be, or eventually will be a better way, but I found the the easiest way to start a nen app is to
