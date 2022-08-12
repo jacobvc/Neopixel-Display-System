@@ -15,12 +15,6 @@ namespace DynamicView
 #endif
             )
         {
-            DynamicViewDeviceCollection Devices
-#if ANDROID
-                = scanner.Devices;
-#else
-                = new DynamicViewDeviceCollection();
-#endif
             BackgroundColor = Colors.LightGrey;
             initialView = new VerticalStackLayout()
             {
@@ -28,10 +22,10 @@ namespace DynamicView
                 HorizontalOptions = LayoutOptions.Center,
 
             };
-
+#if ANDROID
+            DynamicViewDeviceCollection Devices = scanner.Devices;
             //Devices.Add(new NeopixelHttpDevice("192.168.12.208"));
 
-#if ANDROID
             CollectionView cv = new CollectionView()
             {
                 ItemsSource = Devices,
@@ -68,17 +62,57 @@ namespace DynamicView
             };
             button.Clicked += async (sender, args) =>
             {
-                NeopixelHttpDevice transport = new NeopixelHttpDevice(url.Text);
-
-                ViewMetadata[] mdata = await transport.GetMetaDataAsync();
-
-                CreateDynamicView(mdata, transport);
+                NeopixelHttpDevice device = new NeopixelHttpDevice(url.Text);
+                ViewMetadata[] mdata = await device.GetMetaDataAsync();
+                CreateDynamicView(mdata, device);
             };
             row.Add(button);
 #endif
             Content = initialView;
         }
 
+        async void CreateDynamicView(ViewMetadata[] mdata, IDynamicViewDevice device)
+        {
+            if (mdata.Length > 0)
+            {
+                DynamicView view = new DynamicView(device, this);
+
+                StackBase layout = new VerticalStackLayout()
+                {
+                    Spacing = 20,
+                    HorizontalOptions = LayoutOptions.Center,
+                };
+
+                layout.Add(view.Create(mdata));
+
+                var button = new Button
+                {
+                    Text = "Disconnect",
+                    HorizontalOptions = LayoutOptions.Center,
+                    TextColor = Colors.White,
+                    BackgroundColor = Color.FromArgb("#2b0b98"),
+                    Padding = new Thickness(14, 10)
+                };
+                button.Clicked += (sender, args) =>
+                {
+                    Content = initialView;
+                };
+                layout.Add(button);
+                ScrollView sv = new ScrollView()
+                {
+                    Padding = new Thickness(0, 8),
+                    Orientation = ScrollOrientation.Horizontal,
+                    Content = layout
+                };
+                Content = sv;
+            }
+            else
+            {
+                await DisplayAlert("Alert", "Could not connect to device", "OK");
+            }
+        }
+
+#if ANDROID
         DataTemplate BleTemplate()
         {
             DataTemplate tpl = new DataTemplate(() =>
@@ -147,46 +181,6 @@ namespace DynamicView
             });
             return tpl;
         }
-
-        async void CreateDynamicView(ViewMetadata[] mdata, IDynamicViewDevice device)
-        {
-            if (mdata.Length > 0)
-            {
-                DynamicView view = new DynamicView(device, this);
-
-                StackBase layout = new VerticalStackLayout()
-                {
-                    Spacing = 20,
-                    HorizontalOptions = LayoutOptions.Center,
-                };
-
-                layout.Add(view.Create(mdata));
-
-                var button = new Button
-                {
-                    Text = "Disconnect",
-                    HorizontalOptions = LayoutOptions.Center,
-                    TextColor = Colors.White,
-                    BackgroundColor = Color.FromArgb("#2b0b98"),
-                    Padding = new Thickness(14, 10)
-                };
-                button.Clicked += (sender, args) =>
-                {
-                    Content = initialView;
-                };
-                layout.Add(button);
-                ScrollView sv = new ScrollView()
-                {
-                    Padding = new Thickness(0, 8),
-                    Orientation = ScrollOrientation.Horizontal,
-                    Content = layout
-                };
-                Content = sv;
-            }
-            else
-            {
-                await DisplayAlert("Alert", "Could not connect to device", "OK");
-            }
-        }
+#endif
     }
 }
