@@ -7,6 +7,8 @@ processing of OBS Studio scenes.
 
 It controls the Neopixel device found at the specified IP address.
 
+This script is a client of an **esp32Neopxel** device. If one is not available, go to [Neopixel Server](/NeopixelServer) and create one of them first.
+
 The script presents a user interface with a group for each OBS scene and a 
 checkbox that enables / disables participation of that scene. When a scene 
 is disabled, it's interface collapses to a single line.
