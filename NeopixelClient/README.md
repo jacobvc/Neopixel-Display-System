@@ -11,7 +11,7 @@ Android, IOS, and / or MAC OS support.
 
 BUT for the experiment, I also wanted to do use pure C#, so this example does not utilize any XAML or BLAZOR sources.
 
-I also wanted to dynamically create the user interface from device metadata, which is implementred as the **DynamicView** class.
+I also wanted to dynamically create the device interface and representation from device metadata. The interface is implementred as **IDynamicViewDevice**, viewed and controlled using the **DynamicView** class.
 
 ## Operation and design elements
 The application is a single **MainPage** that presents available NeopixelServer device(s) and provides the ability to view / control the device(s). 
