@@ -31,6 +31,7 @@ After all of the metadata objects have been processed the options dictionary is 
  the python script deploywebpage.py is a simple processes web page files, converts them from nonembedded to embedded, and creates a header file to be compiled into the application. 
  
  It utilzes css_html_js_minify to reduce file size
+ 
      pip install css_html_js_minify
 
 It reads the files listed on its command line, converting "__LOCATION__" to "location" and excluding regions marked for exclusion and writes their contents to the specified output file, wrapped as "Rawtext". It then processes them through the relevant minimizer and writes them to a file named the same as the output file with ".min" inserted ahead of the extension.
