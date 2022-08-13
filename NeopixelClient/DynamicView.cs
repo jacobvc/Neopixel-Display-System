@@ -139,7 +139,7 @@ namespace DynamicView
                 Border border = new Border
                 {
                     Stroke = DynamicView.BorderColor,
-                    //Background = Colors.Cornsilk,
+                    Background = Colors.Cornsilk,
                     StrokeThickness = 2,
                     //Padding = new Thickness(6, 6),
                     HorizontalOptions = LayoutOptions.Fill,

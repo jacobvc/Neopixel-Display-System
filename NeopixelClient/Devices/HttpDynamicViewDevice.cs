@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DynamicView
 {
     /// <summary>
-    /// Base transport for device supporting DynamicView. Supports 
+    /// Base device supporting DynamicView over HTTP. Implements 
     /// GetRequestWorker() that performs HTTP Get requests and returns the JSON response
     /// as a string, and GetMetaDataAsync() that returns the JSON result as an array of ViewMetadata.
     /// 

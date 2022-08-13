@@ -23,7 +23,7 @@ namespace DynamicView
 
             };
 #if ANDROID
-            DynamicViewDeviceCollection Devices = scanner.Devices;
+            NeopixelBleDeviceCollection Devices = scanner.Devices;
             //Devices.Add(new NeopixelHttpDevice("192.168.12.208"));
 
             CollectionView cv = new CollectionView()
