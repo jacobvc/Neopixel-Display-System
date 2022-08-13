@@ -15,7 +15,7 @@
 		<ApplicationTitle>NeopixelClient</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.neopixelclient</ApplicationId>
+		<ApplicationId>com.jacobvc.neopixelclient</ApplicationId>
 		<ApplicationIdGuid>FA2EDF2A-1B66-4287-8DB5-ACB30C2663C4</ApplicationIdGuid>
 
 		<!-- Versions -->
