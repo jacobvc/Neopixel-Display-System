@@ -3,13 +3,25 @@
 ## Source Files and Functionalities
 
 ### Boilerplate
-* NeopixelClient.sln
-* NeopixelClient.csproj
+* NeopixelClient.sln - The project solution, maintained by Visual Studio
+
+Nothing interesting here
+* NeopixelClient.csproj - The project, maintained by Visual Studio
+
+Generally not edited manually. This is where things like NuGet packages and platform versions 
+are maintained.
 * MauiProgram.cs
+
+This is the main entry point. It creates  MauiApp builder, adds services and configurations, and registers "App"
+as THE application. Generally adding a nuget package will give instructions on how to manually edit the builder.
 * App.cs
 
+The application ... Potentially performs some configuration, then launches new MainPage().
+
+In this case, for Windows, the application window size is set to a constant.
 ### Entry Page
-* Mainpage.cs
+The entry page is the first thing the user sees. 
+* Mainpage.cs - Implements the MainPage class, derived from Content Page. 
 
 ### Dynamic View
 * DynamicView.cs
