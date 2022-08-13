@@ -9,9 +9,9 @@ I wanted to do a BLE Android App to support the Neopixel server, when I saw a .N
 that it would be a good experiment vs. using Android Studio or Xamarin. It also offered the possibility of single source 
 Android, IOS, and / or MAC OS support.
 
-BUT for the experiment, I also wanted to do use pure C#, so this example does not utilize any XAML or BLAZOR sources.
+BUT for the experiment, I also wanted to use pure C#, so this example does not utilize any XAML or BLAZOR sources.
 
-I also wanted to dynamically create the device interface and representation from device metadata. The interface is implementred as **IDynamicViewDevice**, viewed and controlled using the **DynamicView** class.
+I also wanted to dynamically create the device interface and representation from device metadata. The interface is implemented as **IDynamicViewDevice**, viewed and controlled using the **DynamicView** class.
 
 ## Operation and design elements
 The application is a single **MainPage** that presents available NeopixelServer device(s) and provides the ability to view / control the device(s). 
@@ -23,7 +23,7 @@ In the case of HTTP (Windows), the available device is accessed via a IP Address
 When a **Connect** button is pressed, it's label changes to "**Connecting ...**" while attempting to connect to the device. 
 "Connecting" establishes a connection with the selected BLE device **device.ConnectAsync()**, or with a new **NeopixelHttpDevice()** at the specified IP Address, respectively.
 
-Once a device is connected, it's metadata is retrieved **mdata = device.GetMetaDataAsync()**, and a view / control page is created and displayed using **CreateDynamicView(mdata, device)**.
+Once a device is connected, it's metadata is retrieved **mdata = device.GetMetaDataAsync()**, and a view / control page is created and displayed using **CreateDynamicView(mdata, device)**. The device view includes a **Disconnect** button that returns to the collection view.
 
 ## Quick Start
 This application is a client of an **esp32Neopxel** device. If one is not available, go to [Neopixel Server](/NeopixelServer) and create one of them first.
@@ -38,48 +38,5 @@ Select "Windows Machine" for the target, then build and run. When the app launch
 ### Android Target
 You will need an android device (platform version 23.0 or newer), connected in developer mode. It will appear in the targets list under "Android Local Devices". Select that device for the target, then build and run. When the app launches, it will begin BLE scanning and present a list of available devices. Press connect on the device of interest, and you should be excactly where you ended with the Windows Target.
 
-## Starting a New Application
-I'm sure there must be, or eventually will be a better way, but I found the the easiest way to start a nen app is to
-
-* Use the 
-new project wizard to create a new .NET MAUI application, then delete all of the .xaml and .xaml.cs files in the root directory
-
-* Asd a new App.cs c,lass that implements a trivial App and replace
-
-       internal class App
-       {
-       }
-
-with
-
-       public class App : Application
-       {
-          public App()
-          {
-              MainPage = new MainPage();
-          }
-       }
-
-* Add a new MainPage class that implements the main ContentPage and replace
-
-       internal class MainPage
-       {
-       }
-
-with
-
-        public MainPage()
-        {
-            var layout = new VerticalStackLayout
-            {
-                VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.Center,
-            };
-            var label = new Label
-            {
-                Text = "My first pure C# MAUI App",
-                FontSize = 48,
-            };
-            layout.Add(label); 
-            Content = layout;
-        }
+# Design 
+If you are ready to modify the software for your own needs or to follow this path into .NET MAUI, look [here for more information about the design](DESIGN.md)
