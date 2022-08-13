@@ -1,5 +1,35 @@
 # Neopixel Client (.NET MAUI) Design
 
+## Source Files and Functionalities
+
+### Boilerplate
+* NeopixelClient.sln
+* NeopixelClient.csproj
+* MauiProgram.cs
+* App.cs
+
+### Entry Page
+* Mainpage.cs
+
+### Dynamic View
+* DynamicView.cs
+
+### Color Picker
+* ColorPicker.cs
+
+### Devices
+* IDynamicViewDevice.cs
+* HttpDynamicViewDevice.cs
+* NeopixelStatus.cs
+* NeopixeHttplDevice.cs
+* NeopixelBleDevice.cs
+
+### Platforms, Properties, Resources
+
+## Nuget Packeges
+* triaxis.BluetoothLE
+* CommunityToolkit.Maui
+
 ## Starting a New Application
 I'm sure there must be, or eventually will be a better way, but I found the the easiest way to start a nen app is to
 
