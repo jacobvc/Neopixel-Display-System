@@ -143,13 +143,21 @@ namespace DynamicView
                 nameLabel.SetBinding(Label.TextProperty, "DeviceName");
                 grid.Add(nameLabel);
 
-                Label locationLabel = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16, VerticalOptions = LayoutOptions.End };
-                locationLabel.SetBinding(Label.TextProperty, "Address");
-                grid.Add(locationLabel);
+                Layout sec = new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Start };
+                Label locationLabel = new Label { Text = "Address:", WidthRequest = 70, FontSize = 16, VerticalOptions = LayoutOptions.End };
+                Label locationContent = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16, VerticalOptions = LayoutOptions.End };
+                locationContent.SetBinding(Label.TextProperty, "Address");
+                sec.Add(locationLabel);
+                sec.Add(locationContent);
+                grid.Add(sec);
 
-                Label rssiLabel = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16, VerticalOptions = LayoutOptions.End };
-                rssiLabel.SetBinding(Label.TextProperty, "Rssi");
-                grid.Add(rssiLabel);
+                sec = new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Start };
+                Label rssiLabel = new Label { Text = "RSSI:", WidthRequest = 70, FontSize = 16, VerticalOptions = LayoutOptions.End };
+                Label rssiContent = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16, VerticalOptions = LayoutOptions.End };
+                rssiContent.SetBinding(Label.TextProperty, "Rssi");
+                sec.Add(rssiLabel);
+                sec.Add(rssiContent);
+                grid.Add(sec);
 
                 var button = new Button
                 {

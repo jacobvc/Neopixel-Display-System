@@ -37,7 +37,7 @@ public class NeopixelBleScanner
     }
     public NeopixelBleDeviceCollection Devices { get; set; }
 }
-public class NeopixelBleDeviceCollection : ObservableCollection<IDynamicViewDevice>
+public class NeopixelBleDeviceCollection : ObservableCollection<NeopixelBleDevice>
 {
     public void ProcessAdvertisement(IAdvertisement advertisement)
     {
@@ -69,8 +69,6 @@ public class NeopixelBleDevice : BleDevice, IDynamicViewDevice
 
     ICharacteristic chStatus;
     ICharacteristic chMetadata;
-
-    object IDynamicViewDevice.Peripheral { get => base.Peripheral; set { } }
 
     public event StatusUpdated Updated;
 

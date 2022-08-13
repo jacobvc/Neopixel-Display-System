@@ -34,8 +34,5 @@ namespace DynamicView
         public Task<ViewMetadata[]> GetMetaDataAsync();
 
         public event StatusUpdated Updated;
-
-        object Peripheral { get; set; }
-
     }
 }
