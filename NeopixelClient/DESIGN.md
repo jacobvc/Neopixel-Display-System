@@ -19,9 +19,14 @@ as THE application. Generally adding a nuget package will give instructions on h
 The application ... Potentially performs some configuration, then launches new MainPage().
 
 In this case, for Windows, the application window size is set to a constant.
+
+Note that App.cs is not created by the MAUI new project wizard. For more info on it's origin, see [Starting a New Pure C# Application](#starting-app).
+
 ### Entry Page
 The entry page is the first thing the user sees. 
 * Mainpage.cs - Implements the MainPage class, derived from Content Page. 
+
+Note that MainPage.cs is not created by the MAUI new project wizard. For more info on it's origin, see [Starting a New Pure C# Application](#starting-app).
 
 ### Dynamic View
 * DynamicView.cs
@@ -38,12 +43,12 @@ The entry page is the first thing the user sees.
 
 ### Platforms, Properties, Resources
 
-## Nuget Packeges
+## Nuget Packages
 * triaxis.BluetoothLE
 * CommunityToolkit.Maui
 
-## Starting a New Application
-I'm sure there must be, or eventually will be a better way, but I found the the easiest way to start a nen app is to
+<h2 id="starting-app">Starting a New Pure C# Application</h2>
+I'm sure there must be, or eventually will be a better way, but I found the the easiest way to start a new app is to
 
 * Use the 
 new project wizard to create a new .NET MAUI application, then delete all of the .xaml and .xaml.cs files in the root directory
