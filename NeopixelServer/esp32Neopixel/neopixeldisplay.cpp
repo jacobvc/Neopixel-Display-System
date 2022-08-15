@@ -154,6 +154,12 @@ void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panels
   #endif
     matrix->setTextWrap(false);
     matrix->setBrightness(BRIGHTNESS);
+
+  for (int i = 0; i < display.ledCount; ++i){
+    display.LedSetColorA(i , prefsLedColorA[i]);
+    display.LedSetColorB(i , prefsLedColorB[i]);
+  }
+    
     // Test full bright of all LEDs. If brightness is too high
     // for your current limit (i.e. USB), decrease it.
     matrix->fillScreen(LED_WHITE_LOW);
@@ -365,14 +371,6 @@ NeopixelDisplay::NeopixelDisplay()
   for (int i = 0; i < ledCount; ++i){
     leds[i].mode = LedMode::off;
   }
-  leds[0].colora = RGB565(0, 255, 0); 
-  leds[0].colorb = RGB565(0, 255, 0); 
-  leds[1].colora = RGB565(255, 0, 0); 
-  leds[1].colorb = RGB565(255, 0, 0); 
-  leds[2].colora = RGB565(0, 255, 0); 
-  leds[2].colorb = RGB565(0, 0, 255); 
-  leds[3].colora = RGB565(0, 255, 0); 
-  leds[3].colorb = RGB565(255, 0, 0); 
 }
 
 /***

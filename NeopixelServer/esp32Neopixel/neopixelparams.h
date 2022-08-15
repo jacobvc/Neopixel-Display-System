@@ -21,6 +21,8 @@
 extern String prefsPassword;
 extern String prefsSsid;
 extern String prefsDeviceName;
+extern int prefsLedColorA[];
+extern int prefsLedColorB[];
 
 //
 // JSON status and metadata are maintained as strings;

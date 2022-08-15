@@ -18,6 +18,8 @@
 // UI names for the virtual LEDs
 // No more thsn 4 without updating neopixeldisplay implementation
 #define LEDS_NAMES "LED 1", "LED 2", "LED 3", "LED 4"
+#define LEDS_COLORS_A RGB(0, 255, 0), RGB(255, 0, 0), RGB(255, 255, 0), RGB(0, 0, 255)
+#define LEDS_COLORS_B RGB(0, 255, 0), RGB(255, 0, 0), RGB(255, 255, 0), RGB(0, 0, 255)
 
 // Port numbers and UI names for the physical outputs
 // Limited only by number of GPIOs

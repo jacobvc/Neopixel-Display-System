@@ -133,7 +133,6 @@ class NeopixelDisplay {
     #define LED_PIXELS 2
 
     LedDef *leds;
-    int ledCount;
     NeoPixelPanel panel;
 
     int ledCountdown;
@@ -145,6 +144,7 @@ class NeopixelDisplay {
 
     bool dirty;
 public:
+    int ledCount;
 
     NeopixelDisplay();
 

@@ -169,10 +169,13 @@ void NeoWifiTryConnect()
         WiFi.begin(prefsSsid.c_str(), prefsPassword.c_str());
         provisioningState = TryingConnect;
         triesLeft = 20; // 10 sec
+        display.SetLed(3, LedMode::blink);
         break;
     case SmartConfiging:
         if (WiFi.smartConfigDone())
         {
+            display.ShowText("SmartConfig", 5, Alignment::scroll);
+            display.SetLed(3, LedMode::blink);
             Serial.printf("SmartConfig received.\n Waiting for WiFi");
             provisioningState = TryingConnect;
             triesLeft = 20; // 10 sec
@@ -193,6 +196,7 @@ void NeoWifiTryConnect()
         // Wait for connection
         if (WiFi.status() == WL_CONNECTED)
         {
+           display.SetLed(3, LedMode::off);
             wifiConnected = true;
             provisioningState = Connected;
 
@@ -226,6 +230,8 @@ void NeoWifiTryConnect()
             WiFi.mode(WIFI_AP_STA); // Init WiFi, start SmartConfig
             Serial.printf("Entering SmartConfig\n");
 
+            display.SetLed(3, LedMode::off);
+            display.SetLed(2, LedMode::blink);
             WiFi.beginSmartConfig();
 
             provisioningState = SmartConfiging;
@@ -235,6 +241,7 @@ void NeoWifiTryConnect()
     case Connected:
         break;
     case GaveUp:
+        display.SetLed(2, LedMode::blink);
         break;
     }
 }

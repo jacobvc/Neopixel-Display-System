@@ -31,6 +31,8 @@ struct arraySpec {
 const char *ledsNames[] = { LEDS_NAMES };
 #define VIRTUAL_LED_COUNT (sizeof(ledsNames) / sizeof(ledsNames[0]))
 
+int prefsLedColorA[] = { LEDS_COLORS_A };
+int prefsLedColorB[] = { LEDS_COLORS_B };
 
 const struct arraySpec outputsPorts[] = {OUTPUTS_PORTS};
 #define OUTPUT_COUNT (sizeof(outputsPorts) / sizeof(outputsPorts[0]))
@@ -64,6 +66,9 @@ void InitPreferences()
         prefs.putString("ssid", "");
         prefs.putString("password", "");
 
+        prefs.putBytes("prefsLedColorA", prefsLedColorA, sizeof(prefsLedColorA));
+        prefs.putBytes("prefsLedColorB", prefsLedColorB, sizeof(prefsLedColorB));
+
         prefs.putBool("nvsInit", true); // Create the "already initialized" key and store a value.
     }
     prefs.end();
@@ -77,6 +82,9 @@ void GetPreferences()
     prefsSsid = prefs.getString("ssid");
     prefsPassword = prefs.getString("password");
 
+    prefs.getBytes("prefsLedColorA", prefsLedColorA, sizeof(prefsLedColorA));
+    prefs.getBytes("prefsLedColorB", prefsLedColorB, sizeof(prefsLedColorB));
+
     prefs.end(); // close the namespace in RO mode and...
 }
 
@@ -87,6 +95,9 @@ void SavePreferences()
     prefs.putString("device_name", prefsDeviceName);
     prefs.putString("ssid", prefsSsid);
     prefs.putString("password", prefsPassword);
+
+    prefs.putBytes("prefsLedColorA", prefsLedColorA, sizeof(prefsLedColorA));
+    prefs.putBytes("prefsLedColorB", prefsLedColorB, sizeof(prefsLedColorB));
 
     prefs.end(); // close the namespace in RO mode and...
     JsonEncodeNeopixelMetaData();
@@ -239,6 +250,10 @@ void JsonLedColorAArray(JsonArray obj)
 byte parseLedColorA(const String &value, int arg)
 {
     int val = value.toInt();
+    
+    prefsLedColorA[arg] = val;
+    SavePreferences();
+     
     display.LedSetColorA(arg, val);
     return 1;
 }
@@ -270,6 +285,8 @@ void JsonLedColorBArray(JsonArray obj)
 byte parseLedColorB(const String &value, int arg)
 {
     int val = value.toInt();
+    prefsLedColorB[arg] = val;
+    SavePreferences();
     display.LedSetColorB(arg, val);
     return 1;
 }
