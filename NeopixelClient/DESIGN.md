@@ -1,4 +1,9 @@
 # Neopixel Client (.NET MAUI) Design
+ The design is a pure C# .NET MAUI application (incorporating no XAML or BLAZOR sources), supporting both (either) BLE and HTTP device interfaces.
+ 
+ The starting point was informed by [this Melissa Houghton article](https://melissahoughton-dev.medium.com/getting-started-net-maui-dc3522df6de3).
+ 
+ This section is a high level wallk through the source files and their functionalities.
 
 ## Source Files and Functionalities
 
@@ -79,10 +84,29 @@ I couldn't easily find a useful colorpicker provider. I decided to do something 
 
 ### Devices
 * IDynamicViewDevice.cs
-* HttpDynamicViewDevice.cs
-* NeopixelStatus.cs
-* NeopixeHttpDevice.cs
-* NeopixelBleDevice.cs
+
+  The IDynamicViewDevice interface
+
+    * ConnectAsync() - Connect to the device
+
+      Attempt to connect to the device. Returns boolean success
+    * Task<ViewMetadata[]> GetMetaDataAsync() - Get the device metadata
+
+      Get the device data description as an array of ViewMetadata.
+    * GetStatusAsync() - Request device status
+
+      Ask the device to update it's status
+    * StatusUpdated Updated - Event
+
+      Deliver device status to application by firing this event.
+    * Submit(String param, String value)
+
+      Submit data modification to device and 'param' name / 'value' pair
+    
+* HttpDynamicViewDevice.cs - Generic IDynamicViewDevice utilizing HTTP transport
+* NeopixelStatus.cs - The status object produced by NeoPixelServer Devices
+* NeopixeHttpDevice.cs - NeoPixelServer specific IDynamicViewDevice utilizing HTTP transport
+* NeopixelBleDevice.cs - NeoPixelServer specific IDynamicViewDevice utilizing BLE transport
 
 ### Platforms, Properties, Resources
 
