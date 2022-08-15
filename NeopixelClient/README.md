@@ -26,7 +26,7 @@ When a **Connect** button is pressed, it's label changes to "**Connecting ...**"
 Once a device is connected, it's metadata is retrieved **mdata = device.GetMetaDataAsync()**, and a view / control page is created and displayed using **CreateDynamicView(mdata, device)**. The device view includes a **Disconnect** button that returns to the collection view.
 
 ## Quick Start
-This application is a client of an **esp32Neopxel** device. If one is not available, go to [Neopixel Server](/NeopixelServer) and create one of them first.
+This application is a client of an **esp32Neopxel** device. If an esp32Neopixel device is not available, go to [Neopixel Server](/NeopixelServer) and create one of them first.
 
 At the time of this writing, .NET MAUI requires Visual Studio 2022 Preview. That is sort of a moving target, so I recommend going directly to the [.NET MAUI documentation](https://docs.microsoft.com/en-us/dotnet/maui) to install the most appropriate development tools.
 
