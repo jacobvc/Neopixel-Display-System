@@ -22,7 +22,7 @@ namespace DynamicView
         }
         #endregion
 
-        #region Variables and Porperties
+        #region Variables and Properties
         public event ColorChanged changed;
         Label lblSelected;
         Label lblOriginal;
@@ -34,7 +34,7 @@ namespace DynamicView
             {
                 this.lblSelected.BackgroundColor = value;
                 this.lblSelected.Text = "Selected\n" + value.ToArgbHex();
-                this.lblSelected.TextColor = SugestedTextColor(value);
+                this.lblSelected.TextColor = SuggestedTextColor(value);
             }
         }
 
@@ -93,7 +93,7 @@ namespace DynamicView
             };
             grid.Add(lblOriginal, 0, 0);
             this.lblOriginal.BackgroundColor = color;
-            this.lblOriginal.TextColor = SugestedTextColor(color);
+            this.lblOriginal.TextColor = SuggestedTextColor(color);
 
             lblSelected = new Label
             {
@@ -220,7 +220,7 @@ namespace DynamicView
         /// </summary>
         /// <param name="background"></param>
         /// <returns></returns>
-        public static Color SugestedTextColor(Color background)
+        public static Color SuggestedTextColor(Color background)
         {
             Byte r, g, b;
             background.ToRgb(out r, out g, out b);

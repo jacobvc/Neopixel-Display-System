@@ -337,7 +337,7 @@ namespace DynamicView
                                     {
                                         // Works, but there is probably a better way
                                         cp.BackgroundColor = Color.FromInt((int)(0xff000000 | (int)value));
-                                        cp.TextColor = ColorPicker.SugestedTextColor(cp.BackgroundColor);
+                                        cp.TextColor = ColorPicker.SuggestedTextColor(cp.BackgroundColor);
                                     }
                                     else
                                     {
