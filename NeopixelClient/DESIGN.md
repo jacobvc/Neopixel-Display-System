@@ -26,6 +26,18 @@ Note that App.cs is not created by the MAUI new project wizard. For more info on
 The entry page is the first thing the user sees. 
 * Mainpage.cs - Implements the MainPage class, derived from Content Page. 
 
+This page presents available NeopixelServer device(s) and provides the ability to view / control the device(s). 
+
+In the case of BLE (Android), the available devices are presented using a **CollectionView** of **NeopixelBleDevice**s via a **BleTemplate**. The **CollectionView** is populated by the **NeoPixelBleScanner**. The **BleTemplate** provides a **Connect** button as part of each device view. 
+
+In the case of HTTP (Windows), the available device is accessed via a IP Address text box and a **Connect** button.
+
+When a **Connect** button is pressed, it's label changes to "**Connecting ...**" while attempting to connect to the device. 
+"Connecting" establishes a connection with the selected BLE device **device.ConnectAsync()**, or with a new **NeopixelHttpDevice()** at the specified IP Address, respectively.
+
+Once a device is connected, it's metadata is retrieved **mdata = device.GetMetaDataAsync()**, and a view / control page is created and displayed using **CreateDynamicView(mdata, device)**. The device view includes a **Disconnect** button that returns to the collection view.
+
+
 Note that MainPage.cs is not created by the MAUI new project wizard. For more info on it's origin, see [Starting a New Pure C# Application](#starting-app).
 
 ### Dynamic View
