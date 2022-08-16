@@ -6,9 +6,9 @@ The Neopixel Display System is a server device and several clients emerging from
 
 The Neopixel display panel<br><img src="/assets/NeopixelPanel.png" width="420" height="60">
 
-The Neopixel Server Web Page<br><img src="/assets/webpage.png" width="280" height="60">
+The Neopixel Server Web Page<br><img src="/assets/webpage.png" width="304" height="104">
 
-The Neopixel Client Application<br><img src="/assets/NET-MAUI.png" width="316" height="120">
+The Neopixel Client Application<br><img src="/assets/NET-MAUI.png" width="295" height="230">
 
 At this time, the key components of the system are the NeopixelServer, an OBS Studio plugin, and a .NET MAUI Android / WIndows application.
 
