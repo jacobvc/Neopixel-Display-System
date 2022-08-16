@@ -1,6 +1,6 @@
 # Neopixel Client
 
-The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP 
+The Neopixel Client is a .NET MAUI applicaton using a BLE interface on Android and a HTTP 
 interface on Windows desktop (For now, the third party BLE service used does not support Windows desktop)
 
 <img src="/assets/NET-MAUI.png">
