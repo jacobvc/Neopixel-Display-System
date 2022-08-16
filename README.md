@@ -53,7 +53,7 @@ Go here for [OBS Studio script details](obsstudio_script)
 
 ## Neopixel Client
 
-The Neopixel Client is a .NET MAUI applicaiton using a BLE interface on Android and a HTTP 
+The Neopixel Client is a .NET MAUI application using a BLE interface on Android and a HTTP 
 interface on Windows (The BLE service used does not support Windows)
 
 Go here for [Neopixel Client details](NeopixelClient)
