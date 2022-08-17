@@ -80,7 +80,7 @@ namespace DynamicView
                 StackBase layout = new VerticalStackLayout()
                 {
                     Spacing = 20,
-                    HorizontalOptions = LayoutOptions.Center,
+                    HorizontalOptions = LayoutOptions.Start,
                 };
 
                 layout.Add(view.Create(mdata));
@@ -100,8 +100,8 @@ namespace DynamicView
                 layout.Add(button);
                 ScrollView sv = new ScrollView()
                 {
-                    Padding = new Thickness(0, 8),
-                    Orientation = ScrollOrientation.Horizontal,
+                    Padding = new Thickness(4, 4),
+                    Orientation = ScrollOrientation.Vertical,
                     Content = layout
                 };
                 Content = sv;
@@ -131,7 +131,7 @@ namespace DynamicView
                     StrokeThickness = 4,
                     Padding = new Thickness(16, 8),
                     HorizontalOptions = LayoutOptions.Center,
-                    WidthRequest = 350,
+                    //WidthRequest = 350,
                     StrokeShape = new RoundRectangle
                     {
                         CornerRadius = new CornerRadius(10, 10, 10, 10)
@@ -145,7 +145,7 @@ namespace DynamicView
 
                 Layout sec = new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Start };
                 Label locationLabel = new Label { Text = "Address:", WidthRequest = 70, FontSize = 16, VerticalOptions = LayoutOptions.End };
-                Label locationContent = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16, VerticalOptions = LayoutOptions.End };
+                Label locationContent = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16 };
                 locationContent.SetBinding(Label.TextProperty, "Address");
                 sec.Add(locationLabel);
                 sec.Add(locationContent);
@@ -153,7 +153,7 @@ namespace DynamicView
 
                 sec = new HorizontalStackLayout { HorizontalOptions = LayoutOptions.Start };
                 Label rssiLabel = new Label { Text = "RSSI:", WidthRequest = 70, FontSize = 16, VerticalOptions = LayoutOptions.End };
-                Label rssiContent = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16, VerticalOptions = LayoutOptions.End };
+                Label rssiContent = new Label { FontAttributes = FontAttributes.Italic, FontSize = 16 };
                 rssiContent.SetBinding(Label.TextProperty, "Rssi");
                 sec.Add(rssiLabel);
                 sec.Add(rssiContent);
