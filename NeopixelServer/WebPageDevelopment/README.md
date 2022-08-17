@@ -24,7 +24,7 @@ After all of the metadata objects have been processed, the options dictionary is
  ### Support functions
 **createView(ctl, key, item)** does a **createView()** for each 'field' in metadata 'item' of type 'composite' or 'collapsible', a **createControl()** for each name in a metadata 'item' containing an array of 'names', a **createControl()** for all other metadata 'item's
  
-**createControl(ctl, key, metaType, label, selectClass)** creates a "switch" for metaType 'bool, a combobox (html select) for metaType 'select', and a text input for all other metaType's. Each control is assigned a onchange event that calls **updateStatus()**.
+**createControl(ctl, key, metaType, label, selectClass)** creates a "switch" for metaType 'bool, a combobox (html select) for metaType 'select', for metaType number an numeric input, for metatype readonly a disabled text input, and a text input for all other metaType's. Each control is assigned a onchange event that calls **updateStatus()**.
  
  **updateValue(key, value)** gets the html element with an ID matching 'key', and sets its value / content to 'value'
  
