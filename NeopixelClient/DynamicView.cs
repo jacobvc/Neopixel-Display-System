@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Behaviors;
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
@@ -180,12 +181,12 @@ namespace DynamicView
                 row.Add(NewDefaultLabel(item.label));
                 for (var i = 0; i < item.names.Length; ++i)
                 {
-                    CreateControl(row, key + "[" + i + "]", item.type, item.names[i], item.opts);
+                    CreateControl(row, key + "[" + i + "]", item.type, item.names[i], item);
                 }
             }
             else
             {
-                CreateControl(ctl, key, item.type, item.label, item.opts);
+                CreateControl(ctl, key, item.type, item.label, item);
             }
         }
 
@@ -197,8 +198,8 @@ namespace DynamicView
         /// <param name="key"></param>
         /// <param name="metaType"></param>
         /// <param name="label"></param>
-        /// <param name="optionsName"></param>
-        protected virtual void CreateControl(StackBase ctl, String key, String metaType, String label, String optionsName)
+        /// <param name="item"></param>
+        protected virtual void CreateControl(StackBase ctl, String key, String metaType, String label, ViewMetadata item)
         {
             if (metaType == "bool")
             {
@@ -247,12 +248,55 @@ namespace DynamicView
                 ctl.Add(NewDefaultLabel(label));
                 var select = new Picker
                 {
-                    ItemsSource = options[optionsName].values,
+                    ItemsSource = options[item.opts].values,
                 };
                 controlMapping[key] = select;
                 mapping[select] = key;
                 select.SelectedIndexChanged += Select_SelectedIndexChanged;
                 ctl.Add(select);
+            }
+            else if (metaType == "number")
+            {
+                var row = new HorizontalStackLayout();
+                ctl.Add(row);
+                row.Add(NewDefaultLabel(label));
+                var num = new Entry
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    //WidthRequest = 110,
+                    Keyboard = Keyboard.Numeric
+                };
+
+                var validStyle = new Style(typeof(Entry));
+                validStyle.Setters.Add(new Setter
+                {
+                    Property = Entry.TextColorProperty,
+                    Value = Colors.Green
+                });
+
+                var invalidStyle = new Style(typeof(Entry));
+                invalidStyle.Setters.Add(new Setter
+                {
+                    Property = Entry.TextColorProperty,
+                    Value = Colors.Red
+                });
+
+                var numericValidationBehavior = new NumericValidationBehavior
+                {
+                    InvalidStyle = invalidStyle,
+                    ValidStyle = validStyle,
+                    Flags = ValidationFlags.ValidateOnValueChanged,
+                    MinimumValue = item.min,
+                    MaximumValue = item.max,
+                    MaximumDecimalPlaces = 0
+                };
+
+                num.Behaviors.Add(numericValidationBehavior);
+
+                controlMapping[key] = num;
+                mapping[num] = key;
+                num.TextChanged += Num_TextChanged;
+                row.Add(num);
             }
             else
             {
@@ -264,10 +308,37 @@ namespace DynamicView
                     HorizontalOptions = LayoutOptions.Center,
                     WidthRequest = 110,
                 };
+                if (metaType == "readonly")
+                {
+                    text.IsEnabled = false;
+                }
                 controlMapping[key] = text;
                 mapping[text] = key;
                 text.TextChanged += Text_TextChanged;
                 row.Add(text);
+            }
+        }
+
+        private void Num_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!updating)
+            {
+                String name;
+                Entry text = sender as Entry;
+                NumericValidationBehavior behavior = text.Behaviors[0] as NumericValidationBehavior;
+
+                //text.ForceValidate();
+                 if (behavior.IsValid)
+                {
+                    if (mapping.TryGetValue(sender, out name))
+                    {
+                        //double value;
+                        //if (double.TryParse(text.Text, out value))
+                        {
+                            device.Submit(name, text.Text);
+                        }
+                    }
+                }
             }
         }
 
@@ -327,7 +398,7 @@ namespace DynamicView
                                 {
                                     if (!en.IsFocused)
                                     {
-                                        en.Text = (String)value;
+                                        en.Text = value.ToString();
                                     }
                                 }
                                 else
@@ -458,6 +529,8 @@ namespace DynamicView
         /// <item>bool - A boolean value</item> 
         /// <item>select - A value that hase a specified set of textual values represented by their index</item> 
         /// <item>text - A String value</item> 
+        /// <item>number - A numeric value</item> 
+        /// <item>readonly - A read ontly String value</item> 
         /// <item>composite - A set of ViewMetadata objs that combine to represent a composite entity</item> 
         /// <item>collapsible - A set of ViewMetadata objs that should be in a collapsible section</item> 
         /// <item>value - A constant value to be displayed rather than connected to a control</item> 
@@ -481,6 +554,16 @@ namespace DynamicView
         /// In the case of type 'composite', ViewMetadata subfields
         /// </summary>
         public ViewMetadata[] fields { get; set; }
+
+        /// <summary>
+        /// In the case of type 'numeric', its min value
+        /// </summary>
+        public double min { get; set; }
+
+        /// <summary>
+        /// In the case of type 'numeric', its max value
+        /// </summary>
+        public double max { get; set; }
 
         public override string ToString()
         {

@@ -128,20 +128,14 @@ void JsonMetaOptsLed(JsonObject obj)
   arr[2]="blink";
 }
 
-/***
- *               _               -
- *      ___  ___| |_ _   _ _ __  
- *     / __|/ _ \ __| | | | '_ \ 
- *     \__ \  __/ |_| |_| | |_) |
- *     |___/\___|\__|\__,_| .__/ 
- *                        |_|    
- */
-void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panelsH)
-{
-    width = matrixW * panelsW;
-    height = matrixH * panelsH;
+static int neoGpio;
 
-  matrix = new Adafruit_NeoMatrix(matrixW, matrixH, panelsW, panelsH, gpio,
+void NeoMatrixReInit()
+{
+    width = MATRIX_WIDTH * prefsPanelsW;
+    height = MATRIX_HEIGHT * prefsPanelsH;
+
+  matrix = new Adafruit_NeoMatrix(MATRIX_WIDTH, MATRIX_HEIGHT, prefsPanelsW, prefsPanelsH, neoGpio,
     NEO_MATRIX_TOP       + NEO_MATRIX_LEFT 
     + NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG
     + NEO_TILE_TOP       + NEO_TILE_LEFT
@@ -154,7 +148,20 @@ void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panels
   #endif
     matrix->setTextWrap(false);
     matrix->setBrightness(BRIGHTNESS);
-
+}
+/***
+ *               _               -
+ *      ___  ___| |_ _   _ _ __  
+ *     / __|/ _ \ __| | | | '_ \ 
+ *     \__ \  __/ |_| |_| | |_) |
+ *     |___/\___|\__|\__,_| .__/ 
+ *                        |_|    
+ */
+void NeoDisplaySetup(int gpio)
+{
+neoGpio = gpio;
+  NeoMatrixReInit();
+  
   for (int i = 0; i < display.ledCount; ++i){
     display.LedSetColorA(i , prefsLedColorA[i]);
     display.LedSetColorB(i , prefsLedColorB[i]);

@@ -1,3 +1,4 @@
+#include "neopixeldisplay.h"
 #include <Arduino.h>
 #include <Preferences.h>
 
@@ -13,6 +14,8 @@ enum parsingIds
     TEXT_ALIGNMENT_ID,
     BMP_ALIGNMENT_ID,
     COLOR_INDEX_ID,
+    PANELS_WIDE_ID,    
+    PANELS_HIGH_ID
 };
 
 Preferences prefs;
@@ -22,6 +25,9 @@ NeopixelParams params;
 String prefsPassword;
 String prefsSsid;
 String prefsDeviceName;
+
+int prefsPanelsW = TILES_WIDE;
+int prefsPanelsH = TILES_HIGH;
 
 struct arraySpec {
     int value;
@@ -38,7 +44,7 @@ const struct arraySpec outputsPorts[] = {OUTPUTS_PORTS};
 #define OUTPUT_COUNT (sizeof(outputsPorts) / sizeof(outputsPorts[0]))
 byte outputValues[OUTPUT_COUNT];
 
-StaticJsonDocument<2048> jsonEncodingDoc;
+StaticJsonDocument<3000> jsonEncodingDoc;
 String metadataJson;
 String statusJson;
 
@@ -65,6 +71,9 @@ void InitPreferences()
         // WiFi related Preferences
         prefs.putString("ssid", "");
         prefs.putString("password", "");
+        
+        prefs.putInt("prefsPanelsW", TILES_WIDE);
+        prefs.putInt("prefsPanelsH", TILES_HIGH);
 
         prefs.putBytes("prefsLedColorA", prefsLedColorA, sizeof(prefsLedColorA));
         prefs.putBytes("prefsLedColorB", prefsLedColorB, sizeof(prefsLedColorB));
@@ -82,6 +91,9 @@ void GetPreferences()
     prefsSsid = prefs.getString("ssid");
     prefsPassword = prefs.getString("password");
 
+    prefsPanelsW = prefs.getInt("prefsPanelsW");
+    prefsPanelsH = prefs.getInt("prefsPanelsH");
+
     prefs.getBytes("prefsLedColorA", prefsLedColorA, sizeof(prefsLedColorA));
     prefs.getBytes("prefsLedColorB", prefsLedColorB, sizeof(prefsLedColorB));
 
@@ -95,6 +107,9 @@ void SavePreferences()
     prefs.putString("device_name", prefsDeviceName);
     prefs.putString("ssid", prefsSsid);
     prefs.putString("password", prefsPassword);
+
+    prefs.putInt("prefsPanelsW", prefsPanelsW);
+    prefs.putInt("prefsPanelsH", prefsPanelsH);
 
     prefs.putBytes("prefsLedColorA", prefsLedColorA, sizeof(prefsLedColorA));
     prefs.putBytes("prefsLedColorB", prefsLedColorB, sizeof(prefsLedColorB));
@@ -338,6 +353,12 @@ int IntValue(int arg)
     case COLOR_INDEX_ID:
         return display.GetTextColor();
         break;
+    case PANELS_WIDE_ID:
+        return prefsPanelsW;        
+        break;      
+    case PANELS_HIGH_ID:
+        return prefsPanelsH;        
+        break;      
     }
     return -1;
 }
@@ -358,6 +379,16 @@ void IntChanged(int index, int value)
     case COLOR_INDEX_ID:
         display.SetTextColor(value);
         break;
+    case PANELS_WIDE_ID:
+        prefsPanelsW = value;      
+        SavePreferences();
+        NeoMatrixReInit();
+        break;      
+    case PANELS_HIGH_ID:
+        prefsPanelsH = value;      
+        SavePreferences();
+        NeoMatrixReInit();
+        break;      
     }
 }
 
@@ -413,6 +444,8 @@ void NeoParamSetup()
     params.AddParser("txtclr", parseInt, COLOR_INDEX_ID);
     params.AddParser("text", parseString, TEXT_ID);
     params.AddParser("bmp", parseInt, BITMAP_ID);
+    params.AddParser("panelsw", parseInt, PANELS_WIDE_ID);
+    params.AddParser("panelsh", parseInt, PANELS_HIGH_ID);
 
     params.AddParser("devicename", parseString, DEVNAME_ID);
 
@@ -457,12 +490,17 @@ void NeoParamTick()
 void JsonEncodeNeopixelData()
 {
     jsonEncodingDoc.clear();
-    StaticJsonDocument<2048> &doc = jsonEncodingDoc;
+    StaticJsonDocument<3000> &doc = jsonEncodingDoc;
     doc["textalign"] = IntValue(TEXT_ALIGNMENT_ID);
     doc["bmpalign"] = IntValue(BMP_ALIGNMENT_ID);
     doc["txtclr"] = IntValue(COLOR_INDEX_ID);
     doc["text"] = TextValue();
     doc["bmp"] = IntValue(BITMAP_ID);
+    doc["panelsh"] = prefsPanelsH;
+    doc["panelsw"] = prefsPanelsW;
+    char buf[32];
+    sprintf(buf, "%d x %d", prefsPanelsW * 32, prefsPanelsH * 8);    
+    doc["wxh"] = buf;
     JsonOutputDataArray(doc.createNestedArray("outputs"));
     JsonLedDataArray(doc.createNestedArray("leds"));
     JsonLedColorAArray(doc.createNestedArray("ledcolora"));
@@ -516,6 +554,33 @@ void JsonMetaCompositeBitmap(JsonObject obj)
   arrobj["opts"] = "align-opts";
 }
 
+void JsonMetaPanels(JsonObject obj)
+{
+  obj["name"] = "panels";
+  obj["type"] = "composite";
+  obj["label"] = "Panels";
+  JsonArray arr = obj.createNestedArray("fields");
+ 
+  JsonObject arrobj = arr.createNestedObject();
+  arrobj["name"] = "panelsw";
+  arrobj["label"] = "Panels W";
+  arrobj["type"] = "number";
+  arrobj["min"] = 1;
+  arrobj["max"] = 4;
+
+  arrobj = arr.createNestedObject();
+  arrobj["name"] = "panelsh";
+  arrobj["label"] = "Panels H";
+  arrobj["type"] = "number";
+  arrobj["min"] = 1;
+  arrobj["max"] = 4;
+
+  arrobj = arr.createNestedObject();
+  arrobj["name"] = "wxh";
+  arrobj["label"] = "W x H";
+  arrobj["type"] = "readonly";
+}
+
 void JsonMetaSettings(JsonObject obj)
 {
   obj["name"] = "settings";
@@ -524,6 +589,7 @@ void JsonMetaSettings(JsonObject obj)
   JsonArray arr = obj.createNestedArray("fields");
   JsonMetaLedColorA(arr.createNestedObject());
   JsonMetaLedColorB(arr.createNestedObject());
+  JsonMetaPanels(arr.createNestedObject());
 }
 
 void JsonEncodeNeopixelMetaData()
@@ -531,7 +597,7 @@ void JsonEncodeNeopixelMetaData()
     jsonEncodingDoc.clear();
     // root["password"] = prefsPassword;
     // root["ssid"] = prefsSsid;
-    StaticJsonDocument<2048> &doc = jsonEncodingDoc;
+    StaticJsonDocument<3000> &doc = jsonEncodingDoc;
     JsonObject devicename = doc.createNestedObject();
     devicename["name"] = "devicename";
     devicename["type"] = "value";

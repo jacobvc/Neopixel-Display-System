@@ -26,7 +26,7 @@ void setup() {
   NeoParamSetup();
   
   // Set up the NeoDisplay EARLY - Others may want to use the display during startup
-  NeoDisplaySetup(MATRIX_GPIO, MATRIX_WIDTH, MATRIX_HEIGHT, TILES_WIDE, TILES_HIGH);
+  NeoDisplaySetup(MATRIX_GPIO);
 
   NeoBleSetup();
   NeoWifiSetup();

@@ -202,8 +202,10 @@ extern NeopixelDisplay display;
  *     |_| \_,_|_||_\__|\__|_\___/_||_/__/
  *                                        
  */
-void NeoDisplaySetup(int gpio, int matrixW, int matrixH, int panelsW, int panelsH);
+void NeoDisplaySetup(int gpio);
 void NeoDisplay10msTick();
+
+void NeoMatrixReInit();
 
 void JsonMetaOptsColor(JsonObject obj);
 void JsonMetaOptsBitmap(JsonObject obj);

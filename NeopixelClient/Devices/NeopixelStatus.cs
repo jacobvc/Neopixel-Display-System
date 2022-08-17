@@ -21,6 +21,9 @@ namespace DynamicView
         public int[] leds { get; set; } = new int[0];
         public int[] ledcolora { get; set; } = new int[0];
         public int[] ledcolorb { get; set; } = new int[0];
+        public double panelsw { get; set; } = 0;
+        public double panelsh { get; set; } = 0;
+        public string wxh { get; set; } = "";
     }
 #pragma warning restore IDE1006 // Naming Styles
 }

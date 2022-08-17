@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /// <param name="label"></param>
 /// <param name="optionsName"></param>
 //__END_EXCLUDE__
-function createControl(ctl, key, metaType, label, selectClass) {
+function createControl(ctl, key, metaType, label, item) {
     if (metaType == 'bool') {
         ctl.innerHTML +=
             `<label class="switch"><input type="checkbox" id="` + key + `" onchange="updateStatus(this.id, this.checked)"><span class="slider round"></span></label>`;
@@ -45,19 +45,31 @@ function createControl(ctl, key, metaType, label, selectClass) {
         ctl.innerHTML +=
             `<label for="` + key + `">` + label + `</label>`;
         ctl.innerHTML +=
-            `<select id="` + key + `" class='` + selectClass + `' onchange="updateStatus(this.id, this.value)"></select>`;
+            `<select id="` + key + `" class='` + item.opts + `' onchange="updateStatus(this.id, this.value)"></select>`;
     }
     else if (metaType == 'color') {
         ctl.innerHTML +=
             `<label for="` + key + `">` + label + `</label>`;
         ctl.innerHTML +=
-            `<input id="` + key + `" type="color" onchange="updateColor(this.id, this.value)"></select>`;
+            `<input id="` + key + `" type="color" onchange="updateColor(this.id, this.value)"></input>`;
+    }
+    else if (metaType == 'number') {
+        ctl.innerHTML +=
+            `<label for="` + key + `">` + label + `</label>`;
+        ctl.innerHTML +=
+            `<input id="` + key + `" type="number" min="` + item.min + `" max = "` + item.max + `" onchange="updateStatus(this.id, this.value)"></input>`;
+    }
+    else if (metaType == 'readonly') {
+        ctl.innerHTML +=
+            `<label for="` + key + `">` + label + `</label>`;
+        ctl.innerHTML +=
+            `<input id="` + key + `" type="text" disabled></input>`;
     }
     else {
         ctl.innerHTML +=
             `<label for="` + key + `">` + label + `</label>`;
         ctl.innerHTML +=
-            `<input id="` + key + `" onchange="updateStatus(this.id, this.value)"></select>`;
+            `<input id="` + key + `" type="text" onchange="updateStatus(this.id, this.value)"></input>`;
     }
 }
 
@@ -91,12 +103,12 @@ function createView(ctl, key, item) {
     else if (Array.isArray(item.names)) {
         ctl.innerHTML += "<label class='column1'>" + item.label + ":</label>";
         for (var i = 0; i < item.names.length; ++i) {
-            createControl(ctl, key + '[' + i + ']', item.type, item.names[i], item.opts);
+            createControl(ctl, key + '[' + i + ']', item.type, item.names[i], item);
         }
         ctl.innerHTML += '<br>';
     }
     else {
-        createControl(ctl, key, item.type, item.label, item.opts);
+        createControl(ctl, key, item.type, item.label, item);
     }
 }
 
