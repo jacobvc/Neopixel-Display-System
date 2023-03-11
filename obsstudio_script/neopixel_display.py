@@ -274,7 +274,7 @@ def scene_properties_exec(scene_name, isPreview, activate):
 
 def action_enabled_callback(props, prop, settings):
     property_name = obs.obs_property_name(prop)
-    parts = name.split('^')
+    parts = property_name.split('^')
     name = parts[0]
     scene_properties_enable(obs.obs_data_get_bool(settings, property_name), props, name)
     return True
