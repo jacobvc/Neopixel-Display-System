@@ -33,3 +33,6 @@
 
 # Python Output directory
 __pycache__/
+NeopixelServer/esp32Neopixel/debug.cfg
+NeopixelServer/esp32Neopixel/esp32.svd
+NeopixelServer/esp32Neopixel/debug_custom.json

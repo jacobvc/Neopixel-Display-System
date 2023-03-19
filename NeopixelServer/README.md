@@ -30,19 +30,14 @@ The first step is to install the development environment and build the server.
 * [Install the Arduino IDE](https://www.arduino.cc/en/software) (Note that either version 1.0 or 2.0 can be used)
 * [Install ESP32 support in the Arduino IDE](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 * Connect and test the ESP32 device (should have done this in the previous step)
-* Install the required libraries
+* Install the required libraries (with dependencies)
 * Build and run the project
 
 The required libraries include:
-* ArduinoJson version 6.x (install using Arduino Library Manager)
-* Adafruit_GFX (install using Arduino Library Manager)
-* Adafruit_NeoMatrix (install using Arduino Library Manager)
-* [ESPAsyncTcp](https://github.com/me-no-dev/AsyncTCP) Install as zip library (see below)
-* [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) Install as zip library (see below)
-
-To install as a Zip Library, follow the link the the github repository, click on the green "code" button,
-and choose download zip. Then in the Arduino IDE select the menu item: Sketch > Include Library > Add .zip Library,
-and browse to the downloaded file location.
+* ArduinoJson version 6.x
+* Adafruit_GFX
+* Adafruit_NeoMatrix
+* EsPAsyncWebSrv
 
 Configure the IDE for the board and project and build / run
 * Board ESP32 Dev Module
